@@ -55,18 +55,11 @@ if [ "$ROS_FOUND" = false ] && command -v ros2 &> /dev/null; then
     if [ -n "$ROS2_DISTRO" ]; then
         echo -e "${YELLOW}ROS 版本:${NC} ROS2 $ROS2_DISTRO"
         ROS_FOUND=true
-    else
-        # 备用方法：使用 ros2 --version
-        ROS2_VER=$(ros2 --version 2>/dev/null | head -n1)
-        if [ -n "$ROS2_VER" ]; then
-            echo -e "${YELLOW}ROS 版本:${NC} $ROS2_VER"
-            ROS_FOUND=true
-        fi
     fi
 fi
 
 if [ "$ROS_FOUND" = false ]; then
-    echo -e "${RED}ROS 版本:${NC} 未安装或未 source 环境"
+    echo -e "${RED}ROS 版本:${NC} 未安装"
 fi
 
 echo -e "${BLUE}------------------------------------------------${NC}"
