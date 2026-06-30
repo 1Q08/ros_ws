@@ -1,0 +1,21 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "catkin_make",  // 执行类型
+			"args": [
+				"--directory",
+				"/home/nvidia/catkin_ws",
+				"-DCMAKE_BUILD_TYPE=RelWithDebInfo"
+			],
+			"problemMatcher": [  // 问题匹配器，用于捕获终端输出的错误信息
+				"$catkin-gcc"
+			],
+            "group": {
+                "kind": "build",  // 将此任务归类为构建任务
+                "isDefault": true  // 设置为默认构建任务（按下 Ctrl+Shift+B 时默认运行此任务）
+            },
+			"label": "catkin_make: build"  // 任务名称，会在任务列表中显示
+		}
+	]
+}
