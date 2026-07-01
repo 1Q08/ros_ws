@@ -9,15 +9,14 @@ int main(int argc, char *argv[])
     ros::Publisher pub = nh.advertise<std_msgs::String>("Topic", 10);  // 创建发布者
     ros::Rate loop_rate(10);  // 创建频率对象
 
-    while (ros::ok())  // 可以使用Ctrl+C
+    while (ros::ok())  // 可以使用 Ctrl + C
     {
         /* code */
-        printf("Waitting......\n");
+        printf("\033[33mWaitting......\033[0m\n");
         std_msgs::String msg;  // 创建消息对象
         msg.data = "我在Talking......";  // 设置消息内容
         pub.publish(msg);  // 发布消息
         loop_rate.sleep();  // 按照设定的频率休眠
     }
-    
     return 0;
 }

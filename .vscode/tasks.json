@@ -5,7 +5,7 @@
 			"type": "catkin_make",  // 执行类型
 			"args": [
 				"--directory",
-				"/home/nvidia/catkin_ws",
+				"/home/nvidia/ros1_ws",  // 指定工作空间路径
 				"-DCMAKE_BUILD_TYPE=RelWithDebInfo"
 			],
 			"problemMatcher": [  // 问题匹配器，用于捕获终端输出的错误信息

@@ -1,0 +1,14 @@
+<launch>
+    <!-- 启动三个节点，分别是chao_node、yao_node和ma_node -->
+    <!-- <节点包名 = "包名" 节点 = "节点名" 名字 = "节点名" launch-prefix = "gnome-terminal 两个减号"/>
+    launch-prefix = "gnome-terminal 两个减号"： 在终端中启动节点，gnome-terminal是终端模拟器，-e表示执行命令
+    -->
+    <node pkg = "ssr_pkg" type = "yao_node" name = "yao_node" launch-prefix = "gnome-terminal --"/>
+
+    <node pkg = "ssr_pkg" type = "chao_node" name = "chao_node" launch-prefix = "gnome-terminal --"/>
+    <!-- <节点包名 = "包名" 节点 = "节点名" 名字 = "节点名" output = "screen"/>
+    output = "screen"： 将节点的输出打印到终端上，方便调试
+    -->
+    <node pkg = "atr_pkg" type = "ma_node" name = "ma_node" output = "screen"/>
+
+</launch>
