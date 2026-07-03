@@ -13,10 +13,10 @@ int main(int argc, char *argv[])
     {
         /* code */
         printf("\033[31mWaitting too......\033[0m\n");
-        std_msgs::String msg;
-        msg.data = "不一样的Talking";
-        pub.publish(msg);
-        loop_rate.sleep();
+        std_msgs::String msg;  // 创建消息对象
+        msg.data = "不一样的Talking";  // 设置消息内容
+        pub.publish(msg);  // 发布消息
+        loop_rate.sleep();  // 按照设定的频率休眠
     }
     return 0;
 }
