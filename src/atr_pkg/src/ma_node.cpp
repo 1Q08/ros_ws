@@ -1,9 +1,12 @@
 #include <ros/ros.h>
 #include <std_msgs/String.h>
+#include <qq_msgs/Carry.h>
 
-void chao_callback(std_msgs::String msg)  // 订阅者的回调函数
+void chao_callback(qq_msgs::Carry msg)  // 订阅者的回调函数
 {
-    ROS_WARN(msg.data.c_str());  // 打印接收到的消息
+    ROS_INFO(msg.grade.c_str());  // 打印接收到的消息
+    ROS_WARN("星级: %d", msg.star);  // 打印接收到的消息
+    ROS_ERROR(msg.date.c_str());  // 打印接收到的消息
 }
 
 void yao_callback(std_msgs::String msg)  // 订阅者2的回调函数
