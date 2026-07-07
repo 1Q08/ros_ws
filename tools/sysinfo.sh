@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ===================================================================
-# 系统信息综合查询脚本 + 软件安装助手（V2.2.0）
+# 系统信息综合查询脚本 + 软件安装助手（V2.2.1）
 # 功能：显示系统信息，并提供常用软件安装选项以及系统更新与清理功能
 #       1. rqt —— ROS 可视化工具
 #       2. ubuntu-cleaner —— 系统垃圾清理工具
@@ -154,7 +154,7 @@ while true; do
             else
                 echo "正在使用默认浏览器打开 VOFA+ 串口助手官网 ..."
                 echo "请下载正确版本的 VOFA+ 串口助手并安装"
-                xdg-open https://www.vofa.plus/ 2>/dev/null &
+                xdg-open https://www.vofa.plus/ 2>/dev/null &  # 忽略错误输出并且立马运行下一条命令
                 echo -e "${GREEN}浏览器已打开，请自行选择正确版本下载安装${NC}"
                 read -p "按 Enter 键继续..."
             fi
@@ -163,7 +163,7 @@ while true; do
             echo -e "${GREEN}退出${NC}"
             exit 0  # 终止脚本循环
             ;;
-        *)
+        *)  # * 可以匹配所有未被前面任何模式匹配到的输入
             echo -e "${RED}无效输入，请输入 0-5 之间的数字${NC}"
             ;;
     esac
