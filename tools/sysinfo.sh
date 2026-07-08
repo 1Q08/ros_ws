@@ -138,12 +138,21 @@ while true; do
             ;;
         4)
             clear  # 清屏
-            echo "正在执行系统更新与清理 ..."
+            echo "正在执行系统更新 ..."
             sudo apt update
             sudo apt upgrade -y
-            sudo apt autoremove -y
-            sudo apt autoclean -y
-            echo -e "${GREEN}✅系统更新与清理完成！${NC}"
+
+            echo -e "${GREEN}✅ 系统更新完成！${NC}"
+            echo ""
+            read -p "是否继续执行清理(y/N)?" reply
+            if [[ $reply =~ ^[Yy]$ ]]; then
+                echo "正在执行系统清理 ..."
+                sudo apt autoremove  # 让用户确认是否继续执行清理操作
+                sudo apt autoclean
+                echo -e "${GREEN}✅ 系统清理完成！${NC}"
+            else
+                echo -e "${YELLOW}跳过清理步骤${NC}"
+            fi
             ;;
         5)
             clear  # 清屏
