@@ -4,3 +4,9 @@
 [submodule "src/ros_tutorials"]
 	path = src/ros_tutorials
 	url = https://github.com/ros/ros_tutorials.git
+[submodule "submodule/hipnuc"]
+	path = submodule/hipnuc
+	url = https://github.com/hipnuc/products.git
+[submodule "submodule/damiao_orin_nx"]
+	path = submodule/damiao_orin_nx
+	url = https://gitee.com/kit-miao/orin-board.git

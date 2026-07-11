@@ -1,0 +1,11 @@
+<launch>
+
+<include file = "$(find wpr_simulation)/launch/wpb_stage_slam.launch"/>
+
+<node pkg = "hector_mapping" type = "hector_mapping" name = "hector_mapping"/>
+
+<node pkg = "rviz" type = "rviz" name = "rviz" args = "-d $(find slam_pkg)/rviz/slam.rviz"/>
+
+<node pkg = "rqt_robot_steering" type = "rqt_robot_steering" name = "rqt_robot_steering"/>
+
+</launch>

@@ -3,12 +3,12 @@
 
 void chao_callback(std_msgs::String msg)  // 订阅者的回调函数
 {
-    ROS_WARN(msg.data.c_str());  // 打印接收到的消息
+    ROS_WARN("%s", msg.data.c_str());  // 打印接收到的消息
 }
 
 void yao_callback(std_msgs::String msg)  // 订阅者2的回调函数
 {
-    ROS_ERROR(msg.data.c_str());  // 打印接收到的消息
+    ROS_ERROR("%s", msg.data.c_str());  // 打印接收到的消息
 }
 
 int main(int argc, char *argv[])
