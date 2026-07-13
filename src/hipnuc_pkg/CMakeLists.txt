@@ -205,12 +205,12 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-#hipnuc_node
+#read_hipnuc_node
 # 添加可执行文件
-add_executable(hipnuc_node src/hipnuc_node.cpp)
+add_executable(read_hipnuc_node src/read_hipnuc_node.cpp)
 # 添加依赖（确保生成目标先构建）
-add_dependencies(hipnuc_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(read_hipnuc_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 # 链接所需的库
-target_link_libraries(hipnuc_node
+target_link_libraries(read_hipnuc_node
   ${catkin_LIBRARIES}
 )
