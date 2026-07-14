@@ -1,13 +1,14 @@
-/*
-* Created on: 2026年7月13日
-* Author: zy
-* Version: 1.0.0
-* Description: 检查并读取 HiPNUC 串口数据，输出为十六进制字符串
-*/
+/*==============================================================================
+* 创建于: 2026年7月13日
+* 作者: zy
+* 版本: 2.0.0
+* 功能描述: 检查并读取 HiPNUC 串口数据，输出为十六进制字符串
+==============================================================================*/
 
 #include <ros/ros.h>
 #include <unistd.h>  // access() 检查文件是否存在
 #include <string>
+#include <cstring>  // memcpy()
 #include <fcntl.h>  // open()
 #include <termios.h>  // 串口配置
 
@@ -62,7 +63,7 @@ int main(int argc, char *argv[])
     }
     /******************************************************************************/
 
-    /******************************读取*************************************/
+    /*************************************读取*************************************/
     // 每帧固定长度 82 字节，帧头为 5A A5，先对齐帧头再读取整帧
     const size_t FRAME_SIZE = 82;
     uint8_t frame[FRAME_SIZE];  // 单帧缓冲区
@@ -112,14 +113,21 @@ int main(int argc, char *argv[])
             continue;
         }
 
-        // 将整帧拼接成十六进制字符串并输出
-        std::string hex_str;
-        char tmp[4];
-        for (size_t i = 0; i < FRAME_SIZE; ++i){
-            snprintf(tmp, sizeof(tmp), "%02X ", frame[i]);
-            hex_str += tmp;
-        }
-        ROS_INFO("读取到一帧 %zu 字节: %s", FRAME_SIZE, hex_str.c_str());
+        // // 将整帧拼接成十六进制字符串并输出
+        // std::string hex_str;
+        // char tmp[4];
+        // for (size_t i = 0; i < FRAME_SIZE; ++i){
+        //     snprintf(tmp, sizeof(tmp), "%02X ", frame[i]);
+        //     hex_str += tmp;
+        // }
+        // ROS_INFO("读取到一帧 %zu 字节: %s", FRAME_SIZE, hex_str.c_str());
+
+        // 截取第 54~65 字节（共 12 字节），解析为 roll、pitch、yaw 三个 float
+        float roll = 0.0f, pitch = 0.0f, yaw = 0.0f;
+        memcpy(&roll,  &frame[54], sizeof(float));
+        memcpy(&pitch, &frame[58], sizeof(float));
+        memcpy(&yaw,   &frame[62], sizeof(float));
+        ROS_INFO("姿态角 -> roll: %.3f, pitch: %.3f, yaw: %.3f", roll, pitch, yaw);
 
         ros::spinOnce();
     }
