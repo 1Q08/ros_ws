@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ===================================================================
-# 系统信息综合查询脚本 + 软件安装助手（V3.1.0）
+# 系统信息综合查询脚本 + 软件安装助手（V3.2.0）
 # 功能：显示系统信息，并提供常用软件安装选项以及系统更新与清理功能
 #       1. rqt —— ROS 可视化工具
 #       2. plotjuggler —— ROS 数据可视化/绘图工具
@@ -30,38 +30,56 @@ trap 'echo -e "\n${YELLOW}已取消操作, 退出脚本${NC}"; exit 130' INT
 # 公共函数
 # -------------------------------------------------------------------
 
+# 严格的 y/N 输入询问函数
+# 用法: if ask_yes_no "提示语"; then ...同意... else ...拒绝... fi
+# 说明: 只接受 y/N，其他任何输入（含空输入）都会提示并重新询问
+ask_yes_no() {
+    local prompt="$1"
+    local reply
+    while true; do
+        read -rp "$(echo -e "${YELLOW}${prompt} (y/N): ${NC}")" reply
+        case "$reply" in
+            [y]) return 0 ;;
+            [N]) return 1 ;;
+            *) echo -e "${RED}❗ 无效输入, 请输入 y 或 N${NC}" ;;
+        esac
+    done
+}
+
 # 通用软件包安装函数
 # 用法: install_pkg "显示名称" 包名1 [包名2 ...]
-# 说明: apt-get update 失败（例如某个无关软件源失效）不会中断安装，
-#       仅以 apt-get install 的实际结果为准，避免网络/软件源问题误判。
+# 说明: 确保先执行 sudo apt-get update，若失败则提示用户是否继续安装
 install_pkg() {
     local desc="$1"
     shift
     echo "正在安装 ${desc} ..."
-    # update 仅用于刷新缓存，失败时给出警告但继续尝试安装
+    # update 仅用于刷新缓存，失败时让用户选择是否继续安装
     if ! sudo apt-get update; then
-        echo -e "${YELLOW}⚠️  apt-get update 出现警告（可能有失效的软件源）, 仍尝试使用现有缓存安装...${NC}"
+        echo -e "${YELLOW}⚠️ apt-get update 出现警告${NC}"
+        if ! ask_yes_no "是否使用现有缓存继续安装? (建议优先检查软件源配置)"; then
+            echo -e "${YELLOW}已取消安装, 请检查软件源配置后重试${NC}"
+            return 1
+        fi
     fi
     if sudo apt-get install -y "$@"; then
         echo -e "${GREEN}✅ ${desc} 安装成功！${NC}"
         return 0
     else
-        echo -e "${RED}❗ ${desc} 安装失败, 请检查网络或依赖❗${NC}"
+        echo -e "${RED}❗ ${desc} 安装失败, 请检查网络或依赖${NC}"
         return 1
     fi
 }
 
-clear  # 清屏
-
 # 预检 sudo 权限，避免运行到一半才失败留下半成品状态
 if ! sudo -v; then
-    echo -e "${RED}❗错误: 当前用户无 sudo 权限，无法执行安装操作${NC}"
+    echo -e "${RED}❗ 错误: 当前用户无 sudo 权限，无法执行安装操作${NC}"
     exit 1
 fi
 
 # ===================================================================
 # 第一部分：系统信息报告
 # ===================================================================
+clear  # 清屏
 echo -e "${BLUE}================================================${NC}"
 echo -e "${GREEN}       系统信息报告 (System Info)${NC}"
 echo -e "${BLUE}================================================${NC}"
@@ -164,9 +182,14 @@ while true; do
         5)
             clear  # 清屏
             echo "正在执行系统更新 ..."
-            # update 失败（例如失效软件源）不阻断 upgrade，仅以 upgrade 结果为准
+            # update 失败（例如失效软件源）时让用户选择是否继续升级
             if ! sudo apt-get update; then
-                echo -e "${YELLOW}⚠️  部分软件源刷新失败, 仍尝试基于现有缓存升级...${NC}"
+                echo -e "${YELLOW}⚠️  部分软件源刷新失败${NC}"
+                if ! ask_yes_no "是否基于现有缓存继续升级? (建议优先检查软件源配置)"; then
+                    echo -e "${YELLOW}已取消升级, 请检查软件源配置后重试${NC}"
+                    echo -e "${BLUE}------------------------------------------${NC}"
+                    continue
+                fi
             fi
             if sudo apt-get upgrade -y; then
                 echo -e "${GREEN}✅ 系统更新完成！${NC}"
@@ -174,8 +197,7 @@ while true; do
                 echo -e "${RED}❗ 系统更新失败, 请检查网络或软件源❗${NC}"
             fi
             echo ""
-            read -rp "是否继续执行清理(y/N)?" reply
-            if [[ $reply =~ ^[Yy]$ ]]; then
+            if ask_yes_no "是否继续执行清理?"; then
                 echo "正在执行系统清理 ..."
                 sudo apt-get autoremove -y  # 让用户确认是否继续执行清理操作
                 sudo apt-get autoclean
