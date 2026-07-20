@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ===================================================================
-# 系统信息综合查询脚本 + 软件安装助手（V3.2.0）
+# 系统信息综合查询脚本 + 软件安装助手（V3.2.1）
 # 功能：显示系统信息，并提供常用软件安装选项以及系统更新与清理功能
 #       1. rqt —— ROS 可视化工具
 #       2. plotjuggler —— ROS 数据可视化/绘图工具
@@ -31,7 +31,8 @@ trap 'echo -e "\n${YELLOW}已取消操作, 退出脚本${NC}"; exit 130' INT
 # -------------------------------------------------------------------
 
 # 严格的 y/N 输入询问函数
-# 用法: if ask_yes_no "提示语"; then ...同意... else ...拒绝... fi
+# 用法: if ask_yes_no "提示语";
+#       then ...同意... else ...拒绝... fi
 # 说明: 只接受 y/N，其他任何输入（含空输入）都会提示并重新询问
 ask_yes_no() {
     local prompt="$1"
@@ -197,10 +198,13 @@ while true; do
                 echo -e "${RED}❗ 系统更新失败, 请检查网络或软件源❗${NC}"
             fi
             echo ""
+            echo -e "${YELLOW}预览 autoremove 结果如下:${NC}"
+            sudo apt-get autoremove --dry-run  # 先预览 autoremove 会删除什么（安全习惯）
+            echo ""
             if ask_yes_no "是否继续执行清理?"; then
                 echo "正在执行系统清理 ..."
-                sudo apt-get autoremove -y  # 让用户确认是否继续执行清理操作
-                sudo apt-get autoclean
+                sudo apt-get autoremove -y  # 自动删除不再需要的依赖包
+                sudo apt-get autoclean  # 清理本地缓存的已下载软件包
                 echo -e "${GREEN}✅ 系统清理完成！${NC}"
             else
                 echo -e "${YELLOW}跳过清理步骤${NC}"
