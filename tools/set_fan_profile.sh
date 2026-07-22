@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ===================================================================
-# 风扇配置切换脚本（nvfancontrol）
+# 风扇配置切换脚本（V1.1.0）
 # 功能：将 /etc/nvfancontrol.conf 中的 FAN_DEFAULT_PROFILE 切换为
 #       cool（散热优先）或 quiet（静音优先），并重启 nvfancontrol 服务。
 # 用法：./set_fan_profile.sh [cool|quiet]
