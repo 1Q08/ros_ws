@@ -1,0 +1,576 @@
+---
+layout: page
+title: 命令速查
+permalink: /commands/
+---
+
+<div class="command-reference">
+  <!-- 搜索区域 -->
+  <div class="search-section">
+    <h2><img src="{{ "/assets/icons/icon-search.svg" | relative_url }}" alt="搜索" class="section-icon"> 搜索命令</h2>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="输入命令或关键词搜索..." autocomplete="off">
+      <button onclick="clearSearch()">清除</button>
+    </div>
+    <div id="searchResults" class="search-results"></div>
+  </div>
+
+  <hr>
+
+  <!-- 下拉选择区域 -->
+  <div class="filter-section">
+    <h2><img src="{{ "/assets/icons/icon-eye.svg" | relative_url }}" alt="浏览" class="section-icon"> 分类浏览</h2>
+    
+    <div class="filter-row-inline">
+      <div class="filter-item">
+        <label for="rosVersion">ROS 版本:</label>
+        <select id="rosVersion" onchange="onVersionChange()">
+          <option value="">-- 请选择 --</option>
+          <option value="ros1">ROS 1</option>
+          <option value="ros2">ROS 2</option>
+        </select>
+      </div>
+
+      <div class="filter-item" id="categoryRow" style="display:none;">
+        <label for="category">命令分类:</label>
+        <select id="category" onchange="onCategoryChange()">
+          <option value="">-- 请选择 --</option>
+        </select>
+      </div>
+
+      <div class="filter-item" id="commandRow" style="display:none;">
+        <label for="command">具体命令:</label>
+        <select id="command" onchange="onCommandChange()">
+          <option value="">-- 请选择 --</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- 命令详情展示区域 -->
+  <div id="commandDetail" class="command-detail" style="display:none;">
+    <h3 id="detailTitle"></h3>
+    <div class="detail-content">
+      <p><strong>命令:</strong> <code id="detailCmd"></code></p>
+      <p><strong>说明:</strong> <span id="detailDesc"></span></p>
+      <p><strong>示例:</strong> <code id="detailExample"></code></p>
+      <div id="detailNotes">
+        <strong>注意事项:</strong>
+        <pre id="detailNotesContent"></pre>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- 全部命令列表 -->
+  <div id="allCommands" class="all-commands">
+    <h2>📚 全部命令</h2>
+    <div id="commandsList"></div>
+  </div>
+</div>
+
+<script>
+// 命令数据
+let commandsData = null;
+
+// 页面加载时获取数据
+document.addEventListener('DOMContentLoaded', function() {
+  fetch('{{ "/assets/data/commands.json" | relative_url }}')
+    .then(response => response.json())
+    .then(data => {
+      commandsData = data;
+      renderAllCommands();
+    })
+    .catch(error => console.error('加载命令数据失败:', error));
+});
+
+// 版本选择变化
+function onVersionChange() {
+  const version = document.getElementById('rosVersion').value;
+  const categoryRow = document.getElementById('categoryRow');
+  const commandRow = document.getElementById('commandRow');
+  const detailDiv = document.getElementById('commandDetail');
+  
+  // 重置下级选择
+  document.getElementById('category').innerHTML = '<option value="">-- 请选择 --</option>';
+  document.getElementById('command').innerHTML = '<option value="">-- 请选择 --</option>';
+  commandRow.style.display = 'none';
+  detailDiv.style.display = 'none';
+  
+  if (!version) {
+    categoryRow.style.display = 'none';
+    return;
+  }
+  
+  // 填充分类选项
+  const categories = commandsData[version];
+  const categorySelect = document.getElementById('category');
+  
+  for (const key in categories) {
+    const option = document.createElement('option');
+    option.value = key;
+    option.textContent = categories[key].name;
+    categorySelect.appendChild(option);
+  }
+  
+  categoryRow.style.display = 'block';
+}
+
+// 分类选择变化
+function onCategoryChange() {
+  const version = document.getElementById('rosVersion').value;
+  const category = document.getElementById('category').value;
+  const commandRow = document.getElementById('commandRow');
+  const detailDiv = document.getElementById('commandDetail');
+  
+  // 重置命令选择
+  document.getElementById('command').innerHTML = '<option value="">-- 请选择 --</option>';
+  detailDiv.style.display = 'none';
+  
+  if (!category) {
+    commandRow.style.display = 'none';
+    return;
+  }
+  
+  // 填充命令选项
+  const commands = commandsData[version][category].commands;
+  const commandSelect = document.getElementById('command');
+  
+  commands.forEach((cmd, index) => {
+    const option = document.createElement('option');
+    option.value = index;
+    option.textContent = cmd.cmd;
+    commandSelect.appendChild(option);
+  });
+  
+  commandRow.style.display = 'block';
+}
+
+// 命令选择变化
+function onCommandChange() {
+  const version = document.getElementById('rosVersion').value;
+  const category = document.getElementById('category').value;
+  const cmdIndex = document.getElementById('command').value;
+  const detailDiv = document.getElementById('commandDetail');
+  
+  if (cmdIndex === '') {
+    detailDiv.style.display = 'none';
+    return;
+  }
+  
+  const cmd = commandsData[version][category].commands[cmdIndex];
+  
+  document.getElementById('detailTitle').textContent = cmd.cmd;
+  document.getElementById('detailCmd').textContent = cmd.cmd;
+  document.getElementById('detailDesc').textContent = cmd.desc;
+  document.getElementById('detailExample').textContent = cmd.example;
+  document.getElementById('detailNotesContent').textContent = cmd.notes;
+  
+  detailDiv.style.display = 'block';
+}
+
+// 搜索功能
+document.getElementById('searchInput').addEventListener('input', function(e) {
+  const keyword = e.target.value.toLowerCase().trim();
+  const resultsDiv = document.getElementById('searchResults');
+  
+  if (!keyword) {
+    resultsDiv.innerHTML = '';
+    return;
+  }
+  
+  const results = [];
+  
+  // 遍历所有版本（跳过 common）
+  for (const version in commandsData) {
+    if (version === 'common') continue;
+    
+    // 处理 ROS1/ROS2 命令
+    for (const category in commandsData[version]) {
+      commandsData[version][category].commands.forEach(cmd => {
+        if (cmd.cmd.toLowerCase().includes(keyword) || 
+            cmd.desc.toLowerCase().includes(keyword)) {
+          results.push({
+            version: version.toUpperCase(),
+            category: commandsData[version][category].name,
+            ...cmd
+          });
+        }
+      });
+    }
+  }
+  
+  // 渲染搜索结果
+  if (results.length === 0) {
+    resultsDiv.innerHTML = '<p class="no-results">未找到匹配的命令</p>';
+    return;
+  }
+  
+  let html = '<div class="results-list">';
+  results.forEach(cmd => {
+    html += `
+      <div class="result-item" onclick="showSearchResult('${cmd.cmd}')">
+        <span class="result-version">${cmd.version}</span>
+        <span class="result-category">${cmd.category}</span>
+        <code class="result-cmd">${cmd.cmd}</code>
+        <span class="result-desc">${cmd.desc}</span>
+      </div>
+    `;
+  });
+  html += '</div>';
+  
+  resultsDiv.innerHTML = html;
+});
+
+// 显示搜索结果详情
+function showSearchResult(cmdName) {
+  // 在全部命令中查找并高亮
+  const allCommands = document.querySelectorAll('.command-card');
+  allCommands.forEach(card => {
+    if (card.querySelector('code').textContent === cmdName) {
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      card.classList.add('highlight');
+      setTimeout(() => card.classList.remove('highlight'), 2000);
+    }
+  });
+}
+
+// 清除搜索
+function clearSearch() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchResults').innerHTML = '';
+}
+
+// 渲染全部命令列表
+function renderAllCommands() {
+  const container = document.getElementById('commandsList');
+  let html = '';
+  
+  // ROS1 命令
+  html += '<h3 class="version-title">ROS 1</h3>';
+  for (const category in commandsData.ros1) {
+    html += renderCategory('ros1', category, commandsData.ros1[category]);
+  }
+  
+  // ROS2 命令
+  html += '<h3 class="version-title">ROS 2</h3>';
+  for (const category in commandsData.ros2) {
+    html += renderCategory('ros2', category, commandsData.ros2[category]);
+  }
+  
+  container.innerHTML = html;
+}
+
+// 渲染分类命令
+function renderCategory(version, key, category) {
+  let html = `<div class="category-section">
+    <h4 class="category-title">${category.name}</h4>
+    <div class="commands-grid">`;
+  
+  category.commands.forEach(cmd => {
+    html += `
+      <div class="command-card">
+        <code class="cmd-name">${cmd.cmd}</code>
+        <p class="cmd-desc">${cmd.desc}</p>
+        <p class="cmd-example"><strong>示例:</strong> <code>${cmd.example}</code></p>
+        <details class="cmd-notes">
+          <summary>注意事项</summary>
+          <pre>${cmd.notes}</pre>
+        </details>
+      </div>
+    `;
+  });
+  
+  html += '</div></div>';
+  return html;
+}
+</script>
+
+<style>
+.command-reference {
+  max-width: 100%;
+}
+
+/* 区域标题图标 */
+.section-icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  margin-right: 0.3em;
+  opacity: 0.85;
+}
+
+/* 搜索区域 */
+.search-section {
+  margin-bottom: 20px;
+}
+
+.search-box {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.search-box input {
+  flex: 1;
+  padding: 10px 15px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.search-box input:focus {
+  border-color: #0366d6;
+  outline: none;
+}
+
+.search-box button {
+  padding: 10px 20px;
+  background: #666;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.search-box button:hover {
+  background: #555;
+}
+
+/* 搜索结果 */
+.search-results {
+  margin-top: 10px;
+}
+
+.results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.result-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 15px;
+  background: #f6f8fa;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.result-item:hover {
+  background: #e1e4e8;
+}
+
+.result-version {
+  background: #0366d6;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.result-category {
+  color: #666;
+  font-size: 14px;
+}
+
+.result-cmd {
+  background: #fff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.result-desc {
+  color: #444;
+}
+
+.no-results {
+  color: #666;
+  font-style: italic;
+}
+
+/* 筛选区域 - 横向并排 */
+.filter-section {
+  margin: 20px 0;
+}
+
+.filter-row-inline {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.filter-item label {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.filter-item select {
+  padding: 8px 12px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  min-width: 180px;
+}
+
+.filter-item select:focus {
+  border-color: #0366d6;
+  outline: none;
+}
+
+/* 命令详情 */
+.command-detail {
+  background: #f6f8fa;
+  border: 1px solid #e1e4e8;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+.command-detail h3 {
+  margin-top: 0;
+  color: #0366d6;
+}
+
+.detail-content p {
+  margin: 10px 0;
+}
+
+.detail-content code {
+  background: #fff;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+#detailNotes {
+  margin-top: 15px;
+}
+
+#detailNotes pre {
+  background: #fff;
+  padding: 10px;
+  border-radius: 4px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* 全部命令 */
+.all-commands {
+  margin-top: 30px;
+}
+
+.version-title {
+  color: #0366d6;
+  border-bottom: 2px solid #0366d6;
+  padding-bottom: 5px;
+  margin-top: 30px;
+}
+
+.category-section {
+  margin: 20px 0;
+}
+
+.category-title {
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.commands-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 15px;
+}
+
+.command-card {
+  background: #fff;
+  border: 1px solid #e1e4e8;
+  border-radius: 8px;
+  padding: 15px;
+  transition: box-shadow 0.2s;
+}
+
+.command-card:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.command-card.highlight {
+  border-color: #0366d6;
+  box-shadow: 0 0 0 3px rgba(3,102,214,0.3);
+}
+
+.cmd-name {
+  display: block;
+  font-size: 16px;
+  font-weight: bold;
+  color: #0366d6;
+  margin-bottom: 8px;
+}
+
+.cmd-desc {
+  color: #333;
+  margin: 8px 0;
+}
+
+.cmd-example {
+  font-size: 14px;
+  color: #666;
+}
+
+.cmd-example code {
+  background: #f6f8fa;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+.cmd-notes {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.cmd-notes summary {
+  cursor: pointer;
+  color: #666;
+}
+
+.cmd-notes pre {
+  background: #f6f8fa;
+  padding: 10px;
+  border-radius: 4px;
+  margin-top: 8px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-size: 13px;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .commands-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .filter-row-inline {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filter-item select {
+    width: 100%;
+  }
+  
+  .result-item {
+    flex-wrap: wrap;
+  }
+}
+</style>

@@ -1,0 +1,17 @@
+title: ROS 命令速查
+description: 一个开源的 ROS1 / ROS2 命令行参考工具
+baseurl: "/ros_ws"   # 如果你的仓库名是 ros-command-ref，否则改为 /仓库名
+url: "https://1q08.github.io"
+
+# 主题
+theme: minima
+
+# minima 2.5 导航配置
+header_pages:
+  - about.md
+  - commands.html
+
+# 插件
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag

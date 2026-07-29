@@ -1,0 +1,287 @@
+{
+  "ros1": {
+    "core": {
+      "name": "核心命令",
+      "commands": [
+        {
+          "cmd": "roscore",
+          "desc": "启动 ROS Master 和参数服务器",
+          "example": "roscore",
+          "notes": "必须在运行任何 ROS 节点之前启动"
+        },
+        {
+          "cmd": "rosrun",
+          "desc": "运行指定包中的节点",
+          "example": "rosrun turtlesim turtlesim_node",
+          "notes": "格式: rosrun <package> <node>"
+        },
+        {
+          "cmd": "roslaunch",
+          "desc": "通过 launch 文件启动多个节点",
+          "example": "roslaunch my_package my_launch.launch",
+          "notes": "支持参数传递和节点分组"
+        }
+      ]
+    },
+    "topic": {
+      "name": "话题命令",
+      "commands": [
+        {
+          "cmd": "rostopic list",
+          "desc": "列出所有活跃的话题",
+          "example": "rostopic list",
+          "notes": "显示当前系统中所有发布/订阅的话题"
+        },
+        {
+          "cmd": "rostopic echo",
+          "desc": "实时显示话题消息内容",
+          "example": "rostopic echo /chatter",
+          "notes": "按 Ctrl+C 停止显示"
+        },
+        {
+          "cmd": "rostopic pub",
+          "desc": "向话题发布消息",
+          "example": "rostopic pub /chatter std_msgs/String \"hello\"",
+          "notes": "支持 -r 参数设置发布频率"
+        },
+        {
+          "cmd": "rostopic hz",
+          "desc": "显示话题发布频率",
+          "example": "rostopic hz /chatter",
+          "notes": "用于检查话题是否按预期频率发布"
+        }
+      ]
+    },
+    "node": {
+      "name": "节点命令",
+      "commands": [
+        {
+          "cmd": "rosnode list",
+          "desc": "列出所有运行的节点",
+          "example": "rosnode list",
+          "notes": "显示当前系统中所有活跃的节点名称"
+        },
+        {
+          "cmd": "rosnode info",
+          "desc": "显示节点详细信息",
+          "example": "rosnode info /talker",
+          "notes": "包括发布/订阅的话题和服务"
+        },
+        {
+          "cmd": "rosnode kill",
+          "desc": "终止指定节点",
+          "example": "rosnode kill /talker",
+          "notes": "强制关闭节点，可能产生警告"
+        }
+      ]
+    },
+    "service": {
+      "name": "服务命令",
+      "commands": [
+        {
+          "cmd": "rosservice list",
+          "desc": "列出所有可用的服务",
+          "example": "rosservice list",
+          "notes": "显示当前系统中所有服务"
+        },
+        {
+          "cmd": "rosservice call",
+          "desc": "调用服务",
+          "example": "rosservice call /add_two_ints \"a: 1, b: 2\"",
+          "notes": "格式: rosservice call <service> <args>"
+        }
+      ]
+    },
+    "param": {
+      "name": "参数命令",
+      "commands": [
+        {
+          "cmd": "rosparam list",
+          "desc": "列出所有参数",
+          "example": "rosparam list",
+          "notes": "显示参数服务器中的所有参数"
+        },
+        {
+          "cmd": "rosparam set",
+          "desc": "设置参数值",
+          "example": "rosparam set /my_param 10",
+          "notes": "格式: rosparam set <param> <value>"
+        },
+        {
+          "cmd": "rosparam get",
+          "desc": "获取参数值",
+          "example": "rosparam get /my_param",
+          "notes": "格式: rosparam get <param>"
+        }
+      ]
+    },
+    "bag": {
+      "name": "数据记录",
+      "commands": [
+        {
+          "cmd": "rosbag record",
+          "desc": "录制话题数据到 bag 文件",
+          "example": "rosbag record -a",
+          "notes": "-a 录制所有话题，可指定话题名"
+        },
+        {
+          "cmd": "rosbag play",
+          "desc": "回放 bag 文件",
+          "example": "rosbag play my_data.bag",
+          "notes": "支持 -r 参数调整回放速度"
+        },
+        {
+          "cmd": "rosbag info",
+          "desc": "显示 bag 文件信息",
+          "example": "rosbag info my_data.bag",
+          "notes": "显示时长、话题、消息类型等信息"
+        }
+      ]
+    }
+  },
+  "ros2": {
+    "core": {
+      "name": "核心命令",
+      "commands": [
+        {
+          "cmd": "ros2 run",
+          "desc": "运行指定包中的节点",
+          "example": "ros2 run turtlesim turtlesim_node",
+          "notes": "格式: ros2 run <package> <node>"
+        },
+        {
+          "cmd": "ros2 launch",
+          "desc": "通过 launch 文件启动多个节点",
+          "example": "ros2 launch my_package my_launch.py",
+          "notes": "ROS2 使用 Python launch 文件"
+        }
+      ]
+    },
+    "topic": {
+      "name": "话题命令",
+      "commands": [
+        {
+          "cmd": "ros2 topic list",
+          "desc": "列出所有活跃的话题",
+          "example": "ros2 topic list",
+          "notes": "显示当前系统中所有发布/订阅的话题"
+        },
+        {
+          "cmd": "ros2 topic echo",
+          "desc": "实时显示话题消息内容",
+          "example": "ros2 topic echo /chatter",
+          "notes": "按 Ctrl+C 停止显示"
+        },
+        {
+          "cmd": "ros2 topic pub",
+          "desc": "向话题发布消息",
+          "example": "ros2 topic pub /chatter std_msgs/msg/String \"data: hello\"",
+          "notes": "ROS2 使用 YAML 格式传递消息"
+        },
+        {
+          "cmd": "ros2 topic hz",
+          "desc": "显示话题发布频率",
+          "example": "ros2 topic hz /chatter",
+          "notes": "用于检查话题是否按预期频率发布"
+        }
+      ]
+    },
+    "node": {
+      "name": "节点命令",
+      "commands": [
+        {
+          "cmd": "ros2 node list",
+          "desc": "列出所有运行的节点",
+          "example": "ros2 node list",
+          "notes": "显示当前系统中所有活跃的节点名称"
+        },
+        {
+          "cmd": "ros2 node info",
+          "desc": "显示节点详细信息",
+          "example": "ros2 node info /talker",
+          "notes": "包括发布/订阅的话题、服务和动作"
+        }
+      ]
+    },
+    "service": {
+      "name": "服务命令",
+      "commands": [
+        {
+          "cmd": "ros2 service list",
+          "desc": "列出所有可用的服务",
+          "example": "ros2 service list",
+          "notes": "显示当前系统中所有服务"
+        },
+        {
+          "cmd": "ros2 service call",
+          "desc": "调用服务",
+          "example": "ros2 service call /add_two_ints example_interfaces/srv/AddTwoInts \"{a: 1, b: 2}\"",
+          "notes": "格式: ros2 service call <service> <type> <args>"
+        }
+      ]
+    },
+    "action": {
+      "name": "动作命令",
+      "commands": [
+        {
+          "cmd": "ros2 action list",
+          "desc": "列出所有可用的动作",
+          "example": "ros2 action list",
+          "notes": "显示当前系统中所有动作服务器"
+        },
+        {
+          "cmd": "ros2 action send_goal",
+          "desc": "发送动作目标",
+          "example": "ros2 action send_goal /fibonacci action_tutorials_interfaces/action/Fibonacci \"{order: 5}\"",
+          "notes": "格式: ros2 action send_goal <action> <type> <goal>"
+        }
+      ]
+    },
+    "param": {
+      "name": "参数命令",
+      "commands": [
+        {
+          "cmd": "ros2 param list",
+          "desc": "列出节点的所有参数",
+          "example": "ros2 param list /my_node",
+          "notes": "ROS2 参数属于特定节点"
+        },
+        {
+          "cmd": "ros2 param set",
+          "desc": "设置参数值",
+          "example": "ros2 param set /my_node my_param 10",
+          "notes": "格式: ros2 param set <node> <param> <value>"
+        },
+        {
+          "cmd": "ros2 param get",
+          "desc": "获取参数值",
+          "example": "ros2 param get /my_node my_param",
+          "notes": "格式: ros2 param get <node> <param>"
+        }
+      ]
+    },
+    "bag": {
+      "name": "数据记录",
+      "commands": [
+        {
+          "cmd": "ros2 bag record",
+          "desc": "录制话题数据到 bag 文件",
+          "example": "ros2 bag record -a",
+          "notes": "-a 录制所有话题，可指定话题名"
+        },
+        {
+          "cmd": "ros2 bag play",
+          "desc": "回放 bag 文件",
+          "example": "ros2 bag play my_data.db3",
+          "notes": "ROS2 使用 SQLite3 格式存储"
+        },
+        {
+          "cmd": "ros2 bag info",
+          "desc": "显示 bag 文件信息",
+          "example": "ros2 bag info my_data.db3",
+          "notes": "显示时长、话题、消息类型等信息"
+        }
+      ]
+    }
+  }
+}

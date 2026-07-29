@@ -49,3 +49,18 @@ qtcreator-*
 
 # Catkin custom files
 CATKIN_IGNORE
+
+# Jekyll / GitHub Pages
+docs/_site/
+docs/.jekyll-cache/
+docs/.sass-cache/
+docs/.jekyll-metadata
+docs/vendor/
+docs/.bundle/
+
+# Ruby / Bundler
+.bundle/
+vendor/bundle/
+
+# Node (如果后续使用)
+node_modules/
