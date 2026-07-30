@@ -1,0 +1,119 @@
+/* ============================================================
+   全局主题系统 - CSS 变量定义
+   ============================================================
+   浅色主题：白色背景、深色文字
+   深色主题：深色背景、浅色文字
+   ============================================================ */
+:root {
+  /* 浅色主题（默认） */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f6f8fa;
+  --bg-tertiary: #e1e4e8;
+  --text-primary: #24292e;
+  --text-secondary: #666666;
+  --text-muted: #444444;
+  --border-color: #e1e4e8;
+  --border-strong: #d1d5da;
+  --accent-color: #0366d6;
+  --accent-hover: #0256b9;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --code-bg: #f6f8fa;
+  --input-bg: #ffffff;
+}
+
+/* 深色主题 */
+[data-theme="dark"] {
+  --bg-primary: #0d1117;
+  --bg-secondary: #161b22;
+  --bg-tertiary: #21262d;
+  --text-primary: #c9d1d9;
+  --text-secondary: #8b949e;
+  --text-muted: #6e7681;
+  --border-color: #30363d;
+  --border-strong: #3d444d;
+  --accent-color: #58a6ff;
+  --accent-hover: #79b8ff;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --code-bg: #161b22;
+  --input-bg: #0d1117;
+}
+
+/* ============================================================
+   全局应用主题变量
+   ============================================================ */
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ============================================================
+   深色模式 - 导航链接颜色修复
+   ============================================================
+   minima 主题的导航链接默认使用固定颜色
+   需要覆盖为 CSS 变量以确保深色模式下可见
+   ============================================================ */
+.site-title,
+.site-title:visited {
+  color: var(--text-primary) !important;
+}
+
+.page-link {
+  color: var(--text-primary) !important;
+}
+
+.page-link:hover {
+  color: var(--accent-color) !important;
+}
+
+/* 页脚链接 */
+.footer-col-wrapper,
+.footer-heading,
+.contact-list,
+.social-media-list {
+  color: var(--text-primary) !important;
+}
+
+.footer-col-wrapper a {
+  color: var(--accent-color) !important;
+}
+
+/* ============================================================
+   主题切换按钮（导航栏中）
+   ============================================================ */
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+  margin-left: 15px;
+  vertical-align: middle;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--border-strong);
+}
+
+#themeIcon {
+  font-size: 14px;
+}
+
+/* ============================================================
+   响应式调整
+   ============================================================ */
+@media (max-width: 768px) {
+  .theme-toggle-btn {
+    margin-left: 0;
+    margin-top: 10px;
+    display: flex;
+    width: fit-content;
+  }
+}

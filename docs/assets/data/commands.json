@@ -161,22 +161,34 @@
       "name": "话题命令",
       "commands": [
         {
+          "cmd": "ros2 topic -h",
+          "desc": "查看话题命令的帮助信息",
+          "example": "ros2 topic -h",
+          "notes": "显示 ros2 topic 的所有子命令和用法说明，也可用于子命令，如 ros2 topic pub -h"
+        },
+        {
           "cmd": "ros2 topic list",
           "desc": "列出所有活跃的话题",
           "example": "ros2 topic list",
-          "notes": "显示当前系统中所有发布/订阅的话题"
+          "notes": "显示当前系统中所有发布/订阅的话题\n\n常用选项：\n  -t, --show-types    同时显示话题类型\n  -v, --verbose       显示详细信息（包括 QoS 配置、发布/订阅节点数等）"
         },
         {
           "cmd": "ros2 topic echo",
-          "desc": "实时显示话题消息内容",
+          "desc": "实时打印话题发布的消息内容",
           "example": "ros2 topic echo /chatter",
           "notes": "按 Ctrl+C 停止显示"
         },
         {
+          "cmd": "ros2 topic info",
+          "desc": "显示一个话题的详细信息，包括其消息类型、发布者和订阅者的数量等",
+          "example": "ros2 topic info /chatter",
+          "notes": "按 Ctrl+C 停止显示\n\n常用选项：\n  -v, --verbose       显示详细信息（包括 QoS 配置、发布/订阅节点数等）"
+        },
+        {
           "cmd": "ros2 topic pub",
-          "desc": "向话题发布消息",
+          "desc": "手动向话题发布消息",
           "example": "ros2 topic pub /chatter std_msgs/msg/String \"data: hello\"",
-          "notes": "ROS2 使用 YAML 格式传递消息"
+          "notes": "ROS2 使用 YAML 格式传递消息\n\n常用选项：\n  --once            只发布一次消息后退出\n  -r 1, --rate 1    以 1Hz 频率持续发布（默认 1Hz）"
         },
         {
           "cmd": "ros2 topic hz",

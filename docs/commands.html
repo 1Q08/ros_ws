@@ -1,27 +1,77 @@
 ---
+# ============================================================
+# Jekyll Front Matter（页面元数据）
+# ============================================================
+# layout: 使用 minima 主题的 page 布局（含 header/footer）
+# title:  页面标题，显示在浏览器标签和页面顶部
+# permalink: URL 路径，最终输出为 /commands/index.html
+# ============================================================
 layout: page
 title: 命令速查
 permalink: /commands/
 ---
 
+<!--
+============================================================
+  ROS 命令速查页面 - 主容器
+  ============================================================
+  结构概览：
+  ┌─────────────────────────────────────────────┐
+  │  1. 搜索区域（search-section）               │
+  │     ├── 搜索输入框 + 清除按钮                │
+  │     ├── 实时搜索结果列表                     │
+  │     ├── 搜索详情弹出卡片（点击结果后显示）   │
+  │     ├── "显示全部命令"切换按钮               │
+  │     └── 全部命令列表（默认隐藏）             │
+  ├─────────────────────────────────────────────┤
+  │  2. 分割线（hr）                             │
+  ├─────────────────────────────────────────────┤
+  │  3. 分类浏览区域（filter-section）           │
+  │     └── 三级联动下拉框（横向并排）           │
+  │         ├── ROS 版本选择                     │
+  │         ├── 命令分类选择                     │
+  │         └── 具体命令选择                     │
+  ├─────────────────────────────────────────────┤
+  │  4. 命令详情区域（command-detail）           │
+  │     └── 显示选中命令的完整信息               │
+  └─────────────────────────────────────────────┘
+============================================================
+-->
 <div class="command-reference">
-  <!-- 搜索区域 -->
+
+  <!-- ==========================================================
+       区域 1：搜索命令
+       功能：实时搜索 + 结果列表 + 详情弹出 + 全部命令折叠
+       ========================================================== -->
   <div class="search-section">
+    <!-- 区域标题（含 SVG 图标） -->
     <h2><img src="{{ "/assets/icons/icon-search.svg" | relative_url }}" alt="搜索" class="section-icon"> 搜索命令</h2>
+    
+    <!-- 搜索输入框 + 清除按钮（横向排列） -->
     <div class="search-box">
       <input type="text" id="searchInput" placeholder="输入命令或关键词搜索..." autocomplete="off">
       <button onclick="clearSearch()">清除</button>
     </div>
+    
+    <!-- 搜索结果容器（动态填充） -->
     <div id="searchResults" class="search-results"></div>
   </div>
 
+  <!-- 区域分割线 -->
   <hr>
 
-  <!-- 下拉选择区域 -->
+  <!-- ==========================================================
+       区域 2：分类浏览
+       功能：三级联动下拉框（版本 → 分类 → 命令）
+       ========================================================== -->
   <div class="filter-section">
+    <!-- 区域标题（含 SVG 图标） -->
     <h2><img src="{{ "/assets/icons/icon-eye.svg" | relative_url }}" alt="浏览" class="section-icon"> 分类浏览</h2>
     
+    <!-- 三级下拉框容器（横向并排，响应式） -->
     <div class="filter-row-inline">
+      
+      <!-- 第一级：ROS 版本选择 -->
       <div class="filter-item">
         <label for="rosVersion">ROS 版本:</label>
         <select id="rosVersion" onchange="onVersionChange()">
@@ -31,6 +81,7 @@ permalink: /commands/
         </select>
       </div>
 
+      <!-- 第二级：命令分类选择（选中版本后显示） -->
       <div class="filter-item" id="categoryRow" style="display:none;">
         <label for="category">命令分类:</label>
         <select id="category" onchange="onCategoryChange()">
@@ -38,16 +89,21 @@ permalink: /commands/
         </select>
       </div>
 
+      <!-- 第三级：具体命令选择（选中分类后显示） -->
       <div class="filter-item" id="commandRow" style="display:none;">
         <label for="command">具体命令:</label>
         <select id="command" onchange="onCommandChange()">
           <option value="">-- 请选择 --</option>
         </select>
       </div>
+      
     </div>
   </div>
 
-  <!-- 命令详情展示区域 -->
+  <!-- ==========================================================
+       区域 3：命令详情展示（通过分类浏览选中后显示）
+       功能：显示选中命令的完整信息
+       ========================================================== -->
   <div id="commandDetail" class="command-detail" style="display:none;">
     <h3 id="detailTitle"></h3>
     <div class="detail-content">
@@ -61,85 +117,99 @@ permalink: /commands/
     </div>
   </div>
 
-  <hr>
-
-  <!-- 全部命令列表 -->
-  <div id="allCommands" class="all-commands">
-    <h2>📚 全部命令</h2>
-    <div id="commandsList"></div>
-  </div>
 </div>
 
 <script>
-// 命令数据
+// ============================================================
+// 全局数据存储
+// ============================================================
+// commandsData: 从 JSON 文件加载的完整命令数据库
+// 结构: { ros1: { core: {...}, topic: {...}, ... }, ros2: {...} }
+// ============================================================
 let commandsData = null;
 
-// 页面加载时获取数据
+// ============================================================
+// 初始化：页面加载完成后获取命令数据
+// ============================================================
+// 使用 Fetch API 从 assets/data/commands.json 加载数据
+// relative_url 过滤器自动处理 GitHub Pages 的 baseurl 子路径
+// ============================================================
 document.addEventListener('DOMContentLoaded', function() {
   fetch('{{ "/assets/data/commands.json" | relative_url }}')
     .then(response => response.json())
     .then(data => {
       commandsData = data;
-      renderAllCommands();
     })
     .catch(error => console.error('加载命令数据失败:', error));
 });
 
-// 版本选择变化
+// ============================================================
+// 三级联动下拉框 - 第一级：版本选择
+// ============================================================
+// 当用户选择 ROS 版本时触发
+// 功能：重置下级选择 → 填充分类选项 → 显示分类下拉框
+// ============================================================
 function onVersionChange() {
   const version = document.getElementById('rosVersion').value;
   const categoryRow = document.getElementById('categoryRow');
   const commandRow = document.getElementById('commandRow');
   const detailDiv = document.getElementById('commandDetail');
   
-  // 重置下级选择
+  // 重置第二级和第三级下拉框
   document.getElementById('category').innerHTML = '<option value="">-- 请选择 --</option>';
   document.getElementById('command').innerHTML = '<option value="">-- 请选择 --</option>';
   commandRow.style.display = 'none';
   detailDiv.style.display = 'none';
   
+  // 如果未选择版本，隐藏分类下拉框
   if (!version) {
     categoryRow.style.display = 'none';
     return;
   }
   
-  // 填充分类选项
+  // 根据选中版本，动态填充分类选项
   const categories = commandsData[version];
   const categorySelect = document.getElementById('category');
   
   for (const key in categories) {
     const option = document.createElement('option');
     option.value = key;
-    option.textContent = categories[key].name;
+    option.textContent = categories[key].name;  // 显示中文分类名
     categorySelect.appendChild(option);
   }
   
   categoryRow.style.display = 'block';
 }
 
-// 分类选择变化
+// ============================================================
+// 三级联动下拉框 - 第二级：分类选择
+// ============================================================
+// 当用户选择命令分类时触发
+// 功能：重置命令选择 → 填充命令选项 → 显示命令下拉框
+// ============================================================
 function onCategoryChange() {
   const version = document.getElementById('rosVersion').value;
   const category = document.getElementById('category').value;
   const commandRow = document.getElementById('commandRow');
   const detailDiv = document.getElementById('commandDetail');
   
-  // 重置命令选择
+  // 重置第三级下拉框和详情区域
   document.getElementById('command').innerHTML = '<option value="">-- 请选择 --</option>';
   detailDiv.style.display = 'none';
   
+  // 如果未选择分类，隐藏命令下拉框
   if (!category) {
     commandRow.style.display = 'none';
     return;
   }
   
-  // 填充命令选项
+  // 根据选中分类，动态填充命令选项
   const commands = commandsData[version][category].commands;
   const commandSelect = document.getElementById('command');
   
   commands.forEach((cmd, index) => {
     const option = document.createElement('option');
-    option.value = index;
+    option.value = index;  // 使用索引而非命令名，便于后续获取完整对象
     option.textContent = cmd.cmd;
     commandSelect.appendChild(option);
   });
@@ -147,20 +217,28 @@ function onCategoryChange() {
   commandRow.style.display = 'block';
 }
 
-// 命令选择变化
+// ============================================================
+// 三级联动下拉框 - 第三级：命令选择
+// ============================================================
+// 当用户选择具体命令时触发
+// 功能：获取选中命令的完整数据并显示详情
+// ============================================================
 function onCommandChange() {
   const version = document.getElementById('rosVersion').value;
   const category = document.getElementById('category').value;
   const cmdIndex = document.getElementById('command').value;
   const detailDiv = document.getElementById('commandDetail');
   
+  // 未选择命令时隐藏详情
   if (cmdIndex === '') {
     detailDiv.style.display = 'none';
     return;
   }
   
+  // 从数据中获取选中命令的完整对象
   const cmd = commandsData[version][category].commands[cmdIndex];
   
+  // 填充详情区域各个字段
   document.getElementById('detailTitle').textContent = cmd.cmd;
   document.getElementById('detailCmd').textContent = cmd.cmd;
   document.getElementById('detailDesc').textContent = cmd.desc;
@@ -170,11 +248,17 @@ function onCommandChange() {
   detailDiv.style.display = 'block';
 }
 
-// 搜索功能
+// ============================================================
+// 实时搜索功能
+// ============================================================
+// 监听搜索框 input 事件，实时匹配命令名或中文描述
+// 匹配结果以卡片列表形式显示在搜索框下方
+// ============================================================
 document.getElementById('searchInput').addEventListener('input', function(e) {
   const keyword = e.target.value.toLowerCase().trim();
   const resultsDiv = document.getElementById('searchResults');
   
+  // 清空关键词时清空结果
   if (!keyword) {
     resultsDiv.innerHTML = '';
     return;
@@ -182,35 +266,37 @@ document.getElementById('searchInput').addEventListener('input', function(e) {
   
   const results = [];
   
-  // 遍历所有版本（跳过 common）
+  // 遍历所有版本（跳过 common，已删除）
   for (const version in commandsData) {
     if (version === 'common') continue;
     
-    // 处理 ROS1/ROS2 命令
+    // 遍历该版本下的所有分类
     for (const category in commandsData[version]) {
       commandsData[version][category].commands.forEach(cmd => {
+        // 匹配条件：命令名或中文描述包含关键词
         if (cmd.cmd.toLowerCase().includes(keyword) || 
             cmd.desc.toLowerCase().includes(keyword)) {
           results.push({
-            version: version.toUpperCase(),
-            category: commandsData[version][category].name,
-            ...cmd
+            version: version.toUpperCase(),      // ROS1 / ROS2
+            category: commandsData[version][category].name,  // 中文分类名
+            ...cmd  // 展开命令对象（cmd, desc, example, notes）
           });
         }
       });
     }
   }
   
-  // 渲染搜索结果
+  // 无匹配结果时显示提示
   if (results.length === 0) {
     resultsDiv.innerHTML = '<p class="no-results">未找到匹配的命令</p>';
     return;
   }
   
+  // 渲染搜索结果列表
   let html = '<div class="results-list">';
-  results.forEach(cmd => {
+  results.forEach((cmd, index) => {
     html += `
-      <div class="result-item" onclick="showSearchResult('${cmd.cmd}')">
+      <div class="result-item" onclick="showSearchResult(${index})">
         <span class="result-version">${cmd.version}</span>
         <span class="result-category">${cmd.category}</span>
         <code class="result-cmd">${cmd.cmd}</code>
@@ -221,78 +307,92 @@ document.getElementById('searchInput').addEventListener('input', function(e) {
   html += '</div>';
   
   resultsDiv.innerHTML = html;
+  
+  // 保存当前搜索结果，供点击时获取完整数据
+  window.currentSearchResults = results;
 });
 
-// 显示搜索结果详情
-function showSearchResult(cmdName) {
-  // 在全部命令中查找并高亮
-  const allCommands = document.querySelectorAll('.command-card');
-  allCommands.forEach(card => {
-    if (card.querySelector('code').textContent === cmdName) {
-      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      card.classList.add('highlight');
-      setTimeout(() => card.classList.remove('highlight'), 2000);
-    }
-  });
+// ============================================================
+// 搜索结果显示详情（点击搜索结果后触发）
+// ============================================================
+// 在搜索栏下方动态创建/更新详情卡片
+// 功能：显示选中命令的完整信息 + 关闭按钮
+// ============================================================
+function showSearchResult(index) {
+  const cmd = window.currentSearchResults[index];
+  const resultsDiv = document.getElementById('searchResults');
+  
+  // 首次点击时创建详情容器，后续点击复用
+  let detailDiv = document.getElementById('searchDetail');
+  if (!detailDiv) {
+    detailDiv = document.createElement('div');
+    detailDiv.id = 'searchDetail';
+    detailDiv.className = 'search-detail';
+    resultsDiv.appendChild(detailDiv);
+  }
+  
+  // 填充详情内容（HTML 模板字符串）
+  detailDiv.innerHTML = `
+    <div class="search-detail-header">
+      <h3>${cmd.cmd}</h3>
+      <button class="close-detail" onclick="closeSearchDetail()">×</button>
+    </div>
+    <p><strong>版本:</strong> ${cmd.version} / ${cmd.category}</p>
+    <p><strong>说明:</strong> ${cmd.desc}</p>
+    <p><strong>示例:</strong> <code>${cmd.example}</code></p>
+    <p><strong>注意事项:</strong></p>
+    <pre>${cmd.notes}</pre>
+  `;
+  
+  detailDiv.style.display = 'block';
+  detailDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
-// 清除搜索
+// ============================================================
+// 关闭搜索详情卡片
+// ============================================================
+function closeSearchDetail() {
+  const detailDiv = document.getElementById('searchDetail');
+  if (detailDiv) {
+    detailDiv.style.display = 'none';
+  }
+}
+
+// ============================================================
+// 清除搜索（点击"清除"按钮时触发）
+// ============================================================
+// 功能：清空搜索框 + 清空结果列表 + 移除详情卡片
+// ============================================================
 function clearSearch() {
   document.getElementById('searchInput').value = '';
   document.getElementById('searchResults').innerHTML = '';
-}
-
-// 渲染全部命令列表
-function renderAllCommands() {
-  const container = document.getElementById('commandsList');
-  let html = '';
-  
-  // ROS1 命令
-  html += '<h3 class="version-title">ROS 1</h3>';
-  for (const category in commandsData.ros1) {
-    html += renderCategory('ros1', category, commandsData.ros1[category]);
+  const detailDiv = document.getElementById('searchDetail');
+  if (detailDiv) {
+    detailDiv.remove();
   }
-  
-  // ROS2 命令
-  html += '<h3 class="version-title">ROS 2</h3>';
-  for (const category in commandsData.ros2) {
-    html += renderCategory('ros2', category, commandsData.ros2[category]);
-  }
-  
-  container.innerHTML = html;
-}
-
-// 渲染分类命令
-function renderCategory(version, key, category) {
-  let html = `<div class="category-section">
-    <h4 class="category-title">${category.name}</h4>
-    <div class="commands-grid">`;
-  
-  category.commands.forEach(cmd => {
-    html += `
-      <div class="command-card">
-        <code class="cmd-name">${cmd.cmd}</code>
-        <p class="cmd-desc">${cmd.desc}</p>
-        <p class="cmd-example"><strong>示例:</strong> <code>${cmd.example}</code></p>
-        <details class="cmd-notes">
-          <summary>注意事项</summary>
-          <pre>${cmd.notes}</pre>
-        </details>
-      </div>
-    `;
-  });
-  
-  html += '</div></div>';
-  return html;
 }
 </script>
 
 <style>
+/* ============================================================
+   页面整体样式 - ROS 命令速查页
+   设计风格：GitHub 风格（白底、灰边框、蓝色强调色 #0366d6）
+   布局特点：响应式设计，移动端自动调整为单列布局
+   ============================================================ */
+
+/* ============================================================
+   全局容器
+   ============================================================ */
 .command-reference {
   max-width: 100%;
 }
 
-/* 区域标题图标 */
+/* ============================================================
+   区域标题图标（搜索/分类浏览图标）
+   ============================================================
+   尺寸：1em（与标题文字等大）
+   对齐：vertical-align 微调使图标与文字基线对齐
+   ============================================================ */
 .section-icon {
   width: 1em;
   height: 1em;
@@ -301,44 +401,58 @@ function renderCategory(version, key, category) {
   opacity: 0.85;
 }
 
-/* 搜索区域 */
+/* ============================================================
+   区域 1：搜索区域
+   ============================================================
+   包含：搜索框 + 清除按钮 + 搜索结果列表 + 搜索详情卡片
+   ============================================================ */
 .search-section {
   margin-bottom: 20px;
 }
 
+/* 搜索输入框容器 */
 .search-box {
   display: flex;
   gap: 10px;
   margin-bottom: 15px;
 }
 
+/* 搜索输入框 */
 .search-box input {
   flex: 1;
   padding: 10px 15px;
-  border: 2px solid #ddd;
+  border: 2px solid var(--border-color);
   border-radius: 6px;
   font-size: 16px;
+  background: var(--input-bg);
+  color: var(--text-primary);
 }
 
+/* 输入框聚焦状态 */
 .search-box input:focus {
-  border-color: #0366d6;
+  border-color: var(--accent-color);
   outline: none;
 }
 
+/* 清除按钮 */
 .search-box button {
   padding: 10px 20px;
-  background: #666;
-  color: white;
+  background: var(--text-secondary);
+  color: var(--bg-primary);
   border: none;
   border-radius: 6px;
   cursor: pointer;
 }
 
 .search-box button:hover {
-  background: #555;
+  background: var(--text-muted);
 }
 
-/* 搜索结果 */
+/* ============================================================
+   搜索结果列表
+   ============================================================
+   每条结果包含：版本标签 + 分类名 + 命令名 + 描述
+   ============================================================ */
 .search-results {
   margin-top: 10px;
 }
@@ -349,23 +463,25 @@ function renderCategory(version, key, category) {
   gap: 8px;
 }
 
+/* 单条搜索结果 */
 .result-item {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 10px 15px;
-  background: #f6f8fa;
+  background: var(--bg-secondary);
   border-radius: 6px;
   cursor: pointer;
   transition: background 0.2s;
 }
 
 .result-item:hover {
-  background: #e1e4e8;
+  background: var(--bg-tertiary);
 }
 
+/* 版本标签（ROS1/ROS2） */
 .result-version {
-  background: #0366d6;
+  background: var(--accent-color);
   color: white;
   padding: 2px 8px;
   border-radius: 4px;
@@ -373,32 +489,114 @@ function renderCategory(version, key, category) {
   font-weight: bold;
 }
 
+/* 分类名 */
 .result-category {
-  color: #666;
+  color: var(--text-secondary);
   font-size: 14px;
 }
 
+/* 命令名 */
 .result-cmd {
-  background: #fff;
+  background: var(--bg-primary);
   padding: 2px 6px;
   border-radius: 4px;
   font-weight: bold;
+  color: var(--text-primary);
 }
 
+/* 命令描述 */
 .result-desc {
-  color: #444;
+  color: var(--text-muted);
 }
 
+/* 无结果提示 */
 .no-results {
-  color: #666;
+  color: var(--text-secondary);
   font-style: italic;
 }
 
-/* 筛选区域 - 横向并排 */
+/* ============================================================
+   搜索详情弹出卡片
+   ============================================================
+   位置：搜索结果下方动态创建
+   特点：蓝色边框突出显示，带有关闭按钮
+   ============================================================ */
+.search-detail {
+  margin-top: 15px;
+  padding: 15px 20px;
+  background: var(--bg-primary);
+  border: 2px solid var(--accent-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 12px var(--shadow-color);
+}
+
+/* 详情卡片头部（标题 + 关闭按钮） */
+.search-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.search-detail-header h3 {
+  margin: 0;
+  color: var(--accent-color);
+  font-family: monospace;
+}
+
+/* 关闭按钮 */
+.close-detail {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  line-height: 1;
+}
+
+.close-detail:hover {
+  color: var(--text-primary);
+}
+
+/* 详情卡片内容样式 */
+.search-detail p {
+  margin: 8px 0;
+  color: var(--text-primary);
+}
+
+.search-detail code {
+  background: var(--code-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--text-primary);
+}
+
+.search-detail pre {
+  background: var(--code-bg);
+  padding: 10px;
+  border-radius: 4px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   区域 2：分类浏览（三级联动下拉框）
+   ============================================================
+   布局：横向并排（Flexbox），移动端自动换行
+   三级：ROS 版本 → 命令分类 → 具体命令
+   ============================================================ */
 .filter-section {
   margin: 20px 0;
 }
 
+/* 横向并排容器 */
 .filter-row-inline {
   display: flex;
   gap: 20px;
@@ -406,6 +604,7 @@ function renderCategory(version, key, category) {
   align-items: flex-end;
 }
 
+/* 单个下拉框组（标签 + 下拉框） */
 .filter-item {
   display: flex;
   flex-direction: column;
@@ -417,23 +616,30 @@ function renderCategory(version, key, category) {
   font-size: 14px;
 }
 
+/* 下拉框样式 */
 .filter-item select {
   padding: 8px 12px;
-  border: 2px solid #ddd;
+  border: 2px solid var(--border-color);
   border-radius: 6px;
   font-size: 14px;
   min-width: 180px;
+  background: var(--input-bg);
+  color: var(--text-primary);
 }
 
 .filter-item select:focus {
-  border-color: #0366d6;
+  border-color: var(--accent-color);
   outline: none;
 }
 
-/* 命令详情 */
+/* ============================================================
+   区域 3：命令详情（分类浏览选中后显示）
+   ============================================================
+   特点：灰色背景卡片，与搜索详情区分开
+   ============================================================ */
 .command-detail {
-  background: #f6f8fa;
-  border: 1px solid #e1e4e8;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   padding: 20px;
   margin: 20px 0;
@@ -441,17 +647,19 @@ function renderCategory(version, key, category) {
 
 .command-detail h3 {
   margin-top: 0;
-  color: #0366d6;
+  color: var(--accent-color);
 }
 
 .detail-content p {
   margin: 10px 0;
+  color: var(--text-primary);
 }
 
 .detail-content code {
-  background: #fff;
+  background: var(--bg-primary);
   padding: 2px 6px;
   border-radius: 4px;
+  color: var(--text-primary);
 }
 
 #detailNotes {
@@ -459,107 +667,21 @@ function renderCategory(version, key, category) {
 }
 
 #detailNotes pre {
-  background: #fff;
+  background: var(--bg-primary);
   padding: 10px;
   border-radius: 4px;
   white-space: pre-wrap;
   word-wrap: break-word;
+  color: var(--text-primary);
 }
 
-/* 全部命令 */
-.all-commands {
-  margin-top: 30px;
-}
-
-.version-title {
-  color: #0366d6;
-  border-bottom: 2px solid #0366d6;
-  padding-bottom: 5px;
-  margin-top: 30px;
-}
-
-.category-section {
-  margin: 20px 0;
-}
-
-.category-title {
-  color: #333;
-  margin-bottom: 15px;
-}
-
-.commands-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 15px;
-}
-
-.command-card {
-  background: #fff;
-  border: 1px solid #e1e4e8;
-  border-radius: 8px;
-  padding: 15px;
-  transition: box-shadow 0.2s;
-}
-
-.command-card:hover {
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.command-card.highlight {
-  border-color: #0366d6;
-  box-shadow: 0 0 0 3px rgba(3,102,214,0.3);
-}
-
-.cmd-name {
-  display: block;
-  font-size: 16px;
-  font-weight: bold;
-  color: #0366d6;
-  margin-bottom: 8px;
-}
-
-.cmd-desc {
-  color: #333;
-  margin: 8px 0;
-}
-
-.cmd-example {
-  font-size: 14px;
-  color: #666;
-}
-
-.cmd-example code {
-  background: #f6f8fa;
-  padding: 2px 4px;
-  border-radius: 3px;
-}
-
-.cmd-notes {
-  margin-top: 10px;
-  font-size: 14px;
-}
-
-.cmd-notes summary {
-  cursor: pointer;
-  color: #666;
-}
-
-.cmd-notes pre {
-  background: #f6f8fa;
-  padding: 10px;
-  border-radius: 4px;
-  margin-top: 8px;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  font-size: 13px;
-}
-
-/* 响应式 */
+/* ============================================================
+   响应式设计
+   ============================================================
+   断点：768px（平板/手机）
+   调整：筛选器纵向排列、下拉框全宽
+   ============================================================ */
 @media (max-width: 768px) {
-  .commands-grid {
-    grid-template-columns: 1fr;
-  }
-  
   .filter-row-inline {
     flex-direction: column;
     align-items: stretch;
