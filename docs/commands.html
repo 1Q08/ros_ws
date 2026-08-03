@@ -107,9 +107,11 @@ permalink: /commands/
   <div id="commandDetail" class="command-detail" style="display:none;">
     <h3 id="detailTitle"></h3>
     <div class="detail-content">
-      <p><strong>命令:</strong> <code id="detailCmd"></code></p>
+      <p><strong>命令:</strong></p>
+      <pre class="highlight-code"><code id="detailCmd"></code></pre>
       <p><strong>说明:</strong> <span id="detailDesc"></span></p>
-      <p><strong>示例:</strong> <code id="detailExample"></code></p>
+      <p><strong>示例:</strong></p>
+      <pre class="highlight-code"><code id="detailExample"></code></pre>
       <div id="detailNotes">
         <strong>注意事项:</strong>
         <pre id="detailNotesContent"></pre>
@@ -240,9 +242,9 @@ function onCommandChange() {
   
   // 填充详情区域各个字段
   document.getElementById('detailTitle').textContent = cmd.cmd;
-  document.getElementById('detailCmd').textContent = cmd.cmd;
+  document.getElementById('detailCmd').innerHTML = highlightCode(cmd.cmd);
   document.getElementById('detailDesc').textContent = cmd.desc;
-  document.getElementById('detailExample').textContent = cmd.example;
+  document.getElementById('detailExample').innerHTML = highlightCode(cmd.example);
   document.getElementById('detailNotesContent').textContent = cmd.notes;
   
   detailDiv.style.display = 'block';
@@ -339,7 +341,8 @@ function showSearchResult(index) {
     </div>
     <p><strong>版本:</strong> ${cmd.version} / ${cmd.category}</p>
     <p><strong>说明:</strong> ${cmd.desc}</p>
-    <p><strong>示例:</strong> <code>${cmd.example}</code></p>
+    <p><strong>示例:</strong></p>
+    <pre class="highlight-code"><code>${highlightCode(cmd.example)}</code></pre>
     <p><strong>注意事项:</strong></p>
     <pre>${cmd.notes}</pre>
   `;
@@ -370,6 +373,21 @@ function clearSearch() {
   if (detailDiv) {
     detailDiv.remove();
   }
+}
+
+// ============================================================
+// 代码关键字高亮
+// ============================================================
+// 对命令行文本做简单的关键字着色
+// 匹配规则：
+//   ros1 / ros2  →  橙黄色（品牌色）
+//   后续可扩展更多关键字
+// ============================================================
+function highlightCode(text) {
+  if (!text) return '';
+  return text
+    // ros1 / ros2 橙黄色高亮（大小写不敏感）
+    .replace(/\b(ros1|ros2)\b/gi, '<span class="hl-ros">$1</span>');
 }
 </script>
 
@@ -576,7 +594,8 @@ function clearSearch() {
   color: var(--text-primary);
 }
 
-.search-detail pre {
+/* 注意事项的 pre（保持浅色背景，与代码块区分开） */
+.search-detail pre:not(.highlight-code) {
   background: var(--code-bg);
   padding: 10px;
   border-radius: 4px;
@@ -660,6 +679,58 @@ function clearSearch() {
   padding: 2px 6px;
   border-radius: 4px;
   color: var(--text-primary);
+}
+
+/* ============================================================
+   代码高亮块 - 终端风格（命令/示例）
+   ============================================================
+   设计思路：
+   - 深色背景模拟终端窗口，与浅色页面形成对比
+   - 左侧绿色竖线模拟光标/提示符
+   - 命令名（第一个词）棕色高亮，参数保持默认色
+   - 深色模式下背景略微调整
+   ============================================================ */
+.highlight-code {
+  background: #1e1e1e;
+  border: 1px solid #333;
+  border-left: 3px solid #4ec9b0;
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin: 8px 0;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.highlight-code code {
+  background: transparent;
+  padding: 0;
+  font-family: "Cascadia Code", "Fira Code", "JetBrains Mono", "SF Mono", Consolas, "Liberation Mono", monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #d4d4d4;
+  border-radius: 0;
+}
+
+/* 深色模式下的代码块 */
+[data-theme="dark"] .highlight-code {
+  background: #0d1117;
+  border-color: #30363d;
+  border-left-color: #3fb950;
+}
+
+[data-theme="dark"] .highlight-code code {
+  color: #c9d1d9;
+}
+
+/* ROS 版本关键字高亮（橙黄色） */
+.hl-ros {
+  color: #e6a817;
+  font-weight: bold;
+}
+
+[data-theme="dark"] .hl-ros {
+  color: #f0c040;
 }
 
 #detailNotes {

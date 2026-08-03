@@ -1,11 +1,12 @@
-/* ============================================================
-   全局主题系统 - CSS 变量定义
-   ============================================================
-   浅色主题：白色背景、深色文字
-   深色主题：深色背景、浅色文字
-   ============================================================ */
+/**
+ * 全局主题系统 - CSS 变量定义
+ * ============================================================
+ * 浅色主题：白色背景、深色文字
+ * 深色主题：深色背景、浅色文字
+ */
+
+// CSS 变量（浅色主题 - 默认）
 :root {
-  /* 浅色主题（默认） */
   --bg-primary: #ffffff;
   --bg-secondary: #f6f8fa;
   --bg-tertiary: #e1e4e8;
@@ -21,7 +22,7 @@
   --input-bg: #ffffff;
 }
 
-/* 深色主题 */
+// CSS 变量（深色主题）
 [data-theme="dark"] {
   --bg-primary: #0d1117;
   --bg-secondary: #161b22;
@@ -38,21 +39,20 @@
   --input-bg: #0d1117;
 }
 
-/* ============================================================
-   全局应用主题变量
-   ============================================================ */
+/**
+ * 全局应用主题变量
+ */
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* ============================================================
-   深色模式 - 导航链接颜色修复
-   ============================================================
-   minima 主题的导航链接默认使用固定颜色
-   需要覆盖为 CSS 变量以确保深色模式下可见
-   ============================================================ */
+/**
+ * 深色模式
+ * minima 主题的导航链接默认使用固定颜色
+ * 需要覆盖为 CSS 变量以确保深色模式下可见
+ */
 .site-title,
 .site-title:visited {
   color: var(--text-primary) !important;
@@ -60,27 +60,60 @@ body {
 
 .page-link {
   color: var(--text-primary) !important;
+
+  &:hover {
+    color: var(--accent-color) !important;
+  }
 }
 
-.page-link:hover {
-  color: var(--accent-color) !important;
-}
-
-/* 页脚链接 */
+// 页脚所有文本统一为灰色（用 --text-secondary，深浅模式自动适配）
 .footer-col-wrapper,
-.footer-heading,
 .contact-list,
 .social-media-list {
-  color: var(--text-primary) !important;
+  color: var(--text-secondary) !important;
 }
 
+// 页脚普通链接为灰色
 .footer-col-wrapper a {
-  color: var(--accent-color) !important;
+  color: var(--text-secondary) !important;
 }
 
-/* ============================================================
-   主题切换按钮（导航栏中）
-   ============================================================ */
+// 邮箱链接颜色配置
+.footer-col-wrapper a.u-email {
+  color: var(--accent-hover) !important;
+}
+
+/**
+ * 页脚站点描述 - 右对齐（末字贴到页面最右）
+ */
+.footer-col-2 {
+  padding-left: 0;   // 去掉通用列的左内边距，避免右浮动后右侧留缝
+  text-align: right;
+}
+
+/**
+ * 页脚社交图标 - 单独一行、并排居中
+ */
+.footer-social {
+  clear: both;
+  margin-top: 15px;
+
+  .social-media-list {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+
+    li {
+      padding-top: 0;
+    }
+  }
+}
+
+/**
+ * 主题切换按钮（导航栏中）
+ */
 .theme-toggle-btn {
   display: inline-flex;
   align-items: center;
@@ -95,20 +128,20 @@ body {
   transition: all 0.3s ease;
   margin-left: 15px;
   vertical-align: middle;
-}
 
-.theme-toggle-btn:hover {
-  background: var(--bg-tertiary);
-  border-color: var(--border-strong);
+  &:hover {
+    background: var(--bg-tertiary);
+    border-color: var(--border-strong);
+  }
 }
 
 #themeIcon {
   font-size: 14px;
 }
 
-/* ============================================================
-   响应式调整
-   ============================================================ */
+/**
+ * 响应式调整
+ */
 @media (max-width: 768px) {
   .theme-toggle-btn {
     margin-left: 0;

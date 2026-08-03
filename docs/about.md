@@ -20,4 +20,4 @@ permalink: /about/
 
 ### 联系方式
 
-- GitHub: [1q08](https://github.com/1q08)
+- GitHub: [1Q08](https://github.com/1q08)
