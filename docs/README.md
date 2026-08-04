@@ -1,8 +1,8 @@
 # ROS 命令速查
 
-一个开源的 **ROS1 / ROS2 命令行参考工具**，基于 Jekyll + GitHub Pages 构建，提供交互式命令浏览器。
+一个开源的 **ROS1 / ROS2 命令行参考工具**，基于 Jekyll + GitHub Pages 构建，提供交互式命令浏览器
 
-> 本网站完全由 Kimi K3、Claude Opus 4.8、Deepseek V4 等开源 AI 模型生成，内容仅供参考，若有错误请联系作者纠正。
+> 本网站完全由 Kimi K3、Claude Opus 4.8、Deepseek V4 等开源 AI 模型生成，内容仅供参考，若有错误请联系作者纠正
 
 ---
 
@@ -81,7 +81,7 @@ default.html      ← 根布局
   └── post.html   ← 博客文章（带日期、作者、schema.org）
 ```
 
-所有布局通过 `layout: default` 声明继承，内容通过 `{{ content }}` 注入根布局。
+所有布局通过 `layout: default` 声明继承，内容通过 `{{ content }}` 注入根布局
 
 ### 3. 模板片段（Includes）
 
@@ -244,4 +244,4 @@ JEKYLL_ENV=production bundle exec jekyll build
 
 ## 📄 许可
 
-本项目基于 MIT 许可开源。详见项目根目录的 [LICENSE](../LICENSE) 文件。
+本项目基于 MIT 许可开源。详见项目根目录的 [LICENSE](../LICENSE) 文件
