@@ -9,4 +9,12 @@
     {%- include google-analytics.html -%}
   {%- endif -%}
   <script src="{{ "/assets/js/theme.js" | relative_url }}"></script>
+  {%- if page.custom_css -%}
+    <!-- 页面专属样式（按需加载） -->
+    <link rel="stylesheet" href="{{ page.custom_css | relative_url }}">
+  {%- endif -%}
+  {%- if page.custom_js -%}
+    <!-- 页面专属脚本（按需加载，defer 保证 DOM 就绪后执行） -->
+    <script src="{{ page.custom_js | relative_url }}" defer></script>
+  {%- endif -%}
 </head>

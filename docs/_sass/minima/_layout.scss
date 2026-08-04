@@ -142,6 +142,13 @@
   width:         calc(45% - (#{$spacing-unit} / 2));
 }
 
+// 页脚描述文字样式
+.footer-description {
+  line-height: 1.7;
+  font-size: 0.85em;
+  color: $grey-color;
+}
+
 // 平板尺寸：两列堆叠为单列
 @include media-query($on-laptop) {
   .footer-col-1 {

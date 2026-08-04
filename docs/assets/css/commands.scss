@@ -1,0 +1,381 @@
+---
+# 命令速查页专属样式（commands.html 使用）
+# 依赖：assets/main.scss 编译出的 main.css 中定义的 CSS 变量（--bg-primary 等）
+---
+
+/* ============================================================
+   命令速查页样式 - commands.html 专属
+   设计风格：GitHub 风格（白底、灰边框、蓝色强调色 #0366d6）
+   布局特点：响应式设计，移动端自动调整为单列布局
+   说明：颜色统一使用全局主题 CSS 变量（定义于 _theme.scss），
+         深浅模式自动适配
+   ============================================================ */
+
+/* ============================================================
+   全局容器
+   ============================================================ */
+.command-reference {
+  max-width: 100%;
+}
+
+/* ============================================================
+   区域标题图标（搜索/分类浏览图标）
+   ============================================================
+   尺寸：1em（与标题文字等大）
+   对齐：vertical-align 微调使图标与文字基线对齐
+   ============================================================ */
+.section-icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  margin-right: 0.3em;
+  opacity: 0.85;
+}
+
+/* ============================================================
+   区域 1：搜索区域
+   ============================================================
+   包含：搜索框 + 清除按钮 + 搜索结果列表 + 搜索详情卡片
+   ============================================================ */
+.search-section {
+  margin-bottom: 20px;
+}
+
+/* 搜索输入框容器 */
+.search-box {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+/* 搜索输入框 */
+.search-box input {
+  flex: 1;
+  padding: 10px 15px;
+  border: 2px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 16px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+}
+
+/* 输入框聚焦状态 */
+.search-box input:focus {
+  border-color: var(--accent-color);
+  outline: none;
+}
+
+/* 清除按钮 */
+.search-box button {
+  padding: 10px 20px;
+  background: var(--text-secondary);
+  color: var(--bg-primary);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.search-box button:hover {
+  background: var(--text-muted);
+}
+
+/* ============================================================
+   搜索结果列表
+   ============================================================
+   每条结果包含：版本标签 + 分类名 + 命令名 + 描述
+   ============================================================ */
+.search-results {
+  margin-top: 10px;
+}
+
+.results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* 单条搜索结果 */
+.result-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 15px;
+  background: var(--bg-secondary);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.result-item:hover {
+  background: var(--bg-tertiary);
+}
+
+/* 版本标签（ROS1/ROS2） */
+.result-version {
+  background: var(--accent-color);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* 分类名 */
+.result-category {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+/* 命令名 */
+.result-cmd {
+  background: var(--bg-primary);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+/* 命令描述 */
+.result-desc {
+  color: var(--text-muted);
+}
+
+/* 无结果提示 */
+.no-results {
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* ============================================================
+   搜索详情弹出卡片
+   ============================================================
+   位置：搜索结果下方动态创建
+   特点：蓝色边框突出显示，带有关闭按钮
+   ============================================================ */
+.search-detail {
+  margin-top: 15px;
+  padding: 15px 20px;
+  background: var(--bg-primary);
+  border: 2px solid var(--accent-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 12px var(--shadow-color);
+}
+
+/* 详情卡片头部（标题 + 关闭按钮） */
+.search-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.search-detail-header h3 {
+  margin: 0;
+  color: var(--accent-color);
+  font-family: monospace;
+}
+
+/* 关闭按钮 */
+.close-detail {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  line-height: 1;
+}
+
+.close-detail:hover {
+  color: var(--text-primary);
+}
+
+/* 详情卡片内容样式 */
+.search-detail p {
+  margin: 8px 0;
+  color: var(--text-primary);
+}
+
+.search-detail code {
+  background: var(--code-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--text-primary);
+}
+
+/* 注意事项的 pre（保持浅色背景，与代码块区分开） */
+.search-detail pre:not(.highlight-code) {
+  background: var(--code-bg);
+  padding: 10px;
+  border-radius: 4px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   区域 2：分类浏览（三级联动下拉框）
+   ============================================================
+   布局：横向并排（Flexbox），移动端自动换行
+   三级：ROS 版本 → 命令分类 → 具体命令
+   ============================================================ */
+.filter-section {
+  margin: 20px 0;
+}
+
+/* 横向并排容器 */
+.filter-row-inline {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+/* 单个下拉框组（标签 + 下拉框） */
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.filter-item label {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* 下拉框样式 */
+.filter-item select {
+  padding: 8px 12px;
+  border: 2px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 14px;
+  min-width: 180px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+}
+
+.filter-item select:focus {
+  border-color: var(--accent-color);
+  outline: none;
+}
+
+/* ============================================================
+   区域 3：命令详情（分类浏览选中后显示）
+   ============================================================
+   特点：灰色背景卡片，与搜索详情区分开
+   ============================================================ */
+.command-detail {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+.command-detail h3 {
+  margin-top: 0;
+  color: var(--accent-color);
+}
+
+.detail-content p {
+  margin: 10px 0;
+  color: var(--text-primary);
+}
+
+.detail-content code {
+  background: var(--bg-primary);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   代码高亮块 - 终端风格（命令/示例）
+   ============================================================
+   设计思路：
+   - 深色背景模拟终端窗口，与浅色页面形成对比
+   - 左侧绿色竖线模拟光标/提示符
+   - 命令名（第一个词）棕色高亮，参数保持默认色
+   - 深色模式下背景略微调整
+   ============================================================ */
+.highlight-code {
+  background: #1e1e1e;
+  border: 1px solid #333;
+  border-left: 3px solid #4ec9b0;
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin: 8px 0;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.highlight-code code {
+  background: transparent;
+  padding: 0;
+  font-family: "Cascadia Code", "Fira Code", "JetBrains Mono", "SF Mono", Consolas, "Liberation Mono", monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #d4d4d4;
+  border-radius: 0;
+}
+
+/* 深色模式下的代码块 */
+[data-theme="dark"] .highlight-code {
+  background: #0d1117;
+  border-color: #30363d;
+  border-left-color: #3fb950;
+}
+
+[data-theme="dark"] .highlight-code code {
+  color: #c9d1d9;
+}
+
+/* ROS 版本关键字高亮（橙黄色） */
+.hl-ros {
+  color: #e6a817;
+  font-weight: bold;
+}
+
+[data-theme="dark"] .hl-ros {
+  color: #f0c040;
+}
+
+#detailNotes {
+  margin-top: 15px;
+}
+
+#detailNotes pre {
+  background: var(--bg-primary);
+  padding: 10px;
+  border-radius: 4px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   响应式设计
+   ============================================================
+   断点：768px（平板/手机）
+   调整：筛选器纵向排列、下拉框全宽
+   ============================================================ */
+@media (max-width: 768px) {
+  .filter-row-inline {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-item select {
+    width: 100%;
+  }
+
+  .result-item {
+    flex-wrap: wrap;
+  }
+}
