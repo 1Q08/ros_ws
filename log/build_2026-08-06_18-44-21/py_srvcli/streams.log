@@ -1,0 +1,41 @@
+[1.605s] Invoking command in '/home/nvidia/ros_ws/src/py_srvcli': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/nvidia/ros_ws/build/py_srvcli/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/nvidia/ros_ws/install/py_srvcli/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/py_srvcli build --build-base /home/nvidia/ros_ws/build/py_srvcli/build install --record /home/nvidia/ros_ws/build/py_srvcli/install.log --install-scripts $base/lib/py_srvcli --single-version-externally-managed install_data
+[2.131s] running egg_info
+[2.132s] creating ../../build/py_srvcli/py_srvcli.egg-info
+[2.170s] writing ../../build/py_srvcli/py_srvcli.egg-info/PKG-INFO
+[2.171s] writing dependency_links to ../../build/py_srvcli/py_srvcli.egg-info/dependency_links.txt
+[2.171s] writing entry points to ../../build/py_srvcli/py_srvcli.egg-info/entry_points.txt
+[2.171s] writing requirements to ../../build/py_srvcli/py_srvcli.egg-info/requires.txt
+[2.171s] writing top-level names to ../../build/py_srvcli/py_srvcli.egg-info/top_level.txt
+[2.172s] writing manifest file '../../build/py_srvcli/py_srvcli.egg-info/SOURCES.txt'
+[2.250s] reading manifest file '../../build/py_srvcli/py_srvcli.egg-info/SOURCES.txt'
+[2.251s] writing manifest file '../../build/py_srvcli/py_srvcli.egg-info/SOURCES.txt'
+[2.251s] running build
+[2.251s] running build_py
+[2.252s] creating /home/nvidia/ros_ws/build/py_srvcli/build
+[2.253s] creating /home/nvidia/ros_ws/build/py_srvcli/build/lib
+[2.253s] creating /home/nvidia/ros_ws/build/py_srvcli/build/lib/py_srvcli
+[2.253s] copying py_srvcli/client_member_function.py -> /home/nvidia/ros_ws/build/py_srvcli/build/lib/py_srvcli
+[2.253s] copying py_srvcli/service_member_function.py -> /home/nvidia/ros_ws/build/py_srvcli/build/lib/py_srvcli
+[2.253s] copying py_srvcli/__init__.py -> /home/nvidia/ros_ws/build/py_srvcli/build/lib/py_srvcli
+[2.253s] running install
+[2.265s] running install_lib
+[2.304s] creating /home/nvidia/ros_ws/install/py_srvcli/lib/python3.12/site-packages/py_srvcli
+[2.304s] copying /home/nvidia/ros_ws/build/py_srvcli/build/lib/py_srvcli/client_member_function.py -> /home/nvidia/ros_ws/install/py_srvcli/lib/python3.12/site-packages/py_srvcli
+[2.304s] copying /home/nvidia/ros_ws/build/py_srvcli/build/lib/py_srvcli/service_member_function.py -> /home/nvidia/ros_ws/install/py_srvcli/lib/python3.12/site-packages/py_srvcli
+[2.305s] copying /home/nvidia/ros_ws/build/py_srvcli/build/lib/py_srvcli/__init__.py -> /home/nvidia/ros_ws/install/py_srvcli/lib/python3.12/site-packages/py_srvcli
+[2.305s] byte-compiling /home/nvidia/ros_ws/install/py_srvcli/lib/python3.12/site-packages/py_srvcli/client_member_function.py to client_member_function.cpython-312.pyc
+[2.306s] byte-compiling /home/nvidia/ros_ws/install/py_srvcli/lib/python3.12/site-packages/py_srvcli/service_member_function.py to service_member_function.cpython-312.pyc
+[2.307s] byte-compiling /home/nvidia/ros_ws/install/py_srvcli/lib/python3.12/site-packages/py_srvcli/__init__.py to __init__.cpython-312.pyc
+[2.307s] running install_data
+[2.308s] creating /home/nvidia/ros_ws/install/py_srvcli/share/ament_index
+[2.308s] creating /home/nvidia/ros_ws/install/py_srvcli/share/ament_index/resource_index
+[2.308s] creating /home/nvidia/ros_ws/install/py_srvcli/share/ament_index/resource_index/packages
+[2.308s] copying resource/py_srvcli -> /home/nvidia/ros_ws/install/py_srvcli/share/ament_index/resource_index/packages
+[2.309s] copying package.xml -> /home/nvidia/ros_ws/install/py_srvcli/share/py_srvcli
+[2.309s] running install_egg_info
+[2.351s] Copying ../../build/py_srvcli/py_srvcli.egg-info to /home/nvidia/ros_ws/install/py_srvcli/lib/python3.12/site-packages/py_srvcli-0.0.0-py3.12.egg-info
+[2.355s] running install_scripts
+[2.682s] Installing client script to /home/nvidia/ros_ws/install/py_srvcli/lib/py_srvcli
+[2.682s] Installing service script to /home/nvidia/ros_ws/install/py_srvcli/lib/py_srvcli
+[2.682s] writing list of installed files to '/home/nvidia/ros_ws/build/py_srvcli/install.log'
+[2.802s] Invoked command in '/home/nvidia/ros_ws/src/py_srvcli' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/nvidia/ros_ws/build/py_srvcli/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/nvidia/ros_ws/install/py_srvcli/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/py_srvcli build --build-base /home/nvidia/ros_ws/build/py_srvcli/build install --record /home/nvidia/ros_ws/build/py_srvcli/install.log --install-scripts $base/lib/py_srvcli --single-version-externally-managed install_data

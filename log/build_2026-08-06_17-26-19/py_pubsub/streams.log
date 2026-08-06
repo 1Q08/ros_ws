@@ -1,0 +1,38 @@
+[1.670s] Invoking command in '/home/nvidia/ros_ws/src/py_pubsub': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/nvidia/ros_ws/build/py_pubsub/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/nvidia/ros_ws/install/py_pubsub/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/py_pubsub build --build-base /home/nvidia/ros_ws/build/py_pubsub/build install --record /home/nvidia/ros_ws/build/py_pubsub/install.log --install-scripts $base/lib/py_pubsub --single-version-externally-managed install_data
+[2.170s] running egg_info
+[2.171s] creating ../../build/py_pubsub/py_pubsub.egg-info
+[2.207s] writing ../../build/py_pubsub/py_pubsub.egg-info/PKG-INFO
+[2.207s] writing dependency_links to ../../build/py_pubsub/py_pubsub.egg-info/dependency_links.txt
+[2.208s] writing requirements to ../../build/py_pubsub/py_pubsub.egg-info/requires.txt
+[2.208s] writing top-level names to ../../build/py_pubsub/py_pubsub.egg-info/top_level.txt
+[2.208s] writing manifest file '../../build/py_pubsub/py_pubsub.egg-info/SOURCES.txt'
+[2.285s] reading manifest file '../../build/py_pubsub/py_pubsub.egg-info/SOURCES.txt'
+[2.286s] writing manifest file '../../build/py_pubsub/py_pubsub.egg-info/SOURCES.txt'
+[2.286s] running build
+[2.287s] running build_py
+[2.287s] creating /home/nvidia/ros_ws/build/py_pubsub/build
+[2.287s] creating /home/nvidia/ros_ws/build/py_pubsub/build/lib
+[2.287s] creating /home/nvidia/ros_ws/build/py_pubsub/build/lib/py_pubsub
+[2.287s] copying py_pubsub/publisher_member_function.py -> /home/nvidia/ros_ws/build/py_pubsub/build/lib/py_pubsub
+[2.287s] copying py_pubsub/subscriber_member_function.py -> /home/nvidia/ros_ws/build/py_pubsub/build/lib/py_pubsub
+[2.288s] copying py_pubsub/__init__.py -> /home/nvidia/ros_ws/build/py_pubsub/build/lib/py_pubsub
+[2.288s] running install
+[2.299s] running install_lib
+[2.337s] creating /home/nvidia/ros_ws/install/py_pubsub/lib/python3.12/site-packages/py_pubsub
+[2.337s] copying /home/nvidia/ros_ws/build/py_pubsub/build/lib/py_pubsub/publisher_member_function.py -> /home/nvidia/ros_ws/install/py_pubsub/lib/python3.12/site-packages/py_pubsub
+[2.337s] copying /home/nvidia/ros_ws/build/py_pubsub/build/lib/py_pubsub/subscriber_member_function.py -> /home/nvidia/ros_ws/install/py_pubsub/lib/python3.12/site-packages/py_pubsub
+[2.339s] copying /home/nvidia/ros_ws/build/py_pubsub/build/lib/py_pubsub/__init__.py -> /home/nvidia/ros_ws/install/py_pubsub/lib/python3.12/site-packages/py_pubsub
+[2.339s] byte-compiling /home/nvidia/ros_ws/install/py_pubsub/lib/python3.12/site-packages/py_pubsub/publisher_member_function.py to publisher_member_function.cpython-312.pyc
+[2.339s] byte-compiling /home/nvidia/ros_ws/install/py_pubsub/lib/python3.12/site-packages/py_pubsub/subscriber_member_function.py to subscriber_member_function.cpython-312.pyc
+[2.340s] byte-compiling /home/nvidia/ros_ws/install/py_pubsub/lib/python3.12/site-packages/py_pubsub/__init__.py to __init__.cpython-312.pyc
+[2.340s] running install_data
+[2.341s] creating /home/nvidia/ros_ws/install/py_pubsub/share/ament_index
+[2.341s] creating /home/nvidia/ros_ws/install/py_pubsub/share/ament_index/resource_index
+[2.341s] creating /home/nvidia/ros_ws/install/py_pubsub/share/ament_index/resource_index/packages
+[2.342s] copying resource/py_pubsub -> /home/nvidia/ros_ws/install/py_pubsub/share/ament_index/resource_index/packages
+[2.342s] copying package.xml -> /home/nvidia/ros_ws/install/py_pubsub/share/py_pubsub
+[2.342s] running install_egg_info
+[2.382s] Copying ../../build/py_pubsub/py_pubsub.egg-info to /home/nvidia/ros_ws/install/py_pubsub/lib/python3.12/site-packages/py_pubsub-0.0.0-py3.12.egg-info
+[2.383s] running install_scripts
+[2.633s] writing list of installed files to '/home/nvidia/ros_ws/build/py_pubsub/install.log'
+[2.712s] Invoked command in '/home/nvidia/ros_ws/src/py_pubsub' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/nvidia/ros_ws/build/py_pubsub/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/nvidia/ros_ws/install/py_pubsub/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/py_pubsub build --build-base /home/nvidia/ros_ws/build/py_pubsub/build install --record /home/nvidia/ros_ws/build/py_pubsub/install.log --install-scripts $base/lib/py_pubsub --single-version-externally-managed install_data
