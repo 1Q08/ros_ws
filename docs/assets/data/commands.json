@@ -197,6 +197,51 @@
         }
       ]
     },
+    "pkg": {
+      "name": "包管理",
+      "commands": [
+        {
+          "display": "list",
+          "title": "ros2 pkg list",
+          "cmd": "ros2 pkg list",
+          "desc": "列出当前环境中所有可用的包",
+          "example": "ros2 pkg list",
+          "notes": "显示所有已安装的 ROS2 包，可用 grep 过滤，如 ros2 pkg list | grep turtlesim"
+        },
+        {
+          "display": "prefix",
+          "title": "ros2 pkg prefix",
+          "cmd": "ros2 pkg prefix <package_name>",
+          "desc": "显示指定包的安装前缀（安装路径）",
+          "example": "ros2 pkg prefix turtlesim",
+          "notes": "格式: ros2 pkg prefix <pkg>\n\n返回包的安装目录，可用于查看包的源码或资源位置"
+        },
+        {
+          "display": "executables",
+          "title": "ros2 pkg executables",
+          "cmd": "ros2 pkg executables [package_name]",
+          "desc": "列出包内提供的所有可执行文件",
+          "example": "ros2 pkg executables turtlesim",
+          "notes": "不带包名时列出所有包的可执行文件，带包名时只列出指定包的"
+        },
+        {
+          "display": "create",
+          "title": "ros2 pkg create",
+          "cmd": "ros2 pkg create <package_name>",
+          "desc": "创建一个新的 ROS2 功能包",
+          "example": "ros2 pkg create --build-type ament_python my_package",
+          "notes": "格式: ros2 pkg create <pkg> [options]\n\n常用选项：\n  --build-type <type>   指定构建类型（ament_python / ament_cmake / ament_cmake_python）\n  --dependencies <deps> 指定依赖包，如 --dependencies rclpy std_msgs\n  --node-name <name>    同时创建一个节点文件"
+        },
+        {
+          "display": "xml",
+          "title": "ros2 pkg xml",
+          "cmd": "ros2 pkg xml <package_name>",
+          "desc": "输出指定包的 package.xml 内容",
+          "example": "ros2 pkg xml turtlesim",
+          "notes": "格式: ros2 pkg xml <pkg>\n\n直接打印包的 package.xml 文件内容，便于快速查看包元信息"
+        }
+      ]
+    },
     "topic": {
       "name": "话题命令",
       "commands": [
