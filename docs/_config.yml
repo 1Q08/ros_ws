@@ -14,7 +14,7 @@ github_username: 1Q08
 rss: rss
 
 # 文章摘要显示
-show_excerpts: false
+show_excerpts: true
 
 # Minima 日期格式
 # refer to http://shopify.github.io/liquid/filters/date/ if you want to customize this

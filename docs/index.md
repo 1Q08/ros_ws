@@ -9,6 +9,7 @@ title: 首页
 
 - 查看 [命令速查](commands.html)
 - 阅读 [关于本项目](about.md)
+- 学习 [ROS2 的 launch 文件]({% post_url 2026-08-05-ros2-launch %})
 
 ## 为什么做这个站点？
 
