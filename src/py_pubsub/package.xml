@@ -2,9 +2,9 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>py_pubsub</name>
-  <version>0.0.0</version>
-  <description>Examples of minimal publisher/subscriber using rclpy</description>
-  <maintainer email="19872205914@163.com">nvidia</maintainer>
+  <version>1.1.0</version>
+  <description>最小的 ROS2 发布/订阅示例</description>
+  <maintainer email="example@163.com">nvidia</maintainer>
   <license>Apache License 2.0</license>
 
   <exec_depend>rclpy</exec_depend>

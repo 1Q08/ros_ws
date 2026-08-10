@@ -8,7 +8,7 @@ def generate_launch_description():
         # --- 最小示例：只指定 package + executable ---
         Node(
             # ---- 必须的字段 ----
-            package='my_package',          # 节点所在的功能包名
-            executable='my_node',  # 可执行文件名（CMakeLists.txt 中 add_executable 的名字）
+            package='my_package',  # 节点所在的功能包名
+            executable='my_node',  # 可执行文件名（setup.py 的 console_scripts 里定义的名字）
         )
     ])

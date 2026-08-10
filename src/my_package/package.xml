@@ -12,13 +12,13 @@
   <!-- 包名：必须与 src 下的目录名一致，且全小写、下划线分隔 -->
   <name>my_package</name>
   <!-- 版本号：遵循语义化版本（major.minor.patch）规范 -->
-  <version>0.0.0</version>
+  <version>1.1.0</version>
   <!-- 包的简要描述，用于说明该包的功能用途 -->
-  <description>TODO: Package description</description>
+  <description>最小的 ROS 2 Python 功能包</description>
   <!-- 维护者：负责维护该包的人，email 属性必填 -->
-  <maintainer email="19872205914@163.com">nvidia</maintainer>
+  <maintainer email="example@163.com">nvidia</maintainer>
   <!-- 许可证：声明包的开源协议，如 Apache-2.0 / MIT / BSD-3-Clause -->
-  <license>TODO: License declaration</license>
+  <license>Apache License 2.0</license>
 
   <!-- 以下为测试阶段依赖（构建/运行不需要，仅跑测试时才用） -->
   <test_depend>ament_copyright</test_depend>
