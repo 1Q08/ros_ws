@@ -1,3 +1,6 @@
+import os
+from glob import glob
+
 from setuptools import find_packages, setup
 
 package_name = 'py_srvcli'
@@ -10,12 +13,15 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        # 安装 launch 目录下的所有 launch 文件
+        (os.path.join('share', package_name, 'launch'),
+            glob(os.path.join('launch', '*.launch.py'))),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
     maintainer='nvidia',
-    maintainer_email='19872205914@163.com',
-    description='Python client server tutorial',
+    maintainer_email='example@163.com',
+    description='最小的 ROS2 Python 服务端/客户端示例：提供 /add_two_ints 服务，客户端调用它计算两个整数之和',
     license='Apache License 2.0',
     extras_require={
         'test': [

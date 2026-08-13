@@ -2,13 +2,15 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>py_srvcli</name>
-  <version>0.0.0</version>
-  <description>Python client server tutorial</description>
-  <maintainer email="19872205914@163.com">nvidia</maintainer>
+  <version>1.1.0</version>
+  <description>最小的 ROS2 Python 服务端/客户端示例：提供 /add_two_ints 服务，客户端调用它计算两个整数之和</description>
+  <maintainer email="example@163.com">nvidia</maintainer>
   <license>Apache License 2.0</license>
 
   <depend>rclpy</depend>
   <depend>example_interfaces</depend>
+  <!-- 提供 ros2 launch 命令（内含 launch_ros 的 Node 动作） -->
+  <exec_depend>ros2launch</exec_depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
