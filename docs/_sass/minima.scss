@@ -25,7 +25,8 @@ $grey-color-dark:  darken($grey-color, 25%) !default;
 $table-text-align: left !default;
 
 // 内容区域宽度与响应式断点
-$content-width:    800px !default;
+// 100% 表示内容区完全填充可用宽度（左右仅保留 $spacing-unit 内边距）
+$content-width:    100% !default;
 
 $on-palm:          600px !default;
 $on-laptop:        800px !default;
