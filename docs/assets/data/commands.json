@@ -194,6 +194,14 @@
           "desc": "通过 launch 文件启动多个节点",
           "example": "ros2 launch my_package my_launch.py",
           "notes": "ROS2 使用 Python launch 文件"
+        },
+        {
+          "display": "ros2 doctor",
+          "title": "ros2 doctor",
+          "cmd": "ros2 doctor",
+          "desc": "检查 ROS2 环境配置是否正常",
+          "example": "ros2 doctor",
+          "notes": "检查环境变量、网络、系统等设置，报告潜在问题\n\n常用选项：\n  --report             生成完整的诊断报告\n  --fail-on-error      存在错误时以非零状态退出"
         }
       ]
     },
