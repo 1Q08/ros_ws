@@ -332,6 +332,83 @@
         }
       ]
     },
+    "component": {
+      "name": "组件命令",
+      "commands": [
+        {
+          "display": "container",
+          "title": "ros2 component container",
+          "cmd": "ros2 component container <container_name>",
+          "desc": "启动一个组件容器节点",
+          "example": "ros2 component container /my_container",
+          "notes": "容器节点可在同一进程中运行多个组件，实现节点组合（composition）和零拷贝通信"
+        },
+        {
+          "display": "list",
+          "title": "ros2 component list",
+          "cmd": "ros2 component list [container_name]",
+          "desc": "列出容器节点中的所有组件",
+          "example": "ros2 component list",
+          "notes": "显示指定容器节点中已加载的组件信息，不带容器名时列出所有"
+        },
+        {
+          "display": "types",
+          "title": "ros2 component types",
+          "cmd": "ros2 component types",
+          "desc": "列出可用的组件类型",
+          "example": "ros2 component types",
+          "notes": "显示当前环境中所有可加载的组件类型，如 composition::Talker"
+        },
+        {
+          "display": "load",
+          "title": "ros2 component load",
+          "cmd": "ros2 component load <container_name> <package_name> <component_type>",
+          "desc": "将组件加载到容器节点",
+          "example": "ros2 component load /my_container composition composition::Talker",
+          "notes": "格式: ros2 component load <容器节点> <包名> <组件类型>\n\n常用选项：\n  --node-name <name>   指定组件节点名称\n  --remap <from>:=<to>  重映射话题/服务名"
+        },
+        {
+          "display": "unload",
+          "title": "ros2 component unload",
+          "cmd": "ros2 component unload <container_name> <component_id>",
+          "desc": "从容器节点卸载组件",
+          "example": "ros2 component unload /my_container 1",
+          "notes": "格式: ros2 component unload <容器节点> <组件ID>\n\n组件 ID 可通过 ros2 component list 查看"
+        },
+        {
+          "display": "standalone",
+          "title": "ros2 component standalone",
+          "cmd": "ros2 component standalone <package_name> <component_type>",
+          "desc": "将组件作为独立节点运行",
+          "example": "ros2 component standalone composition composition::Talker",
+          "notes": "格式: ros2 component standalone <包名> <组件类型>\n\n以独立进程运行，不放入容器"
+        },
+        {
+          "display": "nodes",
+          "title": "ros2 component nodes",
+          "cmd": "ros2 component nodes",
+          "desc": "列出所有运行的组件容器节点",
+          "example": "ros2 component nodes",
+          "notes": "显示当前系统中所有容器节点的名称"
+        },
+        {
+          "display": "register",
+          "title": "ros2 component register",
+          "cmd": "ros2 component register <container_name> <package_name> <component_type>",
+          "desc": "注册组件类型到容器（不加载）",
+          "example": "ros2 component register /my_container composition composition::Talker",
+          "notes": "格式: ros2 component register <容器节点> <包名> <组件类型>\n\n仅注册组件类型，便于后续通过 ID 加载"
+        },
+        {
+          "display": "unregister",
+          "title": "ros2 component unregister",
+          "cmd": "ros2 component unregister <container_name> <component_type>",
+          "desc": "从容器取消注册组件类型",
+          "example": "ros2 component unregister /my_container composition::Talker",
+          "notes": "格式: ros2 component unregister <容器节点> <组件类型>\n\n取消注册后该组件类型将无法再加载"
+        }
+      ]
+    },
     "service": {
       "name": "服务命令",
       "commands": [
