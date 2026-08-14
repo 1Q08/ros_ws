@@ -3,11 +3,11 @@ from glob import glob
 
 from setuptools import find_packages, setup
 
-package_name = 'py_srvcli'
+package_name = 'python_parameters'
 
 setup(
     name=package_name,
-    version='1.1.0',
+    version='1.0.0',
     packages=find_packages(exclude=['test']),
     data_files=[
         ('share/ament_index/resource_index/packages',
@@ -21,7 +21,7 @@ setup(
     zip_safe=True,
     maintainer='nvidia',
     maintainer_email='example@163.com',
-    description='最小的 ROS2 Python 服务端/客户端示例：提供 /add_two_ints 服务，客户端调用它计算两个整数之和',
+    description='学习 ROS2 的类',
     license='Apache License 2.0',
     extras_require={
         'test': [
@@ -30,8 +30,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'service = py_srvcli.service_member_function:main',
-            'client = py_srvcli.client_member_function:main',
+            'param_talker = python_parameters.python_parameters_node:main',
         ],
     },
 )
