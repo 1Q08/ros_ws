@@ -3,7 +3,7 @@ from rclpy.node import Node
 from std_msgs.msg import String
 
 class MinimalSubscriber(Node):
-    """最小订阅者节点：订阅话题 /chatter，每收到一条消息就打印出来。"""
+    """最小订阅者节点：订阅话题 /chatter，每收到一条消息就打印出来"""
 
     def __init__(self):
         super().__init__('minimal_subscriber')
@@ -13,7 +13,7 @@ class MinimalSubscriber(Node):
             String, 'chatter', self.listener_callback, 10)
 
     def listener_callback(self, msg):
-        """消息回调：把收到的消息内容打印到日志。"""
+        """消息回调：把收到的消息内容打印到日志"""
         self.get_logger().info(f'I heard: "{msg.data}"')
 
 def main(args=None):

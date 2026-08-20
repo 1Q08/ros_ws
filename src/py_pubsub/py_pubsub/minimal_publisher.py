@@ -3,7 +3,7 @@ from rclpy.node import Node
 from std_msgs.msg import String
 
 class MinimalPublisher(Node):
-    """最小发布者节点：每 0.5 秒向话题 /chatter 发布一条递增的字符串消息。"""
+    """最小发布者节点：每 0.5 秒向话题 /chatter 发布一条递增的字符串消息"""
 
     def __init__(self):
         super().__init__('minimal_publisher')
