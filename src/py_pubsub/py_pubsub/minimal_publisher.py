@@ -7,19 +7,22 @@ class MinimalPublisher(Node):
 
     def __init__(self):
         super().__init__('minimal_publisher')
-        # 创建发布者：String 类型、话题 chatter、队列深度 10（缓存 10 条待发消息）
+        # 创建发布者：消息类型 String、话题名称 chatter、队列深度 10（缓存 10 条待发消息）
         self.publisher_ = self.create_publisher(String, 'chatter', 10)
-        # 每 0.5 秒触发一次 timer_callback
+        # 创建一个定时器，每 0.5 秒触发一次 timer_callback
         self.timer = self.create_timer(0.5, self.timer_callback)
         self.i = 0  # 计数器：让每条消息的序号递增
 
     def timer_callback(self):
-        """定时回调：构造消息、发布，并打印日志。"""
+        """定时回调：每 0.5 秒被触发，构造一条带序号的字符串并发布"""
         msg = String()
-        msg.data = f'Hello World: {self.i}'            # 填充消息内容
-        self.publisher_.publish(msg)                   # 发布
+        # f-string 把序号拼进内容：序号让每条消息内容都不同、可追踪
+        msg.data = f'Hello World: {self.i}'
+        # 消息只有通过 publish 写入话题，订阅者才能收到（数据进入 ROS 图）
+        self.publisher_.publish(msg)
+        # 打印日志：在终端直观看到发布节奏，确认节点在正常工作
         self.get_logger().info(f'Publishing: "{msg.data}"')
-        self.i += 1
+        self.i += 1  # 序号 +1：保证下一条消息序号递增，便于对比观察
 
 def main(args=None):
     rclpy.init(args=args)        # 1. 初始化 rclpy
