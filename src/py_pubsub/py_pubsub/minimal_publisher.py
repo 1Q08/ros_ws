@@ -21,7 +21,7 @@ class MinimalPublisher(Node):
         # 消息只有通过 publish 写入话题，订阅者才能收到（数据进入 ROS 图）
         self.publisher_.publish(msg)
         # 打印日志：在终端直观看到发布节奏，确认节点在正常工作
-        self.get_logger().info(f'Publishing: "{msg.data}"')
+        self.get_logger().warn(f'Publishing: "{msg.data}"')
         self.i += 1  # 序号 +1：保证下一条消息序号递增，便于对比观察
 
 def main(args=None):
