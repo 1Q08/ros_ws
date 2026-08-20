@@ -1,6 +1,6 @@
-import rclpy
-from rclpy.node import Node
-from std_msgs.msg import String
+import rclpy  # ROS2 Python 客户端库
+from rclpy.node import Node  # 节点基类
+from std_msgs.msg import String  # ROS2 内置的 String 消息类型
 
 class MinimalSubscriber(Node):
     """最小订阅者节点：订阅话题 /chatter，每收到一条消息就打印出来"""
@@ -24,8 +24,7 @@ def main(args=None):
     except KeyboardInterrupt:
         # 按 Ctrl+C（SIGINT）时静默退出，避免打印异常栈
         pass
-    finally:
-        # 4. 无论正常结束还是被中断，都释放节点并关闭 rclpy
+    finally:                     # 4. 无论正常结束还是被中断，都释放节点并关闭 rclpy
         node.destroy_node()
         rclpy.shutdown()
 
