@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# 服务客户端（Client）最小示例：调用 /add_two_ints 服务，计算两个整数之和。
+# 服务客户端（Client）最小示例：调用 /add_two_ints 服务，计算两个整数之和
 # 用法：ros2 run py_srvcli client 2 3   （把命令行里的 2 和 3 传进去相加）
 import sys  # 用于读取命令行参数（sys.argv）
 from example_interfaces.srv import AddTwoInts  # 服务的请求/响应消息类型
@@ -7,7 +7,7 @@ import rclpy  # ROS2 Python 客户端库
 from rclpy.node import Node  # 节点基类
 
 class MinimalClientAsync(Node):
-    """异步服务客户端节点。"""
+    """异步服务客户端节点"""
     def __init__(self):
         super().__init__('minimal_client_async')  # 节点名，可用 ros2 node list 看到
         # 创建服务客户端：绑定服务类型 AddTwoInts 和服务名 add_two_ints
@@ -19,7 +19,7 @@ class MinimalClientAsync(Node):
         self.req = AddTwoInts.Request()
 
     def send_request(self):
-        """把命令行参数装进请求，并异步发出。"""
+        """把命令行参数装进请求，并异步发出"""
         # sys.argv[1] / sys.argv[2] 即运行时的第 1、2 个参数（如 "2" "3"），转成 int
         self.req.a = int(sys.argv[1])
         self.req.b = int(sys.argv[2])
