@@ -304,11 +304,12 @@
    - 深色模式下背景略微调整
    ============================================================ */
 .highlight-code {
+  position: relative; /* 供右上角复制按钮绝对定位 */
   background: #1e1e1e;
   border: 1px solid #333;
   border-left: 3px solid #4ec9b0;
   border-radius: 6px;
-  padding: 12px 16px;
+  padding: 12px 44px 12px 16px; /* 右侧预留复制按钮空间 */
   margin: 8px 0;
   overflow-x: auto;
   white-space: pre-wrap;
@@ -344,6 +345,73 @@
 
 [data-theme="dark"] .hl-ros {
   color: #f0c040;
+}
+
+/* ============================================================
+   复制代码按钮
+   ============================================================
+   位置：代码块右上角悬浮，hover 高亮
+   成功状态：按钮文字变为「✓ 已复制」并短暂变绿
+   ============================================================ */
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  color: #d4d4d4;
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease,
+              opacity 0.15s ease, visibility 0.15s ease;
+}
+
+/* 鼠标悬停到代码块上时才显示复制按钮 */
+.highlight-code:hover .copy-btn,
+.highlight-code:focus-within .copy-btn {
+  opacity: 1;
+  visibility: visible;
+}
+
+.copy-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.copy-btn svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.copy-btn.copied {
+  color: #4ec9b0;
+  border-color: rgba(78, 201, 176, 0.55);
+}
+
+[data-theme="dark"] .copy-btn {
+  color: #c9d1d9;
+  background: rgba(110, 118, 129, 0.2);
+  border-color: rgba(240, 246, 252, 0.2);
+}
+
+[data-theme="dark"] .copy-btn:hover {
+  background: rgba(110, 118, 129, 0.4);
+  color: #ffffff;
+}
+
+[data-theme="dark"] .copy-btn.copied {
+  color: #3fb950;
+  border-color: rgba(63, 185, 80, 0.55);
 }
 
 #detailNotes {

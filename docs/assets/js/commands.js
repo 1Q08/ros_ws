@@ -235,6 +235,8 @@ function showSearchResult(index) {
     <pre>${cmd.notes}</pre>
   `;
 
+  initCopyButtons(detailDiv);
+
   detailDiv.style.display = 'block';
   detailDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
@@ -281,3 +283,84 @@ function highlightCode(text) {
     // ros1 / ros2 橙黄色高亮（大小写不敏感）
     .replace(/\b(ros1|ros2)\b/gi, '<span class="hl-ros">$1</span>');
 }
+
+// ============================================================
+// 复制代码功能
+// ============================================================
+// 为代码块动态添加「复制」按钮，点击后把代码块纯文本复制到剪贴板
+// 兼容性：优先 navigator.clipboard（https/localhost），失败降级 execCommand('copy')
+// ============================================================
+
+// 为 root 下所有 <pre class="highlight-code"> 注入复制按钮
+function initCopyButtons(root) {
+  if (!root || !root.querySelectorAll) return;
+  root.querySelectorAll('pre.highlight-code').forEach(addCopyButton);
+}
+
+// 给单个代码块添加复制按钮（重复调用会跳过）
+function addCopyButton(pre) {
+  if (!pre || pre.querySelector('.copy-btn')) return;
+
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'copy-btn';
+  btn.title = '复制';
+  btn.setAttribute('aria-label', '复制代码');
+  // 复制图标（两个重叠矩形）
+  btn.innerHTML = '<svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="5" y="5" width="9" height="9" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M11 5V3.5A1.5 1.5 0 0 0 9.5 2h-6A1.5 1.5 0 0 0 2 3.5v6A1.5 1.5 0 0 0 3.5 11H5" stroke="currentColor" stroke-width="1.5"/></svg>';
+
+  btn.addEventListener('click', function () {
+    const codeEl = pre.querySelector('code');
+    const text = (codeEl ? codeEl.textContent : pre.textContent) || '';
+
+    copyToClipboard(text).then(function (ok) {
+      const original = btn.innerHTML;
+      btn.innerHTML = ok ? '✓ 已复制' : '复制失败';
+      btn.classList.toggle('copied', ok);
+      setTimeout(function () {
+        btn.innerHTML = original;
+        btn.classList.remove('copied');
+      }, 1500);
+    });
+  });
+
+  pre.appendChild(btn);
+}
+
+// 复制文本到剪贴板：优先现代 API，失败降级 execCommand
+function copyToClipboard(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    return navigator.clipboard.writeText(text)
+      .then(function () { return true; })
+      .catch(function () { return fallbackCopy(text); });
+  }
+  return Promise.resolve(fallbackCopy(text));
+}
+
+// 降级方案：隐藏 textarea + execCommand('copy')
+function fallbackCopy(text) {
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.setAttribute('readonly', '');
+  textarea.style.position = 'fixed';
+  textarea.style.top = '-9999px';
+  textarea.style.left = '-9999px';
+  textarea.style.opacity = '0';
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+  let ok = false;
+  try {
+    ok = document.execCommand('copy');
+  } catch (e) {
+    ok = false;
+  }
+  document.body.removeChild(textarea);
+  return ok;
+}
+
+// 页面加载完成后，为详情区已有的代码块添加复制按钮
+// （分类浏览详情的「命令」「示例」两个代码块在 HTML 中静态存在）
+document.addEventListener('DOMContentLoaded', function () {
+  initCopyButtons(document);
+});
