@@ -13,8 +13,8 @@
 
 | 站点               | 地址                                                                                                                    |
 | ------------------ | ----------------------------------------------------------------------------------------------------------------------- |
-| 📚 ROS 命令速查    | [https://1q08.github.io/ros_ws/](https://1q08.github.io/ros_ws/)                                                         |
-| 🌏 ROS2 文档汉化站 | [https://1q08.github.io/ROS2_documentation/jazzy/index.html](https://1q08.github.io/ROS2_documentation/jazzy/index.html) |
+| ROS 命令速查    | [https://1q08.github.io/ros_ws/](https://1q08.github.io/ros_ws/)                                                         |
+| ROS2 文档汉化站 | [https://1q08.github.io/ROS2_documentation/jazzy/index.html](https://1q08.github.io/ROS2_documentation/jazzy/index.html) |
 
 ---
 
@@ -39,14 +39,6 @@ bundle exec jekyll serve --baseurl=""
 ```
 
 更多详情见 [`docs/README.md`](docs/README.md)。
-
----
-
-## 🌏 ROS2 文档汉化站
-
-**ROS 2 官方文档的完整中文翻译版**，覆盖 Tutorials（教程）、Concepts（概念）、How-To-Guides（操作指南）、Installation（安装）等全部章节，按发行版组织。
-
-> ℹ️ 该站点位于独立仓库 `1Q08/ROS2_documentation`，采用 Sphinx 构建、GitHub Actions 自动部署。
 
 ---
 
