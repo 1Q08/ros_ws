@@ -1,16 +1,29 @@
 ---
 layout: home
-title: 首页
+title: ROS 命令速查
+list_title: 最新文章
+post_limit: 3
 ---
 
-欢迎来到 **ROS 命令速查**！这里整理了日常开发中最常用的 ROS1 与 ROS2 命令。
+面向机器人开发者的轻量级 ROS1 / ROS2 命令行参考站点。
 
-## 快速开始
+## 快速入口
 
-- 查看 [命令速查](commands.html)
-- 阅读 [关于本项目](about.md)
-- 学习 [ROS2 的 launch 文件]({% post_url 2026-08-05-ros2-launch %})
-
-## 为什么做这个站点？
-
-ROS 版本众多、命令参数繁杂，这个小站的目标是把高频操作整理成一页速查表，让你少翻文档、多写代码。
+<div class="entry-grid" markdown="0">
+  <a class="entry-card entry-card--primary" href="{{ '/commands/' | relative_url }}">
+    <span class="entry-card__title">命令速查</span>
+    <span class="entry-card__desc">搜索与分类浏览高频命令</span>
+  </a>
+  <a class="entry-card" href="https://1q08.github.io/ROS2_documentation/jazzy/index.html" target="_blank" rel="noopener noreferrer">
+    <span class="entry-card__title">ROS2 文档汉化站</span>
+    <span class="entry-card__desc">官方文档完整中文翻译</span>
+  </a>
+  <a class="entry-card" href="{{ '/archive/' | relative_url }}">
+    <span class="entry-card__title">教程文章</span>
+    <span class="entry-card__desc">ROS 开发实战教程</span>
+  </a>
+  <a class="entry-card" href="https://github.com/1Q08/ros_ws" target="_blank" rel="noopener noreferrer">
+    <span class="entry-card__title">GitHub 仓库</span>
+    <span class="entry-card__desc">源码与协作</span>
+  </a>
+</div>

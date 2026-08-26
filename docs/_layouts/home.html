@@ -10,9 +10,10 @@ layout: default
   {{ content }}
 
   {%- if site.posts.size > 0 -%}
-    <h2 class="post-list-heading">{{ page.list_title | default: "Posts" }}</h2>
+    <h2 class="post-list-heading" id="latest-posts">{{ page.list_title | default: "最新文章" }}</h2>
     <ul class="post-list">
-      {%- for post in site.posts -%}
+      {%- assign post_limit = page.post_limit | default: site.posts.size -%}
+      {%- for post in site.posts limit: post_limit -%}
       <li>
         {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
         <span class="post-meta">{{ post.date | date: date_format }}</span>
@@ -29,6 +30,9 @@ layout: default
       </li>
       {%- endfor -%}
     </ul>
+    <p class="view-all">
+      <a href="{{ '/archive/' | relative_url }}">查看全部 {{ site.posts.size }} 篇文章 →</a>
+    </p>
 
   {%- endif -%}
 

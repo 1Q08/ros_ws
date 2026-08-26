@@ -150,3 +150,90 @@ body {
     width: fit-content;
   }
 }
+
+/**
+ * 首页快速入口 - 按钮卡片
+ */
+.entry-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin: 16px 0 24px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.entry-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+
+  &:hover {
+    border-color: var(--accent-color);
+    box-shadow: 0 4px 12px var(--shadow-color);
+    transform: translateY(-2px);
+  }
+}
+
+.entry-card--primary {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+
+  .entry-card__title,
+  .entry-card__desc {
+    color: #ffffff;
+  }
+
+  &:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+  }
+}
+
+.entry-card__title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.entry-card__desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+/**
+ * 首页「查看全部文章」链接
+ */
+.view-all {
+  margin-top: 8px;
+
+  a {
+    color: var(--accent-color);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--accent-hover);
+      text-decoration: underline;
+    }
+  }
+}
+
+/**
+ * 归档页说明文字
+ */
+.post-list-intro {
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
