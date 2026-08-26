@@ -51,4 +51,7 @@ function setTheme(theme) {
       text.textContent = '深色模式';
     }
   }
+
+  // 通知 favicon 等依赖主题的组件同步更新
+  document.dispatchEvent(new CustomEvent('themechange', { detail: { theme: theme } }));
 }

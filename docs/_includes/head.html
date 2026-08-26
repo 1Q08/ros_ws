@@ -2,6 +2,35 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- 收藏夹/标签页图标（favicon）：
+       默认按系统主题显示，之后跟随页面深浅色切换按钮实时更新 -->
+  <link rel="icon" id="dynamic-favicon" type="image/svg+xml"
+        href="{{ "/assets/icons/favicon.svg" | relative_url }}"
+        data-light="{{ "/assets/icons/favicon.svg" | relative_url }}"
+        data-dark="{{ "/assets/icons/favicon-dark.svg" | relative_url }}">
+  <script>
+    (function () {
+      function applyFavicon(theme) {
+        var link = document.getElementById('dynamic-favicon');
+        if (!link) return;
+        var src = theme === 'dark' ? link.getAttribute('data-dark') : link.getAttribute('data-light');
+        if (src) link.href = src;
+      }
+      function detectTheme() {
+        try {
+          var saved = localStorage.getItem('theme');
+          if (saved === 'dark' || saved === 'light') return saved;
+        } catch (e) {}
+        return (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+      }
+      document.addEventListener('themechange', function (e) {
+        applyFavicon(e.detail && e.detail.theme);
+      });
+      document.addEventListener('DOMContentLoaded', function () {
+        applyFavicon(document.documentElement.getAttribute('data-theme') || detectTheme());
+      });
+    })();
+  </script>
   {%- seo -%}
   <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}">
   {%- feed_meta -%}
