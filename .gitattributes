@@ -1,1 +1,18 @@
-tools/ linguist-vendored=true
+# ============================================================
+# GitHub Linguist 语言统计配置
+# 说明：GitHub Linguist 默认把 docs/ 目录视为 documentation、
+#       把 tools/ 等目录视为 vendored，从而排除在语言统计外。
+#       下面的规则用于覆盖这些默认行为，让指定内容参与统计。
+# ============================================================
+
+# docs/ 下的文件参与统计（覆盖默认的 documentation 排除规则）
+docs/** linguist-documentation=false
+
+# tools/ 下的脚本参与统计
+tools/ linguist-vendored=false
+
+# 排除自动生成的依赖锁定文件（不计入统计）
+docs/Gemfile.lock linguist-generated=true
+
+# 排除图标资源（不计入统计）
+docs/assets/icons/** linguist-vendored=true
