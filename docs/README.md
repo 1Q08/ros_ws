@@ -18,19 +18,19 @@ docs/                              # Jekyll 站点根目录
 ├── about.md                      # 关于页（page 布局）
 ├── commands.html                 # 命令速查交互页（核心功能）
 ├── archive.md                    # 全部文章归档页（page 布局）
-├── 404.html                      # 自定义 404 页面
+├── 404.html                      # 自定义 404 页面（ROS 终端风格）
 │
 ├── _posts/                       # 博客文章（Markdown，文件名含发布日期）
 ├── _layouts/                     # 页面布局模板（继承链）
 │   ├── default.html              # ├─ 根布局：head + header + content + footer
-│   ├── home.html                 # ├─ 首页布局：文章列表 + 分页
+│   ├── home.html                 # ├─ 首页布局：文章列表 + giscus 评论区
 │   ├── page.html                 # ├─ 普通页面布局：标题 + 内容
 │   └── post.html                 # └─ 文章布局：日期 + 作者 + schema.org
 │
 ├── _includes/                    # 可复用片段
 │   ├── head.html                 # ├─ <head>：meta + CSS + JS + SEO + feed
-│   ├── header.html               # ├─ 导航栏：标题 + 链接 + 主题切换按钮
-│   ├── footer.html               # ├─ 页脚：作者 + 邮箱 + 描述 + 社交链接
+│   ├── header.html               # ├─ 导航栏：标题（含随主题图标）+ 链接 + 主题切换按钮
+│   ├── footer.html               # ├─ 页脚：作者 + 邮箱 + 描述 + 社交链接 + 访问量徽章
 │   └── social.html               # └─ 社交图标：GitHub + RSS
 │
 ├── _sass/                        # SCSS 样式源
@@ -81,7 +81,7 @@ _site/                             # Jekyll 编译输出（自动生成，不手
 
 ```
 default.html      ← 根布局
-  ├── home.html   ← 首页（主页/索引页）
+  ├── home.html   ← 首页（主页/索引页 + 评论区）
   ├── page.html   ← 普通页面（about.md、commands.html）
   └── post.html   ← 博客文章（带日期、作者、schema.org）
 ```
@@ -92,9 +92,9 @@ default.html      ← 根布局
 
 | 片段 | 职责 |
 |------|------|
-| `head.html` | `<head>` 标签，引入 `main.css`、`theme.js`、`bg-particles.js`、SEO tag、feed meta，并支持 `page.custom_css` / `page.custom_js` 按需加载 |
-| `header.html` | 导航栏，包含站点标题、页面链接、**ROS2 汉化站外链**、**自定义主题切换按钮** |
-| `footer.html` | 页脚，显示作者、邮箱、站点描述（支持多行）、社交图标 |
+| `head.html` | `<head>` 标签，引入 `main.css`、`theme.js`、`bg-particles.js`、SEO tag、feed meta，并同步 favicon 与站点标题图标（随主题切换），支持 `page.custom_css` / `page.custom_js` 按需加载 |
+| `header.html` | 导航栏，包含站点标题（含随主题切换的图标）、页面链接、**ROS2 汉化站外链**、**自定义主题切换按钮** |
+| `footer.html` | 页脚，显示作者、邮箱、站点描述（支持多行）、社交图标、**访问量徽章** |
 | `social.html` | GitHub + RSS 社交图标 |
 
 ### 4. 样式系统（SCSS）
@@ -121,7 +121,7 @@ assets/main.scss ──@import──→ _sass/minima.scss ──→ _base.scss
 
 1. 检测顺序：`localStorage` → 系统偏好 (`prefers-color-scheme`) → 默认浅色
 2. 切换时设置 `<html data-theme="dark|light">`，保存到 `localStorage`，更新按钮图标
-3. 广播 `themechange` 自定义事件：favicon 与背景粒子监听该事件同步换色
+3. 广播 `themechange` 自定义事件：favicon、站点标题图标与背景粒子监听该事件同步换色
 
 ### 6. ✨ 背景粒子动画（`bg-particles.js`）
 
@@ -238,6 +238,7 @@ bundle exec jekyll serve --baseurl=""
 | `github-pages` gem | GitHub Pages 环境（含 Jekyll 3.x + minima 主题） |
 | `jekyll-feed` | RSS feed 生成 |
 | `jekyll-seo-tag` | SEO meta 标签 |
+| giscus（外部服务） | 评论区，依托 GitHub Discussions 存储 |
 
 ---
 
