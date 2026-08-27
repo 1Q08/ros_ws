@@ -105,6 +105,37 @@ custom_js: /assets/js/commands.js
     </div>
   </div>
 
+  <!-- 区域分割线 -->
+  <hr>
+
+  <!-- ==========================================================
+       区域 2.5：命令速查表（折叠面板）
+       功能：概览全部命令（版本 / 分类 / 命令 / 说明），默认折叠
+       交互：点击按钮展开/折叠
+       ========================================================== -->
+  <div class="summary-section">
+    <button type="button" class="summary-toggle" id="summaryToggle" onclick="toggleSummary()" aria-expanded="false">
+      <span class="summary-sort-icon" aria-hidden="true"></span>
+      <span class="summary-toggle-text">命令速查表</span>
+      <span class="summary-count" id="summaryCount"></span>
+      <span class="summary-chevron-icon" aria-hidden="true"></span>
+    </button>
+
+    <div class="summary-body" id="summaryBody" hidden>
+      <table class="summary-table">
+        <thead>
+          <tr>
+            <th>版本</th>
+            <th>分类</th>
+            <th>命令</th>
+            <th>说明</th>
+          </tr>
+        </thead>
+        <tbody id="summaryTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
   <!-- ==========================================================
        区域 3：命令详情展示（通过分类浏览选中后显示）
        功能：显示选中命令的完整信息

@@ -44,7 +44,7 @@
 /* 搜索输入框容器 */
 .search-box {
   display: flex;
-  gap: 10px;
+  gap: 5px;
   margin-bottom: 15px;
 }
 
@@ -231,7 +231,7 @@
 /* 横向并排容器 */
 .filter-row-inline {
   display: flex;
-  gap: 20px;
+  gap: 5px;
   flex-wrap: wrap;
   align-items: flex-end;
 }
@@ -262,6 +262,141 @@
 .filter-item select:focus {
   border-color: var(--accent-color);
   outline: none;
+}
+
+/* ============================================================
+   区域 2.5：命令速查表（折叠面板）
+   ============================================================
+   包含：折叠按钮 + 概览表格（版本/分类/命令/说明）
+   ============================================================ */
+.summary-section {
+  margin: 20px 0;
+}
+
+/* 折叠切换按钮（中性灰幽灵风格） */
+.summary-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 18px;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--text-secondary);
+  background-color: transparent;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.summary-toggle:hover {
+  background-color: var(--bg-tertiary);
+  border-color: var(--accent-hover);
+  color: var(--accent-hover);
+}
+
+.summary-toggle:active {
+  transform: translateY(1px);
+}
+
+/* sort 排序图标（CSS 遮罩，跟随字色，大小与文字等大） */
+.summary-sort-icon {
+  flex-shrink: 0;
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  background-color: currentColor;
+  -webkit-mask-image: url('../icons/icon-sort.svg');
+  mask-image: url('../icons/icon-sort.svg');
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+/* 右侧展开箭头（chevron） */
+.summary-chevron-icon {
+  flex-shrink: 0;
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  background-color: currentColor;
+  -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M4.5 6.5 8 10l3.5-3.5" fill="none" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+  mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M4.5 6.5 8 10l3.5-3.5" fill="none" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  transition: transform 0.2s;
+}
+
+.summary-toggle[aria-expanded="true"] .summary-chevron-icon {
+  transform: rotate(180deg);
+}
+
+/* 命令总数徽标 */
+.summary-count {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* 表格容器 */
+.summary-body {
+  margin-top: 12px;
+  overflow-x: auto;
+}
+
+/* 概览表格 */
+.summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  background: var(--bg-primary);
+}
+
+.summary-table th,
+.summary-table td {
+  padding: 9px 12px;
+  border: 1px solid var(--border-color);
+  text-align: left;
+  vertical-align: top;
+}
+
+.summary-table thead th {
+  background: var(--bg-secondary);
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.summary-table code {
+  background: var(--bg-secondary);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+/* 版本标签 */
+.summary-version {
+  font-size: 12px;
+  font-weight: bold;
+  padding: 2px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  color: #fff;
+}
+
+.summary-version--ros1 {
+  background: #9c27b0;  /* ROS 1 紫色 */
+}
+
+.summary-version--ros2 {
+  background: #0366d6;  /* ROS 2 蓝色（品牌色） */
 }
 
 /* ============================================================

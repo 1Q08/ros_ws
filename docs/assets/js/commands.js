@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
     .then(response => response.json())
     .then(data => {
       commandsData = data;
+      renderSummaryTable();
     })
     .catch(error => console.error('加载命令数据失败:', error));
 });
@@ -131,6 +132,59 @@ function onCommandChange() {
   document.getElementById('detailNotesContent').textContent = cmd.notes;
 
   detailDiv.style.display = 'block';
+}
+
+// ============================================================
+// 命令速查表（折叠面板）
+// ============================================================
+// 功能：将 commands.json 中全部命令渲染为概览表
+//       列：版本 / 分类 / 命令 / 说明
+// 互动：点击表头按钮展开/折叠
+// ============================================================
+
+// 渲染速查表 + 更新命令总数徽标
+function renderSummaryTable() {
+  const tbody = document.getElementById('summaryTableBody');
+  const count = document.getElementById('summaryCount');
+  if (!tbody || !commandsData) return;
+
+  const versionNames = { ros1: 'ROS 1', ros2: 'ROS 2' };
+  let rows = '';
+  let total = 0;
+
+  for (const version of ['ros1', 'ros2']) {
+    const categories = commandsData[version];
+    if (!categories) continue;
+
+    for (const key in categories) {
+      const cat = categories[key];
+      cat.commands.forEach(cmd => {
+        total++;
+        rows += `
+          <tr>
+            <td><span class="summary-version summary-version--${version}">${versionNames[version]}</span></td>
+            <td>${cat.name}</td>
+            <td><code>${highlightCode(cmd.cmd)}</code></td>
+            <td>${cmd.desc}</td>
+          </tr>
+        `;
+      });
+    }
+  }
+
+  tbody.innerHTML = rows;
+  if (count) count.textContent = total ? `共 ${total} 条` : '';
+}
+
+// 切换折叠面板展开/折叠状态
+function toggleSummary() {
+  const body = document.getElementById('summaryBody');
+  const btn = document.getElementById('summaryToggle');
+  if (!body) return;
+
+  const isHidden = body.hidden;
+  body.hidden = !isHidden;
+  if (btn) btn.setAttribute('aria-expanded', String(isHidden));
 }
 
 // ============================================================
