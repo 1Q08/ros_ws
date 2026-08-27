@@ -37,6 +37,10 @@ layout: default
   {%- endif -%}
 
   <section class="giscus-wrapper">
+    <button type="button" class="giscus-load-btn" id="giscus-load-btn">
+      <span class="giscus-load-icon" aria-hidden="true"></span>
+      查看评论
+    </button>
     <div class="giscus"></div>
     <script>
       (function () {
@@ -110,21 +114,20 @@ layout: default
           }
         }
 
-        // 懒加载：滚动到评论区附近才真正加载 giscus，首屏不被 widget 请求拖慢
-        var container = document.querySelector('.giscus');
-        if ('IntersectionObserver' in window && container) {
-          var io = new IntersectionObserver(function (entries) {
-            for (var i = 0; i < entries.length; i++) {
-              if (entries[i].isIntersecting) {
-                io.disconnect();
-                loadGiscus();
-                break;
-              }
+        // 点击「查看评论」按钮后才真正加载 giscus，避免首屏被 widget 请求拖慢
+        var loadBtn = document.getElementById('giscus-load-btn');
+        if (loadBtn) {
+          loadBtn.addEventListener('click', function () {
+            loadBtn.disabled = true;
+            loadBtn.textContent = '加载中…';
+            loadGiscus();
+            // giscus 渲染完成后会自动替换 .giscus 内容，按钮随之隐藏
+            if (loadBtn.parentElement) {
+              loadBtn.parentElement.removeChild(loadBtn);
             }
-          }, { rootMargin: '200px' });
-          io.observe(container);
+          });
         } else {
-          loadGiscus(); // 兜底：不支持 IntersectionObserver 时立即加载
+          loadGiscus(); // 兜底：找不到按钮时立即加载
         }
 
         // 监听主题切换按钮（theme.js 触发 themechange 事件）

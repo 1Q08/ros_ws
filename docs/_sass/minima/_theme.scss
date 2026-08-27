@@ -130,15 +130,71 @@ body {
 
 /**
  * giscus 评论区
- * .giscus 容器未加载时高度为 0，需给最小高度占位，
- * 否则 IntersectionObserver 无法触发懒加载。
+ * 通过「查看评论」按钮点击后才加载，避免首屏被 widget 请求拖慢。
+ * 按钮上方加分隔线并居中显示，采用描边幽灵样式 + 评论气泡图标。
  */
 .giscus-wrapper {
-  margin-top: 30px;
+  margin-top: 40px;
+  padding-top: 30px;
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+}
+
+.giscus-load-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 22px;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--accent-color);
+  background-color: transparent;
+  border: 1px solid var(--accent-color);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
+}
+
+.giscus-load-icon {
+  flex-shrink: 0;
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  background-color: currentColor;
+  -webkit-mask-image: url('icons/message-comments.svg');
+  mask-image: url('icons/message-comments.svg');
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+.giscus-load-btn:hover {
+  background-color: var(--bg-tertiary);
+  border-color: var(--accent-hover);
+  color: var(--accent-hover);
+}
+
+.giscus-load-btn:active {
+  transform: translateY(1px);
+}
+
+.giscus-load-btn:disabled {
+  cursor: wait;
+  opacity: 0.7;
 }
 
 .giscus {
-  min-height: 120px;
+  margin-top: 24px;
+  text-align: left;
+}
+
+.giscus:empty {
+  min-height: 0;
 }
 
 /**
