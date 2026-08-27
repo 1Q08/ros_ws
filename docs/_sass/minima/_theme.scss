@@ -20,6 +20,7 @@
   --shadow-color: rgba(0, 0, 0, 0.1);
   --code-bg: #f6f8fa;
   --input-bg: #ffffff;
+  --particle-color: #5a6e82;
 }
 
 // CSS 变量（深色主题）
@@ -37,6 +38,7 @@
   --shadow-color: rgba(0, 0, 0, 0.3);
   --code-bg: #161b22;
   --input-bg: #0d1117;
+  --particle-color: #a0b4c8;
 }
 
 /**
@@ -56,10 +58,12 @@ body {
 .site-title,
 .site-title:visited {
   color: var(--text-primary) !important;
+  font-weight: 600;
 }
 
 .page-link {
   color: var(--text-primary) !important;
+  font-weight: 600;
 
   &:hover {
     color: var(--accent-color) !important;
@@ -97,6 +101,10 @@ body {
 .footer-social {
   clear: both;
   margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
 
   .social-media-list {
     display: flex;
@@ -112,6 +120,15 @@ body {
 }
 
 /**
+ * 页脚访问量计数
+ */
+.site-visits__badge {
+  display: inline-block;
+  vertical-align: middle;
+  height: 20px;
+}
+
+/**
  * 主题切换按钮（导航栏中）
  */
 .theme-toggle-btn {
@@ -124,6 +141,7 @@ body {
   border-radius: 20px;
   cursor: pointer;
   font-size: 13px;
+  font-weight: 600;
   color: var(--text-primary);
   transition: all 0.3s ease;
   margin-left: 15px;
@@ -236,4 +254,32 @@ body {
 .post-list-intro {
   color: var(--text-secondary);
   margin-bottom: 12px;
+}
+
+/**
+ * 背景粒子动画 Canvas
+ * ============================================================
+ * 固定在视口底层，位于所有页面内容之下；
+ * z-index: 0，指针事件穿透（不拦截鼠标操作）。
+ * 实际粒子颜色由 --particle-color 控制（深浅色自动适配）。
+ */
+#bg-particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/**
+ * 页眉站点标题图标
+ * 引用 favicon.svg，随主题在浅色(favicon.svg)/深色(favicon-dark.svg)间切换
+ */
+.site-title-icon {
+  width: 1.1em;
+  height: 1.1em;
+  vertical-align: -0.125em;
+  margin-right: 0.1em;
 }

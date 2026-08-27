@@ -1,11 +1,7 @@
 title: ROS 命令速查
 author: 老张同志
 email: example@163.com
-description: |
-  一个开源的 ROS1 / ROS2 命令行参考工具
-  本网站部分由 Kimi K3、Claude Opus 4.8、
-  Deepseek V4 Flash/Pro 等开源AI模型生成
-  内容仅供参考，若有错误请联系作者纠正
+description: 开源的 ROS1/2 命令查找工具
 baseurl: "/ros_ws"
 url: "https://1q08.github.io"
 

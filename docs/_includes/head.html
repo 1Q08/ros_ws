@@ -15,6 +15,12 @@
         if (!link) return;
         var src = theme === 'dark' ? link.getAttribute('data-dark') : link.getAttribute('data-light');
         if (src) link.href = src;
+        // 同步更新页眉站点标题图标
+        var titleIcon = document.getElementById('site-title-icon');
+        if (titleIcon) {
+          var iconSrc = theme === 'dark' ? titleIcon.getAttribute('data-dark') : titleIcon.getAttribute('data-light');
+          if (iconSrc) titleIcon.src = iconSrc;
+        }
       }
       function detectTheme() {
         try {
@@ -38,6 +44,7 @@
     {%- include google-analytics.html -%}
   {%- endif -%}
   <script src="{{ "/assets/js/theme.js" | relative_url }}"></script>
+  <script src="{{ "/assets/js/bg-particles.js" | relative_url }}" defer></script>
   {%- if page.custom_css -%}
     <!-- 页面专属样式（按需加载） -->
     <link rel="stylesheet" href="{{ page.custom_css | relative_url }}">

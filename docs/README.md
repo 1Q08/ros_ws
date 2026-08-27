@@ -10,50 +10,55 @@
 
 ```
 docs/                              # Jekyll 站点根目录
-├── _config.yml                   # ⚙️ 站点核心配置
-├── Gemfile / Gemfile.lock        # 📦 Ruby 依赖管理
-├── README.md                     # 📄 本说明文档
+├── _config.yml                   # 站点核心配置
+├── Gemfile / Gemfile.lock        # Ruby 依赖管理
+├── README.md                     # 本说明文档
 │
-├── index.md                      # 🏠 首页（home 布局）
-├── about.md                      # ℹ️ 关于页（page 布局）
-├── commands.html                 # 🔍 命令速查交互页（核心功能）
-├── 404.html                      # ❌ 自定义 404 页面
+├── index.md                      # 首页（home 布局）
+├── about.md                      # 关于页（page 布局）
+├── commands.html                 # 命令速查交互页（核心功能）
+├── archive.md                    # 全部文章归档页（page 布局）
+├── 404.html                      # 自定义 404 页面
 │
-├── _layouts/                     # 🎨 页面布局模板（继承链）
+├── _posts/                       # 博客文章（Markdown，文件名含发布日期）
+├── _layouts/                     # 页面布局模板（继承链）
 │   ├── default.html              # ├─ 根布局：head + header + content + footer
 │   ├── home.html                 # ├─ 首页布局：文章列表 + 分页
 │   ├── page.html                 # ├─ 普通页面布局：标题 + 内容
 │   └── post.html                 # └─ 文章布局：日期 + 作者 + schema.org
 │
-├── _includes/                    # 🧩 可复用片段
+├── _includes/                    # 可复用片段
 │   ├── head.html                 # ├─ <head>：meta + CSS + JS + SEO + feed
-│   ├── header.html               # ├─ 导航栏：标题 + 链接 + 🌓 主题切换按钮
+│   ├── header.html               # ├─ 导航栏：标题 + 链接 + 主题切换按钮
 │   ├── footer.html               # ├─ 页脚：作者 + 邮箱 + 描述 + 社交链接
 │   └── social.html               # └─ 社交图标：GitHub + RSS
 │
-├── _sass/                        # 💅 SCSS 样式源
+├── _sass/                        # SCSS 样式源
 │   ├── minima.scss               # ├─ 主入口：变量定义 + 导入 partials
 │   └── minima/
 │       ├── _base.scss            # ├─ 基础元素：字体、颜色、链接、代码块、wrapper
 │       ├── _layout.scss          # ├─ 布局样式：header、footer、导航、page-content
 │       ├── _syntax-highlighting.scss  # ├─ Rouge 代码高亮配色
-│       └── _theme.scss           # └─ ✨ 自定义主题系统：CSS 变量 + 深浅色模式
+│       └── _theme.scss           # └─ 自定义主题系统：CSS 变量 + 深浅色模式
 │
-└── assets/                       # 📁 静态资源
+└── assets/                       # 静态资源
     ├── main.scss                 # ├─ CSS 入口（@import "minima" → main.css）
     ├── data/
-    │   └── commands.json         # ├─ 🗄️ 命令数据库（速查页数据源）
+    │   └── commands.json         # ├─ 命令数据库（速查页数据源）
     ├── icons/
+    │   ├── favicon.svg                # ├─ 浅色 favicon（随主题动态切换）
+    │   ├── favicon-dark.svg           # ├─ 深色 favicon
     │   ├── minima-social-icons.svg    # ├─ GitHub/RSS 图标
     │   ├── icon-search.svg            # ├─ 搜索图标
     │   └── icon-eye.svg               # └─ 浏览图标
     ├── js/
-    │   ├── theme.js              # ├─ 🌓 主题切换逻辑（localStorage + 系统偏好）
-    │   └── commands.js           # └─ 🔍 命令速查页脚本（搜索 + 三级联动 + 高亮）
+    │   ├── theme.js              # ├─ 主题切换逻辑（localStorage + 系统偏好）
+    │   ├── bg-particles.js       # ├─ 背景粒子动画（Canvas，大小分层 + 发光）
+    │   └── commands.js           # └─ 命令速查页脚本（搜索 + 三级联动 + 高亮）
     └── css/
-        └── commands.scss         # └─ 🎨 命令速查页专属样式（→ commands.css）
+        └── commands.scss         # └─ 命令速查页专属样式（→ commands.css）
 
-_site/                             # 🏗️ Jekyll 编译输出（自动生成，不手动编辑）
+_site/                             # Jekyll 编译输出（自动生成，不手动编辑）
 ```
 
 ---
@@ -69,7 +74,7 @@ _site/                             # 🏗️ Jekyll 编译输出（自动生成�
 | baseurl | `/ros_ws` |
 | 部署 URL | `https://1q08.github.io` |
 | 主题 | `minima` |
-| 导航栏页面 | `about.md`、`commands.html` |
+| 导航栏页面 | `about.md`、`commands.html`、`archive.md` |
 | 插件 | `jekyll-feed`、`jekyll-seo-tag` |
 
 ### 2. 布局继承链（Layouts）
@@ -87,8 +92,8 @@ default.html      ← 根布局
 
 | 片段 | 职责 |
 |------|------|
-| `head.html` | `<head>` 标签，引入 `main.css`、`theme.js`、SEO tag、feed meta，并支持 `page.custom_css` / `page.custom_js` 按需加载 |
-| `header.html` | 导航栏，包含站点标题、链接、**自定义主题切换按钮** |
+| `head.html` | `<head>` 标签，引入 `main.css`、`theme.js`、`bg-particles.js`、SEO tag、feed meta，并支持 `page.custom_css` / `page.custom_js` 按需加载 |
+| `header.html` | 导航栏，包含站点标题、页面链接、**ROS2 汉化站外链**、**自定义主题切换按钮** |
 | `footer.html` | 页脚，显示作者、邮箱、站点描述（支持多行）、社交图标 |
 | `social.html` | GitHub + RSS 社交图标 |
 
@@ -98,7 +103,7 @@ default.html      ← 根布局
 assets/main.scss ──@import──→ _sass/minima.scss ──→ _base.scss
                                                    ├─ _layout.scss
                                                    ├─ _syntax-highlighting.scss
-                                                   └─ _theme.scss ✨
+                                                   └─ _theme.scss 
 ```
 
 - 所有页面共用 `main.css`（全局样式）
@@ -116,8 +121,15 @@ assets/main.scss ──@import──→ _sass/minima.scss ──→ _base.scss
 
 1. 检测顺序：`localStorage` → 系统偏好 (`prefers-color-scheme`) → 默认浅色
 2. 切换时设置 `<html data-theme="dark|light">`，保存到 `localStorage`，更新按钮图标
+3. 广播 `themechange` 自定义事件：favicon 与背景粒子监听该事件同步换色
 
-### 6. 🔍 命令速查核心页（`commands.html`）
+### 6. ✨ 背景粒子动画（`bg-particles.js`）
+
+- **实现**：Canvas 2D + `requestAnimationFrame`，`<canvas id="bg-particles">` 固定在页面底层（`position: fixed; z-index: 0; pointer-events: none`）
+- **粒子分层**：85% 小粒子（0.7~2.3px）+ 12% 中粒子（2.4~4.8px）+ 3% 大光点（4~7px，带径向渐变光晕）
+- **自适应**：监听 `themechange` 事件同步粒子颜色（浅色 `#5a6e82` / 深色 `#a0b4c8`）；DPR 缩放保证高清屏清晰；`prefers-reduced-motion` 时只渲染一帧
+
+### 7. 🔍 命令速查核心页（`commands.html`）
 
 **页面结构**（3 个区域）：
 
@@ -133,7 +145,7 @@ assets/main.scss ──@import──→ _sass/minima.scss ──→ _base.scss
 - 代码块中 `ros1`/`ros2` 关键字橙黄色高亮（`<span class="hl-ros">`）
 - HTML 实体转义，防止 `<param>` 被浏览器解析为标签
 
-### 7. 🗄️ 命令数据库（`assets/data/commands.json`）
+### 8. 🗄️ 命令数据库（`assets/data/commands.json`）
 
 **数据结构**：
 
@@ -165,7 +177,7 @@ assets/main.scss ──@import──→ _sass/minima.scss ──→ _base.scss
 
 ---
 
-## 🚀 本地开发
+## 本地开发
 
 ### 环境要求
 
@@ -185,19 +197,6 @@ bundle exec jekyll serve --baseurl=""
 
 # 3. 浏览器访问
 # http://127.0.0.1:4000
-```
-
-### 常用命令
-
-```bash
-# 构建站点（输出到 _site/）
-bundle exec jekyll build
-
-# 构建并监听变化
-bundle exec jekyll build --watch
-
-# 生产模式构建（启用 GA/SEO 等）
-JEKYLL_ENV=production bundle exec jekyll build
 ```
 
 ---
@@ -232,7 +231,7 @@ JEKYLL_ENV=production bundle exec jekyll build
 
 ---
 
-## 📦 依赖
+## 依赖
 
 | 依赖 | 用途 |
 |------|------|
@@ -242,6 +241,6 @@ JEKYLL_ENV=production bundle exec jekyll build
 
 ---
 
-## 📄 许可
+## 许可
 
 本项目基于 MIT 许可开源。详见项目根目录的 [LICENSE](../LICENSE) 文件

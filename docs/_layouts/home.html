@@ -36,4 +36,65 @@ layout: default
 
   {%- endif -%}
 
+  <section class="giscus-wrapper">
+    <div class="giscus"></div>
+    <script>
+      (function () {
+        function resolveTheme() {
+          try {
+            var saved = localStorage.getItem('theme');
+            if (saved === 'dark' || saved === 'light') return saved;
+          } catch (e) {}
+          return (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+        }
+        function giscusThemeName(theme) {
+          return theme === 'dark' ? 'noborder_dark' : 'noborder_light';
+        }
+        // 动态创建 giscus client 脚本，配置全部写在 script 标签的 data-* 上（client.js 读取位置）
+        function loadGiscus(initialTheme) {
+          var s = document.createElement('script');
+          s.src = 'https://giscus.app/client.js';
+          s.setAttribute('data-repo', '1Q08/ros_ws');
+          s.setAttribute('data-repo-id', 'R_kgDOTF12Rw');
+          s.setAttribute('data-category', 'Announcements');
+          s.setAttribute('data-category-id', 'DIC_kwDOTF12R84DESZv');
+          s.setAttribute('data-mapping', 'pathname');
+          s.setAttribute('data-strict', '1');
+          s.setAttribute('data-reactions-enabled', '1');
+          s.setAttribute('data-emit-metadata', '0');
+          s.setAttribute('data-input-position', 'top');
+          s.setAttribute('data-theme', giscusThemeName(initialTheme));
+          s.setAttribute('data-lang', 'zh-CN');
+          s.setAttribute('data-loading', 'lazy');
+          s.crossOrigin = 'anonymous';
+          s.async = true;
+          // 插到 .giscus 容器之后，giscus client.js 会用它前面的 .giscus 作为渲染容器
+          var container = document.querySelector('.giscus');
+          if (container && container.parentElement) {
+            container.parentElement.insertBefore(s, container.nextSibling);
+          } else {
+            document.body.appendChild(s);
+          }
+        }
+        // 主题切换时，通知已加载的 giscus iframe 更新主题
+        function applyGiscusTheme(theme) {
+          var name = giscusThemeName(theme);
+          var frame = document.querySelector('iframe.giscus-frame');
+          if (frame) {
+            frame.contentWindow.postMessage(
+              { giscus: { setConfig: { theme: name } } },
+              'https://giscus.app'
+            );
+          }
+        }
+        // 首次加载：同步计算当前主题，保证初始主题正确、深色模式下不闪烁
+        loadGiscus(resolveTheme());
+        // 监听主题切换按钮（theme.js 触发 thechange 事件）
+        document.addEventListener('themechange', function (e) {
+          applyGiscusTheme(e.detail && e.detail.theme);
+        });
+      })();
+    </script>
+  </section>
+
 </div>

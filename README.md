@@ -9,15 +9,6 @@
 
 ---
 
-## 🔗 网站导航
-
-| 站点               | 地址                                                                                                                    |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------------- |
-| ROS 命令速查    | [https://1q08.github.io/ros_ws/](https://1q08.github.io/ros_ws/)                                                         |
-| ROS2 文档汉化站 | [https://1q08.github.io/ROS2_documentation/jazzy/index.html](https://1q08.github.io/ROS2_documentation/jazzy/index.html) |
-
----
-
 ## 📚 文档站（`docs/`）
 
 一个开源的 **ROS1 / ROS2 命令行参考工具**，基于 Jekyll + GitHub Pages 构建，提供交互式命令浏览器。
