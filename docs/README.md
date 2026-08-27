@@ -63,67 +63,7 @@ _site/                             # Jekyll 编译输出（自动生成，不手
 
 ---
 
-## 🏗️ 架构详解
-
-### 1. 核心配置（`_config.yml`）
-
-| 配置项 | 值 |
-|--------|-----|
-| 站点标题 | `ROS 命令速查` |
-| 作者 | `老张同志` |
-| baseurl | `/ros_ws` |
-| 部署 URL | `https://1q08.github.io` |
-| 主题 | `minima` |
-| 导航栏页面 | `about.md`、`commands.html`、`archive.md` |
-| 插件 | `jekyll-feed`、`jekyll-seo-tag` |
-
-### 2. 布局继承链（Layouts）
-
-```
-default.html      ← 根布局
-  ├── home.html   ← 首页（主页/索引页 + 评论区）
-  ├── page.html   ← 普通页面（about.md、commands.html）
-  └── post.html   ← 博客文章（带日期、作者、schema.org）
-```
-
-所有布局通过 `layout: default` 声明继承，内容通过 `{{ content }}` 注入根布局
-
-### 3. 模板片段（Includes）
-
-| 片段 | 职责 |
-|------|------|
-| `head.html` | `<head>` 标签，引入 `main.css`、`theme.js`、`bg-particles.js`、SEO tag、feed meta，并同步 favicon 与站点标题图标（随主题切换），支持 `page.custom_css` / `page.custom_js` 按需加载 |
-| `header.html` | 导航栏，包含站点标题（含随主题切换的图标）、页面链接、**ROS2 汉化站外链**、**自定义主题切换按钮** |
-| `footer.html` | 页脚，显示作者、邮箱、站点描述（支持多行）、社交图标、**访问量徽章** |
-| `social.html` | GitHub + RSS 社交图标 |
-
-### 4. 样式系统（SCSS）
-
-```
-assets/main.scss ──@import──→ _sass/minima.scss ──→ _base.scss
-                                                   ├─ _layout.scss
-                                                   ├─ _syntax-highlighting.scss
-                                                   └─ _theme.scss 
-```
-
-- 所有页面共用 `main.css`（全局样式）
-- 命令速查页额外加载 `commands.css`（页面专属样式，通过 front matter 声明）
-- 颜色统一使用 CSS 变量（`--bg-primary`、`--text-primary` 等），深浅模式自动适配
-
-### 5. ✨ 自定义主题系统（`_theme.scss` + `theme.js`）
-
-**CSS 变量方案**，定义于 `_theme.scss`：
-
-- `:root` — 浅色主题（GitHub 风格：白色背景、深色文字）
-- `[data-theme="dark"]` — 深色主题（GitHub Dark 风格：深色背景、浅色文字）
-
-**切换逻辑**（`theme.js`）：
-
-1. 检测顺序：`localStorage` → 系统偏好 (`prefers-color-scheme`) → 默认浅色
-2. 切换时设置 `<html data-theme="dark|light">`，保存到 `localStorage`，更新按钮图标
-3. 广播 `themechange` 自定义事件：favicon、站点标题图标与背景粒子监听该事件同步换色
-
-### 6. 🔍 命令速查核心页（`commands.html`）
+## 🔍 命令速查核心页（`commands.html`）
 
 **页面结构**（3 个区域）：
 
@@ -139,7 +79,7 @@ assets/main.scss ──@import──→ _sass/minima.scss ──→ _base.scss
 - 代码块中 `ros1`/`ros2` 关键字橙黄色高亮（`<span class="hl-ros">`）
 - HTML 实体转义，防止 `<param>` 被浏览器解析为标签
 
-### 7. 🗄️ 命令数据库（`assets/data/commands.json`）
+## 🗄️ 命令数据库（`assets/data/commands.json`）
 
 **数据结构**：
 
