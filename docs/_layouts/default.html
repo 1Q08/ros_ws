@@ -5,8 +5,10 @@
 
   <body>
 
-    <!-- 背景粒子动画（固定在底层，不拦截鼠标） -->
+    {%- if page.layout == 'home' -%}
+    <!-- 背景粒子动画（仅首页显示，固定在底层，不拦截鼠标） -->
     <canvas id="bg-particles" aria-hidden="true"></canvas>
+    {%- endif -%}
 
     {%- include header.html -%}
 

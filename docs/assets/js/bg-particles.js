@@ -149,6 +149,9 @@
     return 'rgba(90,110,130,' + alpha + ')';
   }
 
+  var rafId = null;
+  var running = false;
+
   function step() {
     var t = Date.now() / 1000;
     for (var i = 0; i < particles.length; i++) {
@@ -163,7 +166,21 @@
       else if (p.y > H + 10) p.y = -10;
     }
     draw();
-    requestAnimationFrame(step);
+    rafId = requestAnimationFrame(step);
+  }
+
+  function startLoop() {
+    if (reduceMotion || running) return;
+    running = true;
+    rafId = requestAnimationFrame(step);
+  }
+
+  function stopLoop() {
+    running = false;
+    if (rafId !== null) {
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    }
   }
 
   // 深浅色切换时更新颜色（站点已有 themechange 事件）
@@ -178,12 +195,22 @@
     if (reduceMotion) draw();
   });
 
+  // 页面切到后台时暂停动画，回前台恢复（省电、减少卡顿）
+  document.addEventListener('visibilitychange', function () {
+    if (reduceMotion) return;
+    if (document.hidden) {
+      stopLoop();
+    } else {
+      startLoop();
+    }
+  });
+
   // 启动
   resize();
   initParticles();
   if (reduceMotion) {
     draw(); // 只画一帧静止粒子
   } else {
-    step();
+    startLoop();
   }
 })();

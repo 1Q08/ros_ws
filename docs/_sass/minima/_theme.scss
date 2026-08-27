@@ -129,6 +129,19 @@ body {
 }
 
 /**
+ * giscus 评论区
+ * .giscus 容器未加载时高度为 0，需给最小高度占位，
+ * 否则 IntersectionObserver 无法触发懒加载。
+ */
+.giscus-wrapper {
+  margin-top: 30px;
+}
+
+.giscus {
+  min-height: 120px;
+}
+
+/**
  * 主题切换按钮（导航栏中）
  */
 .theme-toggle-btn {

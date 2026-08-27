@@ -123,13 +123,7 @@ assets/main.scss ──@import──→ _sass/minima.scss ──→ _base.scss
 2. 切换时设置 `<html data-theme="dark|light">`，保存到 `localStorage`，更新按钮图标
 3. 广播 `themechange` 自定义事件：favicon、站点标题图标与背景粒子监听该事件同步换色
 
-### 6. ✨ 背景粒子动画（`bg-particles.js`）
-
-- **实现**：Canvas 2D + `requestAnimationFrame`，`<canvas id="bg-particles">` 固定在页面底层（`position: fixed; z-index: 0; pointer-events: none`）
-- **粒子分层**：85% 小粒子（0.7~2.3px）+ 12% 中粒子（2.4~4.8px）+ 3% 大光点（4~7px，带径向渐变光晕）
-- **自适应**：监听 `themechange` 事件同步粒子颜色（浅色 `#5a6e82` / 深色 `#a0b4c8`）；DPR 缩放保证高清屏清晰；`prefers-reduced-motion` 时只渲染一帧
-
-### 7. 🔍 命令速查核心页（`commands.html`）
+### 6. 🔍 命令速查核心页（`commands.html`）
 
 **页面结构**（3 个区域）：
 
@@ -145,7 +139,7 @@ assets/main.scss ──@import──→ _sass/minima.scss ──→ _base.scss
 - 代码块中 `ros1`/`ros2` 关键字橙黄色高亮（`<span class="hl-ros">`）
 - HTML 实体转义，防止 `<param>` 被浏览器解析为标签
 
-### 8. 🗄️ 命令数据库（`assets/data/commands.json`）
+### 7. 🗄️ 命令数据库（`assets/data/commands.json`）
 
 **数据结构**：
 
@@ -178,6 +172,8 @@ assets/main.scss ──@import──→ _sass/minima.scss ──→ _base.scss
 ---
 
 ## 本地开发
+
+> 注：giscus 评论区依赖 giscus.app 外网服务，本地沙箱预览时可能无法访问而不显示，部署到 GitHub Pages 后即可正常加载。
 
 ### 环境要求
 
@@ -238,7 +234,8 @@ bundle exec jekyll serve --baseurl=""
 | `github-pages` gem | GitHub Pages 环境（含 Jekyll 3.x + minima 主题） |
 | `jekyll-feed` | RSS feed 生成 |
 | `jekyll-seo-tag` | SEO meta 标签 |
-| giscus（外部服务） | 评论区，依托 GitHub Discussions 存储 |
+| 💎[giscus](https://github.com/giscus/giscus) | 评论区，依托 GitHub Discussions 存储 |
+| 👀[Visitor Badge](https://github.com/hehuapei/visitor-badge) | 零代码的访客徽章服务 |
 
 ---
 
