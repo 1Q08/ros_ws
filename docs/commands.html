@@ -105,11 +105,30 @@ custom_js: /assets/js/commands.js
     </div>
   </div>
 
+  <!-- ==========================================================
+       区域 2.5：命令详情展示（通过分类浏览选中后显示）
+       功能：显示选中命令的完整信息
+       ========================================================== -->
+  <div id="commandDetail" class="command-detail" style="display:none;">
+    <h3 id="detailTitle"></h3>
+    <div class="detail-content">
+      <p><strong>命令:</strong></p>
+      <pre class="highlight-code"><code id="detailCmd"></code></pre>
+      <p><strong>说明:</strong> <span id="detailDesc"></span></p>
+      <p><strong>示例:</strong></p>
+      <pre class="highlight-code"><code id="detailExample"></code></pre>
+      <div id="detailNotes">
+        <strong>注意事项:</strong>
+        <pre id="detailNotesContent"></pre>
+      </div>
+    </div>
+  </div>
+
   <!-- 区域分割线 -->
   <hr>
 
   <!-- ==========================================================
-       区域 2.5：命令速查表（折叠面板）
+       区域 3：命令速查表（折叠面板）
        功能：概览全部命令（版本 / 分类 / 命令 / 说明），默认折叠
        交互：点击按钮展开/折叠
        ========================================================== -->
@@ -133,25 +152,6 @@ custom_js: /assets/js/commands.js
         </thead>
         <tbody id="summaryTableBody"></tbody>
       </table>
-    </div>
-  </div>
-
-  <!-- ==========================================================
-       区域 3：命令详情展示（通过分类浏览选中后显示）
-       功能：显示选中命令的完整信息
-       ========================================================== -->
-  <div id="commandDetail" class="command-detail" style="display:none;">
-    <h3 id="detailTitle"></h3>
-    <div class="detail-content">
-      <p><strong>命令:</strong></p>
-      <pre class="highlight-code"><code id="detailCmd"></code></pre>
-      <p><strong>说明:</strong> <span id="detailDesc"></span></p>
-      <p><strong>示例:</strong></p>
-      <pre class="highlight-code"><code id="detailExample"></code></pre>
-      <div id="detailNotes">
-        <strong>注意事项:</strong>
-        <pre id="detailNotesContent"></pre>
-      </div>
     </div>
   </div>
 
