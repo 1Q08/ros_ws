@@ -19,7 +19,7 @@
 
 <h1 align="center">ROS 命令速查</h1>
 
-<p align="center">一个开源的 **ROS 1 / ROS 2 命令行参考工具**，基于 Jekyll + GitHub Pages 构建，提供交互式命令浏览器，支持中英双语与深浅色主题</p>
+<p align="center">一个开源的 <strong>ROS 1 / ROS 2 命令行参考工具</strong>，基于 Jekyll + GitHub Pages 构建，提供交互式命令浏览器，支持中英双语与深浅色主题</p>
 
 <blockquote>
 <p align="center">本网站完全由 Kimi K3、Claude Opus 4.8、Deepseek V4 等开源 AI 模型生成，内容仅供参考，若有错误请联系作者纠正</p>
@@ -28,7 +28,8 @@
 <!-- PROJECT LINKS -->
 <p align="center">
   <a href="https://1q08.github.io/ros_ws/"><strong>浏览网站 »</strong></a>
-  ·
+</p>
+<p align="center">
   <a href="https://github.com/1Q08/ros_ws/issues">报告 Bug</a>
   ·
   <a href="https://github.com/1Q08/ros_ws/issues">请求功能</a>
