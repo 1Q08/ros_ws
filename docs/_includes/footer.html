@@ -20,7 +20,11 @@
       </div>
 
       <div class="footer-col footer-col-2">
+        {%- if page.lang == 'en' -%}
+        <p class="footer-description">{{- site.description_en | default: site.description | escape | newline_to_br -}}</p>
+        {%- else -%}
         <p class="footer-description">{{- site.description | escape | newline_to_br -}}</p>
+        {%- endif -%}
       </div>
     </div>
 

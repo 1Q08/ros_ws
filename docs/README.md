@@ -20,6 +20,12 @@ docs/                              # Jekyll 站点根目录
 ├── archive.md                    # 全部文章归档页（page 布局）
 ├── 404.html                      # 自定义 404 页面（ROS 终端风格）
 │
+├── en/                           # 英文版页面（挂载于 /en/ 路径）
+│   ├── index.md                  # ├─ 英文首页（无文章列表 / 评论区）
+│   ├── commands.html             # ├─ 英文命令速查交互页
+│   ├── about.md                  # ├─ 英文关于页
+│   └── 404.html                  # └─ 英文自定义 404
+│
 ├── _posts/                       # 博客文章（Markdown，文件名含发布日期）
 ├── _layouts/                     # 页面布局模板（继承链）
 │   ├── default.html              # ├─ 根布局：head + header + content + footer
@@ -28,9 +34,10 @@ docs/                              # Jekyll 站点根目录
 │   └── post.html                 # └─ 文章布局：日期 + 作者 + schema.org
 │
 ├── _includes/                    # 可复用片段
-│   ├── head.html                 # ├─ <head>：meta + CSS + JS + SEO + feed
-│   ├── header.html               # ├─ 导航栏：标题（含随主题图标）+ 链接 + 主题切换按钮
-│   ├── footer.html               # ├─ 页脚：作者 + 邮箱 + 描述 + 社交链接 + 访问量徽章
+│   ├── head.html                 # ├─ <head>：meta + CSS + JS + SEO + feed + hreflang
+│   ├── header.html               # ├─ 导航栏：标题（中英自适应）+ 链接 + 语言/主题切换按钮
+│   ├── footer.html               # ├─ 页脚：作者 + 邮箱 + 描述（中英自适应）+ 社交链接
+│   ├── lang-switcher.html        # ├─ 语言切换按钮（中英互跳 /en/ ↔ /）
 │   └── social.html               # └─ 社交图标：GitHub + RSS
 │
 ├── _sass/                        # SCSS 样式源
@@ -44,7 +51,8 @@ docs/                              # Jekyll 站点根目录
 └── assets/                       # 静态资源
     ├── main.scss                 # ├─ CSS 入口（@import "minima" → main.css）
     ├── data/
-    │   └── commands.json         # ├─ 命令数据库（速查页数据源）
+    │   ├── commands.json         # ├─ 命令数据库（中文源，速查页数据源）
+    │   └── commands.en.json      # └─ 命令数据库（英文翻译，结构一致）
     ├── icons/
     │   ├── favicon.svg                # ├─ 浅色 favicon（随主题动态切换）
     │   ├── favicon-dark.svg           # ├─ 深色 favicon
@@ -55,12 +63,37 @@ docs/                              # Jekyll 站点根目录
     ├── js/
     │   ├── theme.js              # ├─ 主题切换逻辑（localStorage + 系统偏好）
     │   ├── bg-particles.js       # ├─ 背景粒子动画（Canvas，大小分层 + 发光）
-    │   └── commands.js           # └─ 命令速查页脚本（搜索 + 三级联动 + 高亮）
+    │   └── commands.js           # └─ 命令速查页脚本（搜索 + 三级联动 + 高亮 + 文案 i18n）
     └── css/
-        └── commands.scss         # └─ 命令速查页专属样式（→ commands.css）
+        └── commands.scss         # └─ 命令速查页专属样式（→ commands.css，含斑马条纹表格）
 
 _site/                             # Jekyll 编译输出（自动生成，不手动编辑）
 ```
+
+---
+
+## 🌐 中英双语
+
+站点默认中文，英文版挂载于 `/en/` 路径，与中文共享同一套布局、脚本与数据源。
+
+**实现机制**：
+
+- 页面用 front matter 声明语言与独立 permalink：`lang: en` + `permalink: /en/...`
+- 中文页导航右侧显示 `EN` 胶囊按钮、英文页显示 `中文`，一键互跳（`_includes/lang-switcher.html`）
+- `<head>` 输出双向 `hreflang`（`zh-CN` / `en` / `x-default`），便于搜索引擎识别对应版本
+- `site.title_en` / `site.description_en` 驱动英文站点标题、页脚描述与英文页 `<title>`
+- 英文首页不显示文章列表与 giscus 评论区（`_layouts/home.html` 按 `page.lang` 分支）
+
+**覆盖范围**：
+
+| 页面 | 中文 | 英文 |
+|------|------|------|
+| 首页 | `/` | `/en/` |
+| 命令速查 | `/commands/` | `/en/commands/` |
+| 关于 | `/about/` | `/en/about/` |
+| 404 | `/404.html` | `/en/404.html` |
+
+> 博客文章（`_posts/`）仅提供中文，不生成英文副本。
 
 ---
 
@@ -77,11 +110,15 @@ _site/                             # Jekyll 编译输出（自动生成，不手
 
 **技术特点**：
 
-- 数据与视图分离：`commands.json` 为数据源，`commands.js` 实现交互逻辑，`commands.scss` 控制样式
+- 数据与视图分离：`commands.json` / `commands.en.json` 为数据源，`commands.js` 实现交互逻辑，`commands.scss` 控制样式
+- 页面文案国际化：脚本根据 `<html lang>` 自动切换中英文 UI 文案与数据文件，无需维护两份 JS
+- 概览表采用斑马条纹（偶数行底色复用 `--bg-secondary`），低对比、深浅主题均辅助横向扫视
 - 代码块中 `ros1`/`ros2` 关键字橙黄色高亮（`<span class="hl-ros">`）
 - HTML 实体转义，防止 `<param>` 被浏览器解析为标签
 
 ## 🗄️ 命令数据库（`assets/data/commands.json`）
+
+中英文数据源分离：`commands.json` 为中文源，`commands.en.json` 为其逐条英文翻译（结构完全一致）。速查页脚本根据页面语言（`<html lang>`）自动加载对应文件，命令文本（`display`/`title`/`cmd`/`example`）保持一致，仅 `desc`/`notes` 本地化。
 
 **数据结构**：
 
@@ -143,7 +180,7 @@ bundle exec jekyll serve --baseurl=""
 
 ### 添加新命令
 
-编辑 `assets/data/commands.json`，在对应版本和分类的 `commands` 数组中添加：
+编辑 `assets/data/commands.json`，在对应版本和分类的 `commands` 数组中添加；随后在 `assets/data/commands.en.json` 的相同位置补一条英文翻译（保持两条 JSON 结构一致，否则中英文速查表条目数会不一致）：
 
 ```json
 {
@@ -158,8 +195,14 @@ bundle exec jekyll serve --baseurl=""
 
 ### 添加新分类
 
-1. 在 `commands.json` 的对应版本对象中添加新键值
+1. 在 `commands.json` 的对应版本对象中添加新键值，并在 `commands.en.json` 中同步添加英文分类名
 2. 该键会自动出现在分类下拉框中（无需修改 JS）
+
+### 添加英文页面
+
+1. 在 `en/` 目录下创建对应文件，front matter 声明 `lang: en` 与 `permalink: /en/xxx/`
+2. 英文站导航固定在 `_includes/header.html` 中维护（Home / Commands / About），新增导航项需同步修改该文件
+3. 页面级 `<title>` 与 `description` 在 front matter 中用 `title:` / `description:` 定位英文文案
 
 ### 添加新页面
 
@@ -177,7 +220,7 @@ bundle exec jekyll serve --baseurl=""
 | `jekyll-feed` | RSS feed 生成 |
 | `jekyll-seo-tag` | SEO meta 标签 |
 | 💎[giscus](https://github.com/giscus/giscus) | 评论区，依托 GitHub Discussions 存储 |
-| 👀[Visitor Badge](https://github.com/hehuapei/visitor-badge) | 零代码的访客徽章服务 |
+| 👀[hits.sh](https://hits.sh) | 零代码的访客计数徽章服务（页脚访问量） |
 
 ---
 

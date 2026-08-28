@@ -1,0 +1,20 @@
+{%- comment -%}
+  语言切换按钮（B 方案：胶囊按钮，只显示目标语言）
+  - 中文页面：显示 EN，点击进入对应英文页面
+  - 英文页面：显示 中文，点击进入对应中文页面
+  - 文章页无英文版，切换到英文首页
+{%- endcomment -%}
+{%- if page.lang == 'en' -%}
+  {%- assign switch_label = '中文' -%}
+  {%- assign switch_title = '切换为中文' -%}
+  {%- assign switch_url = page.url | remove_first: '/en' -%}
+{%- else -%}
+  {%- assign switch_label = 'EN' -%}
+  {%- assign switch_title = 'Switch to English' -%}
+  {%- if page.layout == 'post' -%}
+    {%- assign switch_url = '/en/' -%}
+  {%- else -%}
+    {%- assign switch_url = page.url | prepend: '/en' -%}
+  {%- endif -%}
+{%- endif -%}
+<a class="lang-switch-btn" href="{{ switch_url | relative_url }}" title="{{ switch_title }}" aria-label="{{ switch_title }}">{{ switch_label }}</a>

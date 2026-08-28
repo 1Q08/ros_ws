@@ -9,7 +9,7 @@ layout: default
 
   {{ content }}
 
-  {%- if site.posts.size > 0 -%}
+  {%- if site.posts.size > 0 and page.lang != 'en' -%}
     <h2 class="post-list-heading" id="latest-posts">{{ page.list_title | default: "最新文章" }}</h2>
     <ul class="post-list">
       {%- assign post_limit = page.post_limit | default: site.posts.size -%}
@@ -36,6 +36,7 @@ layout: default
 
   {%- endif -%}
 
+  {%- unless page.lang == 'en' -%}
   <section class="giscus-wrapper">
     <button type="button" class="giscus-load-btn" id="giscus-load-btn">
       <span class="giscus-load-icon" aria-hidden="true"></span>
@@ -211,5 +212,6 @@ layout: default
       })();
     </script>
   </section>
+  {%- endunless -%}
 
 </div>

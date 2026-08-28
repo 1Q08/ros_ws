@@ -12,6 +12,42 @@
 //                               relative_url 处理，兼容 GitHub Pages baseurl）
 // ============================================================
 
+// ============================================================
+// 国际化文案：根据页面语言（<html lang>）选择
+// ============================================================
+const PAGE_LANG = (document.documentElement.lang || '').toLowerCase().startsWith('en') ? 'en' : 'zh';
+
+const I18N = {
+  zh: {
+    selectPlaceholder: '-- 请选择 --',
+    noResults: '未找到匹配的命令',
+    totalCount: '共 {n} 条',
+    copyTitle: '复制',
+    copyAria: '复制代码',
+    copied: '✓ 已复制',
+    copyFailed: '复制失败',
+    version: '版本',
+    description: '说明',
+    example: '示例',
+    notes: '注意事项'
+  },
+  en: {
+    selectPlaceholder: '-- Select --',
+    noResults: 'No matching commands found',
+    totalCount: '{n} total',
+    copyTitle: 'Copy',
+    copyAria: 'Copy code',
+    copied: '✓ Copied',
+    copyFailed: 'Copy failed',
+    version: 'Version',
+    description: 'Description',
+    example: 'Example',
+    notes: 'Notes'
+  }
+};
+
+const T = I18N[PAGE_LANG];
+
 // 全局数据存储
 // 结构: { ros1: { core: {...}, topic: {...}, ... }, ros2: {...} }
 let commandsData = null;
@@ -42,8 +78,8 @@ function onVersionChange() {
   const detailDiv = document.getElementById('commandDetail');
 
   // 重置第二级和第三级下拉框
-  document.getElementById('category').innerHTML = '<option value="">-- 请选择 --</option>';
-  document.getElementById('command').innerHTML = '<option value="">-- 请选择 --</option>';
+  document.getElementById('category').innerHTML = '<option value="">' + T.selectPlaceholder + '</option>';
+  document.getElementById('command').innerHTML = '<option value="">' + T.selectPlaceholder + '</option>';
   commandRow.style.display = 'none';
   detailDiv.style.display = 'none';
 
@@ -80,7 +116,7 @@ function onCategoryChange() {
   const detailDiv = document.getElementById('commandDetail');
 
   // 重置第三级下拉框和详情区域
-  document.getElementById('command').innerHTML = '<option value="">-- 请选择 --</option>';
+  document.getElementById('command').innerHTML = '<option value="">' + T.selectPlaceholder + '</option>';
   detailDiv.style.display = 'none';
 
   // 如果未选择分类，隐藏命令下拉框
@@ -173,7 +209,7 @@ function renderSummaryTable() {
   }
 
   tbody.innerHTML = rows;
-  if (count) count.textContent = total ? `共 ${total} 条` : '';
+  if (count) count.textContent = total ? T.totalCount.replace('{n}', total) : '';
 }
 
 // 切换折叠面板展开/折叠状态
@@ -231,7 +267,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 无匹配结果时显示提示
     if (results.length === 0) {
-      resultsDiv.innerHTML = '<p class="no-results">未找到匹配的命令</p>';
+      resultsDiv.innerHTML = '<p class="no-results">' + T.noResults + '</p>';
       return;
     }
 
@@ -281,11 +317,11 @@ function showSearchResult(index) {
       <h3>${cmd.cmd}</h3>
       <button class="close-detail" onclick="closeSearchDetail()">×</button>
     </div>
-    <p><strong>版本:</strong> ${cmd.version} / ${cmd.category}</p>
-    <p><strong>说明:</strong> ${cmd.desc}</p>
-    <p><strong>示例:</strong></p>
+    <p><strong>${T.version}:</strong> ${cmd.version} / ${cmd.category}</p>
+    <p><strong>${T.description}:</strong> ${cmd.desc}</p>
+    <p><strong>${T.example}:</strong></p>
     <pre class="highlight-code"><code>${highlightCode(cmd.example)}</code></pre>
-    <p><strong>注意事项:</strong></p>
+    <p><strong>${T.notes}:</strong></p>
     <pre>${cmd.notes}</pre>
   `;
 
@@ -358,8 +394,8 @@ function addCopyButton(pre) {
   const btn = document.createElement('button');
   btn.type = 'button';
   btn.className = 'copy-btn';
-  btn.title = '复制';
-  btn.setAttribute('aria-label', '复制代码');
+  btn.title = T.copyTitle;
+  btn.setAttribute('aria-label', T.copyAria);
   // 复制图标（两个重叠矩形）
   btn.innerHTML = '<svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="5" y="5" width="9" height="9" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M11 5V3.5A1.5 1.5 0 0 0 9.5 2h-6A1.5 1.5 0 0 0 2 3.5v6A1.5 1.5 0 0 0 3.5 11H5" stroke="currentColor" stroke-width="1.5"/></svg>';
 
@@ -369,7 +405,7 @@ function addCopyButton(pre) {
 
     copyToClipboard(text).then(function (ok) {
       const original = btn.innerHTML;
-      btn.innerHTML = ok ? '✓ 已复制' : '复制失败';
+      btn.innerHTML = ok ? T.copied : T.copyFailed;
       btn.classList.toggle('copied', ok);
       setTimeout(function () {
         btn.innerHTML = original;

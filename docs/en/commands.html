@@ -1,0 +1,136 @@
+---
+# ============================================================
+# Jekyll Front Matter (page metadata)
+# ============================================================
+# layout: minima "page" layout (with header/footer)
+# title:  page title, shown in the browser tab and at the top of the page
+# permalink: URL path, output as /en/commands/index.html
+# custom_css: page-specific stylesheet (loaded on demand by head.html)
+# custom_js:  page-specific script (loaded on demand by head.html)
+# ============================================================
+layout: page
+lang: en
+title: Command Reference
+description: Search and browse ROS 1 and ROS 2 command-line tools with usage examples.
+permalink: /en/commands/
+custom_css: /assets/css/commands.css
+custom_js: /assets/js/commands.js
+---
+
+<!--
+============================================================
+  ROS Command Reference - main container
+  ============================================================
+  Structure:
+  1. Search section
+  2. Filter section (three cascading dropdowns)
+  3. Command detail
+  4. Summary table (collapsible)
+============================================================
+-->
+<div class="command-reference">
+
+  <!-- ==========================================================
+       1. Search
+       ========================================================== -->
+  <div class="search-section">
+    <h2><img src="{{ "/assets/icons/icon-search.svg" | relative_url }}" alt="Search" class="section-icon"> Search Commands</h2>
+
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Type a command or keyword to search..." autocomplete="off">
+      <button onclick="clearSearch()">Clear</button>
+    </div>
+
+    <div id="searchResults" class="search-results"></div>
+  </div>
+
+  <hr>
+
+  <!-- ==========================================================
+       2. Browse by category
+       ========================================================== -->
+  <div class="filter-section">
+    <h2><img src="{{ "/assets/icons/icon-eye.svg" | relative_url }}" alt="Browse" class="section-icon"> Browse by Category</h2>
+
+    <div class="filter-row-inline">
+
+      <div class="filter-item">
+        <label for="rosVersion">ROS version:</label>
+        <select id="rosVersion" onchange="onVersionChange()">
+          <option value="">-- Select --</option>
+          <option value="ros1">ROS 1</option>
+          <option value="ros2">ROS 2</option>
+        </select>
+      </div>
+
+      <div class="filter-item" id="categoryRow" style="display:none;">
+        <label for="category">Category:</label>
+        <select id="category" onchange="onCategoryChange()">
+          <option value="">-- Select --</option>
+        </select>
+      </div>
+
+      <div class="filter-item" id="commandRow" style="display:none;">
+        <label for="command">Command:</label>
+        <select id="command" onchange="onCommandChange()">
+          <option value="">-- Select --</option>
+        </select>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==========================================================
+       3. Command detail
+       ========================================================== -->
+  <div id="commandDetail" class="command-detail" style="display:none;">
+    <h3 id="detailTitle"></h3>
+    <div class="detail-content">
+      <p><strong>Command:</strong></p>
+      <pre class="highlight-code"><code id="detailCmd"></code></pre>
+      <p><strong>Description:</strong> <span id="detailDesc"></span></p>
+      <p><strong>Example:</strong></p>
+      <pre class="highlight-code"><code id="detailExample"></code></pre>
+      <div id="detailNotes">
+        <strong>Notes:</strong>
+        <pre id="detailNotesContent"></pre>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ==========================================================
+       4. Summary table (collapsible)
+       ========================================================== -->
+  <div class="summary-section">
+    <button type="button" class="summary-toggle" id="summaryToggle" onclick="toggleSummary()" aria-expanded="false">
+      <span class="summary-sort-icon" aria-hidden="true"></span>
+      <span class="summary-toggle-text">Command Reference Table</span>
+      <span class="summary-count" id="summaryCount"></span>
+      <span class="summary-chevron-icon" aria-hidden="true"></span>
+    </button>
+
+    <div class="summary-body" id="summaryBody" hidden>
+      <table class="summary-table">
+        <thead>
+          <tr>
+            <th>Version</th>
+            <th>Category</th>
+            <th>Command</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody id="summaryTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// The command-reference script lives in assets/js/commands.js (loaded via custom_js).
+// Here we only inject page-specific config: the command data URL (relative_url
+// handles the GitHub Pages baseurl).
+window.COMMANDS_DATA_URL = '{{ "/assets/data/commands.en.json" | relative_url }}';
+</script>

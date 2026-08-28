@@ -373,6 +373,13 @@
   white-space: nowrap;
 }
 
+/* 斑马条纹：正文偶数行浅灰底，降低横向扫视时的串行阅读压力。
+   配色复用 --bg-secondary（浅色 #f6f8fa / 深色 #161b22），与表头一致、对比度极小，
+   深浅主题自动适配，不增加视觉负担。 */
+.summary-table tbody tr:nth-child(even) {
+  background: var(--bg-secondary);
+}
+
 .summary-table code {
   background: var(--bg-secondary);
   padding: 2px 6px;
