@@ -4,49 +4,35 @@
   </a>
 </p>
 
-[English](./README.md) | [简体中文](./README.zh-CN.md)
-
-# ROS 命令速查
-
-一个开源的 **ROS 1 / ROS 2 命令行参考工具**，基于 Jekyll + GitHub Pages 构建，提供交互式命令浏览器
-
-> 本网站完全由 Kimi K3、Claude Opus 4.8、Deepseek V4 等开源 AI 模型生成，内容仅供参考，若有错误请联系作者纠正
-
 <!-- PROJECT SHIELDS -->
-
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![Apache 2.0 License][license-shield]][license-url]
-
-<!-- PROJECT LOGO -->
-<br />
-
 <p align="center">
-  <h3 align="center">ROS 命令速查</h3>
-  <p align="center">
-    开源的 ROS 1 / ROS 2 命令行参考工具，提供交互式命令浏览器，支持中英双语与深浅色主题。
-    <br />
-    <a href="https://1q08.github.io/ros_ws/"><strong>浏览网站 »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/1Q08/ros_ws/issues">报告 Bug</a>
-    ·
-    <a href="https://github.com/1Q08/ros_ws/issues">请求功能</a>
-  </p>
+  <a href="https://github.com/1Q08/ros_ws/graphs/contributors"><img src="https://img.shields.io/github/contributors/1Q08/ros_ws.svg?style=flat-square" alt="Contributors"></a>
+  <a href="https://github.com/1Q08/ros_ws/network/members"><img src="https://img.shields.io/github/forks/1Q08/ros_ws.svg?style=flat-square" alt="Forks"></a>
+  <a href="https://github.com/1Q08/ros_ws/stargazers"><img src="https://img.shields.io/github/stars/1Q08/ros_ws.svg?style=flat-square" alt="Stargazers"></a>
+  <a href="https://github.com/1Q08/ros_ws/issues"><img src="https://img.shields.io/github/issues/1Q08/ros_ws.svg?style=flat-square" alt="Issues"></a>
+  <a href="https://github.com/1Q08/ros_ws/blob/main/LICENSE"><img src="https://img.shields.io/github/license/1Q08/ros_ws.svg?style=flat-square" alt="Apache 2.0 License"></a>
 </p>
 
-## 目录
+<p align="center">
+  <a href="./README.md">English</a> | <a href="./README.zh-CN.md">简体中文</a>
+</p>
 
-- [项目架构](#项目架构)
-- [中英双语](#中英双语)
-- [命令速查核心页](#命令速查核心页)
-- [命令数据库](#命令数据库)
-- [本地开发](#本地开发)
-- [扩展指南](#扩展指南)
-- [依赖](#依赖)
-- [许可](#许可)
+<h1 align="center">ROS 命令速查</h1>
+
+<p align="center">一个开源的 **ROS 1 / ROS 2 命令行参考工具**，基于 Jekyll + GitHub Pages 构建，提供交互式命令浏览器，支持中英双语与深浅色主题</p>
+
+<blockquote>
+<p align="center">本网站完全由 Kimi K3、Claude Opus 4.8、Deepseek V4 等开源 AI 模型生成，内容仅供参考，若有错误请联系作者纠正</p>
+</blockquote>
+
+<!-- PROJECT LINKS -->
+<p align="center">
+  <a href="https://1q08.github.io/ros_ws/"><strong>浏览网站 »</strong></a>
+  ·
+  <a href="https://github.com/1Q08/ros_ws/issues">报告 Bug</a>
+  ·
+  <a href="https://github.com/1Q08/ros_ws/issues">请求功能</a>
+</p>
 
 ---
 
@@ -155,7 +141,7 @@ _site/                             # Jekyll 编译输出（自动生成，不手
 
 ---
 
-## 🗄️ 命令数据库
+## 命令数据库
 
 中英文数据源分离：`commands.json` 为中文源，`commands.en.json` 为其逐条英文翻译（结构完全一致）。速查页脚本根据页面语言（`<html lang>`）自动加载对应文件，命令文本（`display`/`title`/`cmd`/`example`）保持一致，仅 `desc`/`notes` 本地化。
 
@@ -215,7 +201,7 @@ bundle exec jekyll serve --baseurl=""
 
 ---
 
-## 🔧 扩展指南
+## 扩展指南
 
 ### 添加新命令
 
@@ -258,8 +244,8 @@ bundle exec jekyll serve --baseurl=""
 | `github-pages` gem                        | GitHub Pages 环境（含 Jekyll 3.x + minima 主题） |
 | `jekyll-feed`                             | RSS feed 生成                                    |
 | `jekyll-seo-tag`                          | SEO meta 标签                                    |
-| 💎 [giscus](https://github.com/giscus/giscus) | 评论区，依托 GitHub Discussions 存储             |
-| 👀 [hits.sh](https://hits.sh)                 | 零代码的访客计数徽章服务（页脚访问量）           |
+| [giscus](https://github.com/giscus/giscus) | 评论区，依托 GitHub Discussions 存储             |
+| [hits.sh](https://hits.sh)                 | 零代码的访客计数徽章服务（页脚访问量）           |
 
 ---
 
@@ -267,14 +253,3 @@ bundle exec jekyll serve --baseurl=""
 
 本项目基于 Apache License 2.0 开源。详见项目根目录的 [LICENSE](../LICENSE) 文件
 
-<!-- links -->
-[contributors-shield]: https://img.shields.io/github/contributors/1Q08/ros_ws.svg?style=flat-square
-[contributors-url]: https://github.com/1Q08/ros_ws/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/1Q08/ros_ws.svg?style=flat-square
-[forks-url]: https://github.com/1Q08/ros_ws/network/members
-[stars-shield]: https://img.shields.io/github/stars/1Q08/ros_ws.svg?style=flat-square
-[stars-url]: https://github.com/1Q08/ros_ws/stargazers
-[issues-shield]: https://img.shields.io/github/issues/1Q08/ros_ws.svg?style=flat-square
-[issues-url]: https://github.com/1Q08/ros_ws/issues
-[license-shield]: https://img.shields.io/github/license/1Q08/ros_ws.svg?style=flat-square
-[license-url]: https://github.com/1Q08/ros_ws/blob/main/LICENSE
