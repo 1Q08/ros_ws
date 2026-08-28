@@ -1,0 +1,139 @@
+---
+# 关于页专属样式（about.md / en/about.md 使用）
+# 依赖：assets/main.scss 编译出的 main.css 中定义的 CSS 变量（--bg-primary 等）
+---
+
+/* ============================================================
+   关于页样式 - 终端风格卡片（参考 404 页面）
+   设计风格：固定深色终端窗口，不受深浅色主题影响
+   布局特点：响应式设计，移动端自动调整为单列布局
+   ============================================================ */
+
+/* 顶部介绍段落 */
+.about-intro {
+  font-size: 1.05em;
+  line-height: 1.7;
+  margin-bottom: 8px;
+}
+
+.about-intro strong {
+  color: var(--accent-color);
+}
+
+/* 统计区块：数字卡片 */
+.about-stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin: 24px 0 8px;
+}
+
+.stat-card {
+  flex: 1 1 140px;
+  max-width: 200px;
+  text-align: center;
+}
+
+/* 小节卡片区：响应式网格 */
+.about-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+/* ============================================================
+   终端窗口风格（与 404 页一致）
+   ============================================================ */
+.stat-card,
+.about-card {
+  background: #1e1e1e;
+  border: 1px solid #333;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover,
+.about-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+}
+
+/* 终端标题栏：三色圆点 + 标题 */
+.term-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #2a2a2a;
+  border-bottom: 1px solid #333;
+}
+
+.term-bar .dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot-red { background: #ff5f56; }
+.dot-yellow { background: #ffbd2e; }
+.dot-green { background: #27c93f; }
+
+.term-title {
+  margin-left: 8px;
+  font-size: 13px;
+  color: #9aa0a6;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 统计卡片内容 */
+.stat-body {
+  padding: 20px 16px;
+}
+
+.stat-number {
+  display: block;
+  font-size: 2.2em;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #4ec9b0;
+}
+
+.stat-label {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.9em;
+  color: #9aa0a6;
+}
+
+/* 小节卡片内容 */
+.card-body {
+  padding: 18px 20px 20px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #e6e6e6;
+}
+
+.card-body ul {
+  margin: 0;
+  padding-left: 1.2em;
+}
+
+.card-body li {
+  margin-bottom: 8px;
+}
+
+.card-body li:last-child {
+  margin-bottom: 0;
+}
+
+.card-body a {
+  color: #4ec9b0;
+}

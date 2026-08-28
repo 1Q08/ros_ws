@@ -256,9 +256,24 @@ body {
   }
 }
 
+/* 英文站首页只有 3 张卡片：改为 3 列均分，居中对称展示 */
+html[lang^="en"] .entry-grid {
+  grid-template-columns: repeat(3, 1fr);
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+}
+
 .entry-card {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  text-align: center;
   gap: 6px;
   padding: 20px 16px;
   background: var(--bg-secondary);
@@ -340,6 +355,14 @@ body {
   height: 100%;
   z-index: 0;
   pointer-events: none;
+}
+
+// 粒子层固定于底层，页眉/内容/页脚需提升层级以免被粒子浮在文字之上
+.site-header,
+.page-content,
+.site-footer {
+  position: relative;
+  z-index: 1;
 }
 
 /**
