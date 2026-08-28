@@ -1,16 +1,16 @@
 ---
 layout: post
-title: "ROS2 功能包：C++ 包与 Python 包的文件结构与内容介绍"
+title: "ROS 2 功能包：C++ 包与 Python 包的文件结构与内容介绍"
 date: 2026-08-21 11:40:00 +0800
 categories: ros2 tutorial
 author: 老张同志
-excerpt: "从零掌握 ROS2 功能包：分别介绍 C++ 功能包（ament_cmake）和 Python 功能包（ament_python）的目录结构、每个文件的用途与内容详解（CMakeLists.txt / setup.py / package.xml），以及创建、构建、运行的完整命令，附两类包对比总结表。"
+excerpt: "从零掌握 ROS 2 功能包：分别介绍 C++ 功能包（ament_cmake）和 Python 功能包（ament_python）的目录结构、每个文件的用途与内容详解（CMakeLists.txt / setup.py / package.xml），以及创建、构建、运行的完整命令，附两类包对比总结表。"
 ---
-# ROS2 功能包：C++ 包与 Python 包的文件结构与内容介绍
+# ROS 2 功能包：C++ 包与 Python 包的文件结构与内容介绍
 
-本文分别介绍 ROS2 中 **C++ 功能包**（`ament_cmake`）和 **Python 功能包**（`ament_python`）的目录结构、每个文件的用途，以及两者的区别。
+本文分别介绍 ROS 2 中 **C++ 功能包**（`ament_cmake`）和 **Python 功能包**（`ament_python`）的目录结构、每个文件的用途，以及两者的区别。
 
-> 环境：ROS2 Jazzy / Ubuntu，工作区：`~/ros_ws`（`src/` 下存放所有功能包源码）。
+> 环境：ROS 2 Jazzy / Ubuntu，工作区：`~/ros_ws`（`src/` 下存放所有功能包源码）。
 
 ---
 
@@ -239,7 +239,7 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 set(CMAKE_CXX_STANDARD 17)
 
-# 找依赖（rclcpp：C++ 的 ROS2 客户端库；std_msgs：标准消息）
+# 找依赖（rclcpp：C++ 的 ROS 2 客户端库；std_msgs：标准消息）
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)

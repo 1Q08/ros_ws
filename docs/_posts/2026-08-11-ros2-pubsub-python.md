@@ -1,21 +1,21 @@
 ---
 layout: post
-title: "ROS2 发布者与订阅者 —— 用 Python 从零实现最小 Pub/Sub"
+title: "ROS 2 发布者与订阅者 —— 用 Python 从零实现最小 Pub/Sub"
 date: 2026-08-11 10:00:00 +0800
 categories: ros2 tutorial
 author: 老张同志
-excerpt: "理解 ROS2 最基础的发布者/订阅者（Pub/Sub）通信模式，并用 Python 从零写出最小可运行的 talker 与 listener，附建包、构建、运行全流程。"
+excerpt: "理解 ROS 2 最基础的发布者/订阅者（Pub/Sub）通信模式，并用 Python 从零写出最小可运行的 talker 与 listener，附建包、构建、运行全流程。"
 ---
 
-# ROS2 发布者与订阅者（Publisher & Subscriber）
+# ROS 2 发布者与订阅者（Publisher & Subscriber）
 
-> ROS2 中节点间通信最基础、最核心的模式就是 **发布者 / 订阅者（Pub/Sub）**。本文带你理解它的原理，并用 Python 从零写出一个最小可运行的发布者和订阅者。
+> ROS 2 中节点间通信最基础、最核心的模式就是 **发布者 / 订阅者（Pub/Sub）**。本文带你理解它的原理，并用 Python 从零写出一个最小可运行的发布者和订阅者。
 
 ---
 
 ## 一、什么是发布者与订阅者？
 
-在 ROS2 中，一个可执行程序被称为 **节点（Node）**。节点之间通过 **话题（Topic）** 进行**异步**通信：
+在 ROS 2 中，一个可执行程序被称为 **节点（Node）**。节点之间通过 **话题（Topic）** 进行**异步**通信：
 
 - **发布者（Publisher）**：向某个话题发送数据（消息）。
 - **订阅者（Subscriber）**：从某个话题接收数据（消息）。
@@ -40,10 +40,10 @@ flowchart LR
 
 ## 二、准备工作
 
-本文基于 **ROS2 Jazzy + Python 3**，假设你的环境已经配置好：
+本文基于 **ROS 2 Jazzy + Python 3**，假设你的环境已经配置好：
 
 ```bash
-# 检查 ROS2 是否可用
+# 检查 ROS 2 是否可用
 printenv ROS_DISTRO        # 应输出 jazzy
 
 # 每次打开终端都要 source 环境（也可写入 ~/.bashrc）
@@ -136,7 +136,7 @@ if __name__ == '__main__':
 
 | 代码 | 作用 |
 |------|------|
-| `rclpy.init()` | 初始化 ROS2 客户端库，**每个进程必须调用一次** |
+| `rclpy.init()` | 初始化 ROS 2 客户端库，**每个进程必须调用一次** |
 | `Node('名称')` | 创建节点，节点名在整个 ROS 图中需唯一 |
 | `create_publisher(Type, topic, qos)` | 创建发布者：消息类型 / 话题名 / 队列深度 |
 | `create_subscription(Type, topic, cb, qos)` | 创建订阅者：收到消息后自动调用回调 |
@@ -260,8 +260,8 @@ data: 'Hello World: 43'
 
 ## 六、小结
 
-- **发布者/订阅者**是 ROS2 最基础的异步通信模式，通过**话题 + 消息类型**解耦。
+- **发布者/订阅者**是 ROS 2 最基础的异步通信模式，通过**话题 + 消息类型**解耦。
 - 用 Python 只需掌握 `rclpy.init()`、`Node`、`create_publisher` / `create_subscription`、`rclpy.spin()` 五个关键点。
 - 完整流程：**建包 → 写代码 → 注册入口 → 构建 → 运行**，每一步缺一不可。
 
-掌握了 Pub/Sub，你就打通了 ROS2 程序间通信的大门，后面的服务（Service）、动作（Action）都是在此基础上的扩展。
+掌握了 Pub/Sub，你就打通了 ROS 2 程序间通信的大门，后面的服务（Service）、动作（Action）都是在此基础上的扩展。

@@ -5,7 +5,7 @@ list_title: 最新文章
 post_limit: 3
 ---
 
-面向机器人开发者的轻量级 ROS1 / ROS2 命令行参考站点。
+面向机器人开发者的轻量级 ROS 1 / ROS 2 命令行参考站点。
 
 ## 快速入口
 
@@ -15,7 +15,7 @@ post_limit: 3
     <span class="entry-card__desc">搜索与分类浏览高频命令</span>
   </a>
   <a class="entry-card" href="https://1q08.github.io/ROS2_documentation/jazzy/index.html" target="_blank" rel="noopener noreferrer">
-    <span class="entry-card__title">ROS2 文档汉化站</span>
+    <span class="entry-card__title">ROS 2 文档汉化站</span>
     <span class="entry-card__desc">官方文档完整中文翻译</span>
   </a>
   <a class="entry-card" href="{{ '/archive/' | relative_url }}">

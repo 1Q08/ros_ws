@@ -1,20 +1,20 @@
 ---
 layout: post
-title: "ROS2 服务端（Service Server）与客户端（Service Client）"
+title: "ROS 2 服务端（Service Server）与客户端（Service Client）"
 date: 2026-08-21 11:42:00 +0800
 categories: ros2 tutorial
 author: 老张同志
-excerpt: "从零掌握 ROS2 服务/客户端（Service）通信模式：理解服务端与客户端的概念与特点，用 Python 手写最小可运行的服务端（minimal_service）与客户端（minimal_client），覆盖建包、注册入口、构建、运行与命令行调用验证，附常见问题排查表。"
+excerpt: "从零掌握 ROS 2 服务/客户端（Service）通信模式：理解服务端与客户端的概念与特点，用 Python 手写最小可运行的服务端（minimal_service）与客户端（minimal_client），覆盖建包、注册入口、构建、运行与命令行调用验证，附常见问题排查表。"
 ---
-# ROS2 服务端（Service Server）与客户端（Service Client）
+# ROS 2 服务端（Service Server）与客户端（Service Client）
 
-> ROS2 中节点间通信除了异步的 **话题（Topic）** 模式，还有一种同步的 **服务 / 客户端（Service）** 模式。本文带你理解它的原理，并用 Python 从零写出一个最小可运行的服务端与客户端。
+> ROS 2 中节点间通信除了异步的 **话题（Topic）** 模式，还有一种同步的 **服务 / 客户端（Service）** 模式。本文带你理解它的原理，并用 Python 从零写出一个最小可运行的服务端与客户端。
 
 ---
 
 ## 一、什么是服务端与客户端？
 
-在 ROS2 中，**话题**适合"一个发、多个收"的**异步**数据流；而**服务**适合"请求一次、得到一次结果"的**同步**问答式通信：
+在 ROS 2 中，**话题**适合"一个发、多个收"的**异步**数据流；而**服务**适合"请求一次、得到一次结果"的**同步**问答式通信：
 
 - **服务端（Service Server）**：接收客户端的请求，处理并返回响应。
 - **客户端（Service Client）**：发起请求，然后**阻塞等待**服务端的响应。
@@ -45,10 +45,10 @@ sequenceDiagram
 
 ## 二、准备工作
 
-本文基于 **ROS2 Jazzy + Python 3**，假设你的环境已经配置好：
+本文基于 **ROS 2 Jazzy + Python 3**，假设你的环境已经配置好：
 
 ```bash
-# 检查 ROS2 是否可用
+# 检查 ROS 2 是否可用
 printenv ROS_DISTRO        # 应输出 jazzy
 
 # 每次打开终端都要 source 环境（也可写入 ~/.bashrc）
@@ -67,7 +67,7 @@ source ~/ros_ws/install/setup.bash
 ### 3.1 服务端 `minimal_service.py`
 
 ```python
-import rclpy                    # ROS2 Python 客户端库
+import rclpy                    # ROS 2 Python 客户端库
 from rclpy.node import Node     # 节点基类
 from example_interfaces.srv import AddTwoInts  # 服务接口类型（请求/响应的数据结构）
 
@@ -108,7 +108,7 @@ if __name__ == '__main__':
 
 ```python
 import sys                      # 读取命令行参数
-import rclpy                    # ROS2 Python 客户端库
+import rclpy                    # ROS 2 Python 客户端库
 from rclpy.node import Node     # 节点基类
 from example_interfaces.srv import AddTwoInts  # 服务接口类型（请求/响应的数据结构）
 
@@ -160,7 +160,7 @@ if __name__ == '__main__':
 
 | 代码 | 作用 |
 |------|------|
-| `rclpy.init()` | 初始化 ROS2 客户端库，**每个进程必须调用一次** |
+| `rclpy.init()` | 初始化 ROS 2 客户端库，**每个进程必须调用一次** |
 | `create_service(Type, name, cb)` | 创建服务端：接口类型 / 服务名 / 回调。回调返回 `response` |
 | `create_client(Type, name)` | 创建客户端：接口类型 / 服务名 |
 | `wait_for_service(秒)` | 阻塞等待服务端上线，返回 `bool`，用于客户端先于服务端启动的场景 |
@@ -168,7 +168,7 @@ if __name__ == '__main__':
 | `call_async(req)` | 异步发起请求，返回一个 `Future` 对象 |
 | `spin_until_future_complete(node, future)` | 在等待期间处理节点回调，直到请求完成；也可用 `future.result()` 拿结果 |
 
-> **为什么回调要 `return response`？** 服务端回调的签名固定为 `(request, response) -> response`。你在回调里修改 `response` 的字段，最后**必须把它返回**，ROS2 才会把结果送回客户端。
+> **为什么回调要 `return response`？** 服务端回调的签名固定为 `(request, response) -> response`。你在回调里修改 `response` 的字段，最后**必须把它返回**，ROS 2 才会把结果送回客户端。
 
 > **`call_async` 是异步的**：它不会阻塞主线程，而是返回 `Future`。用 `rclpy.spin_until_future_complete()` 或 `rclpy.spin_once()` + `future.done()` 来等待完成，这样节点在等待期间仍能处理其他回调。
 
@@ -295,9 +295,9 @@ example_interfaces.srv.AddTwoInts_Response(sum=12)
 
 ## 六、小结
 
-- **服务端 / 客户端**是 ROS2 中"一问一答"的**同步**通信模式，通过**服务名 + 服务接口（srv）**关联，适合一次性调用拿结果的场景。
+- **服务端 / 客户端**是 ROS 2 中"一问一答"的**同步**通信模式，通过**服务名 + 服务接口（srv）**关联，适合一次性调用拿结果的场景。
 - 用 Python 只需掌握 `create_service` / `create_client`、`wait_for_service`、`call_async` + `spin_until_future_complete` 几个关键点。
 - 完整流程：**建包 → 写代码 → 注册入口 → 补充依赖 → 构建 → 运行**，每一步缺一不可。
 - 本文使用现成的 `AddTwoInts` 接口。当你要传递**自己的数据结构**时，需要自定义 `.srv` 文件（格式为 `请求字段` + `---` + `响应字段`）并在 `package.xml` 中添加 `rosidl_default_generators` 等依赖，这部分可以留待进阶文章展开。
 
-掌握了 Service，你就掌握了 ROS2 里"同步调用"的通信方式；它与前面学的 Pub/Sub（异步）、以及后续要学的 Action（长耗时任务）一起，构成了 ROS2 节点通信的三大核心模式。
+掌握了 Service，你就掌握了 ROS 2 里"同步调用"的通信方式；它与前面学的 Pub/Sub（异步）、以及后续要学的 Action（长耗时任务）一起，构成了 ROS 2 节点通信的三大核心模式。

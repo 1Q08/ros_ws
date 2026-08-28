@@ -2,7 +2,7 @@
 layout: page
 lang: en
 title: About
-description: About this open-source ROS 1/2 command reference project.
+description: About this open-source ROS 1 / ROS 2 command reference project.
 permalink: /en/about/
 ---
 

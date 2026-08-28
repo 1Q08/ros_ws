@@ -9,12 +9,12 @@ excerpt: "从环境变量冲突的本质讲起，对比「环境切换 / Docker 
 
 # ROS 多版本管理 —— 一台机器跑多个 ROS 的完整方案
 
-> **适用场景**：团队 / 个人同时维护 ROS1 与 ROS2 项目，或需要运行不同发行版（如 Humble 与 Jazzy）的 ROS2 项目，但只有一台开发机。
+> **适用场景**：团队 / 个人同时维护 ROS 1 与 ROS 2 项目，或需要运行不同发行版（如 Humble 与 Jazzy）的 ROS 2 项目，但只有一台开发机。
 
 **核心结论先行**：
 
-- **ROS1 与 ROS2 可以装在同一台机器上**，通过 `source` 不同的 setup 文件切换使用。
-- **ROS2 不同发行版（Humble / Jazzy）不建议直接共存在宿主机**，推荐用 **Docker 容器** 隔离。
+- **ROS 1 与 ROS 2 可以装在同一台机器上**，通过 `source` 不同的 setup 文件切换使用。
+- **ROS 2 不同发行版（Humble / Jazzy）不建议直接共存在宿主机**，推荐用 **Docker 容器** 隔离。
 - 最干净、最可复现的通用方案是 **Docker + 容器化开发**，环境互不干扰，项目间一键切换。
 
 ---
@@ -24,10 +24,10 @@ excerpt: "从环境变量冲突的本质讲起，对比「环境切换 / Docker 
 1. [为什么 ROS 版本会"打架"](#一为什么-ros-版本会打架)
 2. [ROS 发行版与 Ubuntu 的对应关系](#二ros-发行版与-ubuntu-的对应关系)
 3. [关键概念：ROS 环境变量体系](#三关键概念ros-环境变量体系)
-4. [方案一：环境切换法（ROS1 + ROS2 共存）](#四方案一环境切换法ros1--ros2-共存)
+4. [方案一：环境切换法（ROS 1 + ROS 2 共存）](#四方案一环境切换法ros1--ros2-共存)
 5. [方案二：Docker 容器化（推荐，支持任意版本组合）](#五方案二docker-容器化推荐支持任意版本组合)
 6. [方案三：Python 工具链隔离](#六方案三python-工具链隔离)
-7. [ROS1 与 ROS2 互通：ros1_bridge](#七ros1-与-ros2-互通ros1_bridge)
+7. [ROS 1 与 ROS 2 互通：ros1_bridge](#七ros1-与-ros2-互通ros1_bridge)
 8. [日常检查与排查命令](#八日常检查与排查命令)
 9. [方案对比总结](#九方案对比总结)
 
@@ -41,18 +41,18 @@ ROS 通过**环境变量**来决定当前终端使用哪一套工具链和库。
 | --- | --- | --- |
 | `ROS_DISTRO` | 当前 ROS 发行版标识 | `jazzy` |
 | `ROS_VERSION` | ROS 大版本号 | `2` |
-| `AMENT_PREFIX_PATH` | ROS2 包查找路径 | `/opt/ros/jazzy` |
+| `AMENT_PREFIX_PATH` | ROS 2 包查找路径 | `/opt/ros/jazzy` |
 | `CMAKE_PREFIX_PATH` | 编译时依赖查找路径 | `/opt/ros/jazzy` |
 | `PYTHONPATH` | Python 模块查找路径 | `/opt/ros/jazzy/lib/python3.12/site-packages` |
 | `LD_LIBRARY_PATH` | 动态库查找路径 | `/opt/ros/jazzy/lib` |
 | `PATH` | 可执行文件查找路径 | `/opt/ros/jazzy/bin` |
-| `RMW_IMPLEMENTATION` | 中间件实现（ROS2） | `rmw_fastrtps_cpp` |
+| `RMW_IMPLEMENTATION` | 中间件实现（ROS 2） | `rmw_fastrtps_cpp` |
 
 **冲突的本质**：
 
 - 两个版本的 setup 文件**不能同时 source**，否则后面的会覆盖前面的 `PYTHONPATH` / `LD_LIBRARY_PATH` / `CMAKE_PREFIX_PATH`，导致找错库、找错包。
-- ROS1（Noetic）是单进程架构；ROS2 是 DDS 分布式架构，两者通信协议完全不同。
-- ROS2 各发行版的**系统级 Python 工具**（`colcon`、`rosdep`、`vcs`）通过 apt 安装在同一位置，Humble 和 Jazzy 会互相覆盖，这是它们难以在宿主机共存的直接原因。
+- ROS 1（Noetic）是单进程架构；ROS 2 是 DDS 分布式架构，两者通信协议完全不同。
+- ROS 2 各发行版的**系统级 Python 工具**（`colcon`、`rosdep`、`vcs`）通过 apt 安装在同一位置，Humble 和 Jazzy 会互相覆盖，这是它们难以在宿主机共存的直接原因。
 
 ---
 
@@ -60,14 +60,14 @@ ROS 通过**环境变量**来决定当前终端使用哪一套工具链和库。
 
 | ROS 版本 | 类型 | 官方支持的系统 | Python |
 | --- | --- | --- | --- |
-| **Noetic** | ROS1 | Ubuntu 20.04 (Focal) | Python 3.8 |
-| **Foxy** | ROS2 | Ubuntu 20.04 (Focal) | Python 3.8 |
-| **Humble** | ROS2 LTS | Ubuntu 22.04 (Jammy) | Python 3.10 |
-| **Iron** | ROS2 | Ubuntu 22.04 (Jammy) | Python 3.10 |
-| **Jazzy** | ROS2 LTS | Ubuntu 24.04 (Noble) | Python 3.12 |
+| **Noetic** | ROS 1 | Ubuntu 20.04 (Focal) | Python 3.8 |
+| **Foxy** | ROS 2 | Ubuntu 20.04 (Focal) | Python 3.8 |
+| **Humble** | ROS 2 LTS | Ubuntu 22.04 (Jammy) | Python 3.10 |
+| **Iron** | ROS 2 | Ubuntu 22.04 (Jammy) | Python 3.10 |
+| **Jazzy** | ROS 2 LTS | Ubuntu 24.04 (Noble) | Python 3.12 |
 
 > **关键点**：每个 ROS 发行版与特定 Ubuntu 版本、特定 Python 版本强绑定。
-> 一台宿主机的 Ubuntu 版本一旦固定，能直接通过 apt 安装的 ROS2 发行版基本只有一个。
+> 一台宿主机的 Ubuntu 版本一旦固定，能直接通过 apt 安装的 ROS 2 发行版基本只有一个。
 > 想要运行其它发行版，要么**源码编译**（费时且易出问题），要么**用 Docker 跑对应系统的容器**（推荐）。
 
 ---
@@ -77,7 +77,7 @@ ROS 通过**环境变量**来决定当前终端使用哪一套工具链和库。
 每个 ROS 环境都有各自的 `setup` 文件：
 
 ```text
-/opt/ros/<distro>/setup.bash        # ROS1 和 ROS2 通用入口
+/opt/ros/<distro>/setup.bash        # ROS 1 和 ROS 2 通用入口
 /opt/ros/<distro>/local_setup.bash  # 当前工作空间安装的环境
 ```
 
@@ -95,22 +95,22 @@ printenv | grep -E 'ROS|AMENT|COLCON'   # 查看全部相关环境变量
 
 ---
 
-## 四、方案一：环境切换法（ROS1 + ROS2 共存）
+## 四、方案一：环境切换法（ROS 1 + ROS 2 共存）
 
-> 适用于 **ROS1 与 ROS2 在同一 Ubuntu 上共存**（例如 Ubuntu 20.04 同时装 Noetic 与 Foxy），
-> 因为 ROS1 与 ROS2 的安装路径、工具链基本不重叠，可以真正装在同一台宿主机上。
+> 适用于 **ROS 1 与 ROS 2 在同一 Ubuntu 上共存**（例如 Ubuntu 20.04 同时装 Noetic 与 Foxy），
+> 因为 ROS 1 与 ROS 2 的安装路径、工具链基本不重叠，可以真正装在同一台宿主机上。
 
 ### 4.1 安装
 
 ```bash
-# 安装 ROS1 Noetic（Ubuntu 20.04）
+# 安装 ROS 1 Noetic（Ubuntu 20.04）
 sudo apt install ros-noetic-desktop
 
-# 安装 ROS2 Foxy（Ubuntu 20.04，可与 Noetic 共存）
+# 安装 ROS 2 Foxy（Ubuntu 20.04，可与 Noetic 共存）
 sudo apt install ros-foxy-desktop
 ```
 
-> 注意：如果你在 Ubuntu 22.04/24.04 上想同时用 ROS1 与 ROS2，ROS1 Noetic 没有官方二进制包，
+> 注意：如果你在 Ubuntu 22.04/24.04 上想同时用 ROS 1 与 ROS 2，ROS 1 Noetic 没有官方二进制包，
 > 需要**源码编译**或使用容器，因此更推荐直接跳到 Docker 方案。
 
 ### 4.2 在 `.bashrc` 中配置快速切换
@@ -125,20 +125,20 @@ cat >> ~/.bashrc <<'EOF'
 export ROS_WS=~/ros_ws   # 你的工作空间路径
 
 use_ros1() {
-    # 若当前已 source 过 ROS2，建议开新终端或先执行 env -i bash
+    # 若当前已 source 过 ROS 2，建议开新终端或先执行 env -i bash
     source /opt/ros/noetic/setup.bash
     if [ -f "$ROS_WS/devel/setup.bash" ]; then
-        source "$ROS_WS/devel/setup.bash"    # ROS1 使用 catkin 生成 devel
+        source "$ROS_WS/devel/setup.bash"    # ROS 1 使用 catkin 生成 devel
     fi
-    echo ">>> 已切换到 ROS1 (Noetic)"
+    echo ">>> 已切换到 ROS 1 (Noetic)"
 }
 
 use_ros2() {
     source /opt/ros/foxy/setup.bash
     if [ -f "$ROS_WS/install/setup.bash" ]; then
-        source "$ROS_WS/install/setup.bash"  # ROS2 使用 colcon 生成 install
+        source "$ROS_WS/install/setup.bash"  # ROS 2 使用 colcon 生成 install
     fi
-    echo ">>> 已切换到 ROS2 (Foxy)"
+    echo ">>> 已切换到 ROS 2 (Foxy)"
 }
 EOF
 source ~/.bashrc
@@ -147,17 +147,17 @@ source ~/.bashrc
 ### 4.3 使用方式
 
 ```bash
-use_ros1 && roscore &            # 运行 ROS1 master
-rosrun turtlesim turtlesim_node  # 运行 ROS1 节点
+use_ros1 && roscore &            # 运行 ROS 1 master
+rosrun turtlesim turtlesim_node  # 运行 ROS 1 节点
 
 # ---------- 另开一个终端 ----------
-use_ros2 && ros2 run turtlesim turtlesim_node   # 运行 ROS2 节点
+use_ros2 && ros2 run turtlesim turtlesim_node   # 运行 ROS 2 节点
 ```
 
 ### 4.4 重要注意事项
 
-- **不要**同时 `source` ROS1 与 ROS2 的 setup 文件，`PYTHONPATH` / `LD_LIBRARY_PATH` 会互相污染。
-- ROS1 命令（`rospack`、`rosrun`、`catkin_make`）与 ROS2 命令（`ros2`、`colcon`）分属不同工具链。
+- **不要**同时 `source` ROS 1 与 ROS 2 的 setup 文件，`PYTHONPATH` / `LD_LIBRARY_PATH` 会互相污染。
+- ROS 1 命令（`rospack`、`rosrun`、`catkin_make`）与 ROS 2 命令（`ros2`、`colcon`）分属不同工具链。
 - 同一终端内切换版本后，最好 `echo $ROS_DISTRO` 确认，必要时直接开新终端。
 
 ---
@@ -171,10 +171,10 @@ use_ros2 && ros2 run turtlesim turtlesim_node   # 运行 ROS2 节点
 
 | 需求 | 镜像 |
 | --- | --- |
-| ROS1 Noetic | `ros:noetic-ros-base` / `ros:noetic-ros-core` |
-| ROS2 Humble | `osrf/ros:humble-desktop` / `osrf/ros:humble-ros-base` |
-| ROS2 Jazzy | `osrf/ros:jazzy-desktop` / `osrf/ros:jazzy-ros-base` |
-| ROS2 Foxy | `osrf/ros:foxy-desktop` |
+| ROS 1 Noetic | `ros:noetic-ros-base` / `ros:noetic-ros-core` |
+| ROS 2 Humble | `osrf/ros:humble-desktop` / `osrf/ros:humble-ros-base` |
+| ROS 2 Jazzy | `osrf/ros:jazzy-desktop` / `osrf/ros:jazzy-ros-base` |
+| ROS 2 Foxy | `osrf/ros:foxy-desktop` |
 
 ### 5.2 基本运行命令（带 GUI 与共享目录）
 
@@ -390,7 +390,7 @@ docker run -it --rm \
 
 > **⚠️ ARM64 关键提示**（重点）：
 > - 官方 `osrf/ros:*` 镜像**基本只有 amd64**。在 Jetson / 树莓派等 ARM64 机器上强行 `docker pull`，会提示 `platform does not match`，运行时走 qemu 模拟，**几乎不可用**。
-> - 请改用 **NVIDIA L4T 镜像**，或自行基于 `ubuntu:22.04`（arm64）构建 —— **ROS2 官方 apt 源对 arm64 有原生二进制包**，在容器内 `apt install ros-humble-desktop` 是可行且流畅的。
+> - 请改用 **NVIDIA L4T 镜像**，或自行基于 `ubuntu:22.04`（arm64）构建 —— **ROS 2 官方 apt 源对 arm64 有原生二进制包**，在容器内 `apt install ros-humble-desktop` 是可行且流畅的。
 
 #### 5.5.5 常见问题排查表
 
@@ -409,7 +409,7 @@ docker run -it --rm \
 
 ## 六、方案三：Python 工具链隔离
 
-如果你**坚持在宿主机源码编译多个 ROS2 发行版**（不推荐），至少要把构建工具隔离，
+如果你**坚持在宿主机源码编译多个 ROS 2 发行版**（不推荐），至少要把构建工具隔离，
 因为 `colcon`、`rosdep`、`vcs` 等 Python 工具安装路径是共享的。
 
 ### 6.1 用 pipx 或 venv 隔离工具链
@@ -443,13 +443,13 @@ source install/setup.bash
 
 ---
 
-## 七、ROS1 与 ROS2 互通：ros1_bridge
+## 七、ROS 1 与 ROS 2 互通：ros1_bridge
 
-当你需要让 ROS1 节点与 ROS2 节点在同一台机器上互相通信时，使用 `ros1_bridge`。
+当你需要让 ROS 1 节点与 ROS 2 节点在同一台机器上互相通信时，使用 `ros1_bridge`。
 
 ### 7.1 准备工作
 
-- ROS1（如 Noetic）与 ROS2（如 Jazzy）分别装在**同一台宿主机或两个能互通的主机**上。
+- ROS 1（如 Noetic）与 ROS 2（如 Jazzy）分别装在**同一台宿主机或两个能互通的主机**上。
 - 安装 bridge：
 
 ```bash
@@ -459,27 +459,27 @@ sudo apt install ros-jazzy-ros1-bridge
 ### 7.2 启动桥接
 
 ```bash
-# 终端 1：启动 ROS1
+# 终端 1：启动 ROS 1
 source /opt/ros/noetic/setup.bash
 roscore
 
-# 终端 2：启动 ROS2 并运行 bridge（先 source ROS1 再 source ROS2）
+# 终端 2：启动 ROS 2 并运行 bridge（先 source ROS 1 再 source ROS 2）
 source /opt/ros/noetic/setup.bash
 source /opt/ros/jazzy/setup.bash
 ros2 run ros1_bridge dynamic_bridge
 
-# 终端 3：验证（ROS1 侧发布）
+# 终端 3：验证（ROS 1 侧发布）
 source /opt/ros/noetic/setup.bash
 rostopic pub /chatter std_msgs/String "data: 'hello'" -r 1
 ```
 
 ```bash
-# 终端 4：在 ROS2 侧订阅
+# 终端 4：在 ROS 2 侧订阅
 source /opt/ros/jazzy/setup.bash
 ros2 topic echo /chatter
 ```
 
-> 前提：bridge 所在终端**先 source ROS1 再 source ROS2**，这样 bridge 能同时找到两套库。
+> 前提：bridge 所在终端**先 source ROS 1 再 source ROS 2**，这样 bridge 能同时找到两套库。
 
 ---
 
@@ -492,7 +492,7 @@ echo $ROS_DISTRO
 # 查看工作空间 / 环境前缀
 printenv | grep -E 'ROS|AMENT|CMAKE_PREFIX_PATH|COLCON'
 
-# 确认当前是 ROS1 还是 ROS2
+# 确认当前是 ROS 1 还是 ROS 2
 echo $ROS_VERSION        # 1 或 2
 
 # 环境被污染时的急救：开一个干净终端
@@ -510,15 +510,15 @@ docker ps -a
 
 | 方案 | 适用场景 | 优点 | 缺点 |
 | --- | --- | --- | --- |
-| **环境切换（source）** | 宿主机 ROS1 + 同 Ubuntu 的 ROS2 | 零额外依赖、轻量 | 只能支持宿主机对应发行版；工具链可能冲突 |
+| **环境切换（source）** | 宿主机 ROS 1 + 同 Ubuntu 的 ROS 2 | 零额外依赖、轻量 | 只能支持宿主机对应发行版；工具链可能冲突 |
 | **Docker 容器化** ⭐ | 任意版本组合（Humble/Jazzy/Noetic…） | 完全隔离、可复现、易分发、支持 GUI/硬件 | 需学习 Docker；磁盘占用较大 |
 | **Python 工具链隔离** | 源码编译多发行版的高级用户 | 保留宿主机原生编译体验 | 系统依赖冲突多、易踩坑 |
 
 ### 推荐实践路线
 
 1. **日常开发**：优先 Docker，为每个项目写一个 `docker-compose.yml`，不同项目一键切换容器。
-2. **宿主机 ROS1 + ROS2 共存**：用 `.bashrc` 切换函数（`use_ros1` / `use_ros2`），开新终端再切换。
-3. **跨版本通信**：用 `ros1_bridge`（跨 ROS1/ROS2）、不同 `ROS_DOMAIN_ID` 隔离 ROS2 不同容器。
+2. **宿主机 ROS 1 + ROS 2 共存**：用 `.bashrc` 切换函数（`use_ros1` / `use_ros2`），开新终端再切换。
+3. **跨版本通信**：用 `ros1_bridge`（跨 ROS 1 / ROS 2）、不同 `ROS_DOMAIN_ID` 隔离 ROS 2 不同容器。
 4. **CI / 团队协作**：把 Dockerfile 提交到仓库，任何人 `docker build` 都能得到一致环境。
 
 ---
