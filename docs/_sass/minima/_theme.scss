@@ -197,6 +197,13 @@ body {
   min-height: 0;
 }
 
+/* 高度兜底：即使 giscus 漏报 resizeHeight，也保证 iframe 有可用高度，
+   避免评论区打开后内容被裁剪（填充不完全）。180px 为保守下限，可按需调整 */
+.giscus iframe.giscus-frame {
+  width: 100%;
+  min-height: 180px;
+}
+
 /**
  * 主题切换按钮（导航栏中）
  */

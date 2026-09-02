@@ -44,7 +44,9 @@
     s.setAttribute('data-input-position', 'top');
     s.setAttribute('data-theme', giscusThemeName(resolveTheme()));
     s.setAttribute('data-lang', 'zh-CN');
-    s.setAttribute('data-loading', 'lazy');
+    // eager：手动懒加载已由「点击按钮」承担，原生 lazy 会推迟到滚动才渲染，
+    // 与“点开后立即显示”冲突，且易导致高度计算滞后（内容被裁剪）
+    s.setAttribute('data-loading', 'eager');
     s.setAttribute('data-giscus', '');
     s.crossOrigin = 'anonymous';
     s.async = true;
@@ -173,5 +175,16 @@
   // 监听主题切换按钮（theme.js 触发 themechange 事件）
   document.addEventListener('themechange', function (e) {
     applyGiscusTheme(e.detail && e.detail.theme);
+  });
+
+  // 高度兜底：giscus 通过 postMessage 上报内容高度（giscus.resizeHeight）。
+  // 头像/图片晚加载、主题切换后内容高度变化等场景可能漏报，这里再同步一次，
+  // 避免评论区“填充不完全”（内容被裁剪）。
+  window.addEventListener('message', function (e) {
+    if (e.origin !== 'https://giscus.app') return;
+    var d = e.data;
+    if (!d || !d.giscus || typeof d.giscus.resizeHeight !== 'number') return;
+    var frame = document.querySelector('iframe.giscus-frame');
+    if (frame) frame.style.height = d.giscus.resizeHeight + 'px';
   });
 })();
