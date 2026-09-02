@@ -104,7 +104,7 @@ custom_css: /assets/css/about.css
     </div>
     <div class="card-body changelog-body">
       <ul class="changelog-list">
-        <li><span class="cl-date">2026-09-02</span> Refactored the command data into a unified 7-field structure and added a colcon build-command category (80 commands total)</li>
+        <li><span class="cl-date">2026-09-02</span> Refactored command data, fixed giscus comments occasionally rendering incompletely, and optimized the codebase</li>
         <li><span class="cl-date">2026-08-28</span> Added the English site (`/en/`), improved the command cheatsheet experience, and beautified the home &amp; about pages</li>
         <li><span class="cl-date">2026-08-27</span> Added giscus comments (lazy loading + theme switching), a full-site particle background, a ROS-terminal-style 404 page, and a traffic badge in the footer</li>
         <li><span class="cl-date">2026-08-26</span> Added code block copy and a theme-aware favicon; improved home page content and external links</li>

@@ -102,7 +102,7 @@ custom_css: /assets/css/about.css
     </div>
     <div class="card-body changelog-body">
       <ul class="changelog-list">
-        <li><span class="cl-date">2026-09-02</span> 重构命令数据文件：统一为 7 字段结构，新增 colcon 构建命令分类（累计 80 条命令）</li>
+        <li><span class="cl-date">2026-09-02</span> 重构命令数据文件、修复 giscus 评论区概率性填充不完全、优化项目代码</li>
         <li><span class="cl-date">2026-08-28</span> 新增英文版站点（`/en/`），优化命令速查表体验，美化主页与关于页面</li>
         <li><span class="cl-date">2026-08-27</span> 首页新增 giscus 评论区（懒加载 + 深浅色切换）、全站背景粒子动画、404 页面升级为 ROS 终端风格、页脚访问量徽章</li>
         <li><span class="cl-date">2026-08-26</span> 新增代码块复制、favicon 图标（跟随深浅色），优化首页内容与外链</li>
