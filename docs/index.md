@@ -1,6 +1,7 @@
 ---
 layout: home
 title: ROS 命令速查
+description: 面向机器人开发者的轻量级 ROS 1 / ROS 2 命令行参考站点，收录高频命令与用法示例。
 list_title: 最新文章
 post_limit: 3
 ---

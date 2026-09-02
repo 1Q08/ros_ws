@@ -137,3 +137,95 @@
 .card-body a {
   color: #4ec9b0;
 }
+
+/* ============================================================
+   更新记录（Changelog）板块
+   ============================================================ */
+.about-changelog {
+  margin-top: 24px;
+}
+
+.changelog-card {
+  background: #1e1e1e;
+  border: 1px solid #333;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.changelog-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+}
+
+.changelog-body {
+  max-height: 420px;
+  overflow-y: auto;
+  /* 避免圆点/竖线因滚动 padding 错位 */
+  padding: 14px 22px 16px 20px;
+}
+
+.changelog-list {
+  position: relative;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.changelog-list li {
+  position: relative;
+  margin: 0;
+  padding: 0 0 20px 22px;
+}
+
+.changelog-list li:last-child {
+  padding-bottom: 0;
+}
+
+/* 列表项左侧圆点标记：空心青色，以背景色遮住下方连线 */
+.changelog-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #1e1e1e;
+  border: 2px solid #4ec9b0;
+  box-sizing: border-box;
+  z-index: 1;
+}
+
+/* 最新一条：绿色实心高亮 */
+.changelog-list li:first-child::before {
+  background: #27c93f;
+  border-color: #27c93f;
+  box-shadow: 0 0 8px rgba(39, 201, 63, 0.6);
+}
+
+/* 逐条连接线：从当前圆点下方延伸到下一条圆点中心，首尾不外露 */
+.changelog-list li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 14px;
+  bottom: -9px;
+  width: 2px;
+  background: rgba(78, 201, 176, 0.4);
+}
+
+/* 版本日期 */
+.cl-date {
+  display: inline-block;
+  margin-right: 10px;
+  padding: 1px 8px;
+  font-size: 12px;
+  color: #9cdcfe;
+  background: rgba(156, 220, 254, 0.12);
+  border: 1px solid rgba(156, 220, 254, 0.3);
+  border-radius: 4px;
+  white-space: nowrap;
+}

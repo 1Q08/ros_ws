@@ -350,6 +350,113 @@
         }
       ]
     },
+    "build": {
+      "name": "Build Commands",
+      "commands": [
+        {
+          "display": "build",
+          "title": "colcon build",
+          "cmd": "colcon build",
+          "desc": "Build all packages in the workspace (or a subset specified via options)",
+          "example": "colcon build\n# Build only the specified package\ncolcon build --packages-select my_package\n# Install with symlinks for easier development and debugging\ncolcon build --symlink-install",
+          "options": [
+            {
+              "flag": "--packages-select <pkg>",
+              "desc": "Build only the specified package(s), space-separated"
+            },
+            {
+              "flag": "--packages-up-to <pkg>",
+              "desc": "Build the specified package and all of its dependencies"
+            },
+            {
+              "flag": "--symlink-install",
+              "desc": "Install using symlinks; no rebuild needed after code changes"
+            },
+            {
+              "flag": "--cmake-args <args>",
+              "desc": "Pass additional arguments to CMake"
+            }
+          ],
+          "notes": "Run from the workspace root with the environment sourced; source the target ROS 2 distribution and dependencies before building"
+        },
+        {
+          "display": "list",
+          "title": "colcon list",
+          "cmd": "colcon list",
+          "desc": "List all packages in the workspace along with their paths",
+          "example": "colcon list\ncolcon list --names-only",
+          "options": [
+            {
+              "flag": "--names-only",
+              "desc": "Show only package names, without paths"
+            },
+            {
+              "flag": "--paths-only",
+              "desc": "Show only package paths"
+            }
+          ],
+          "notes": ""
+        },
+        {
+          "display": "test",
+          "title": "colcon test",
+          "cmd": "colcon test",
+          "desc": "Run tests for all packages in the workspace (or a specified subset)",
+          "example": "colcon test\ncolcon test --packages-select my_package",
+          "options": [
+            {
+              "flag": "--packages-select <pkg>",
+              "desc": "Test only the specified package(s), space-separated"
+            },
+            {
+              "flag": "--pytest-args <args>",
+              "desc": "Pass additional arguments to pytest"
+            },
+            {
+              "flag": "--ctest-args <args>",
+              "desc": "Pass additional arguments to CTest"
+            }
+          ],
+          "notes": "Run colcon build before running colcon test"
+        },
+        {
+          "display": "test-result",
+          "title": "colcon test-result",
+          "cmd": "colcon test-result",
+          "desc": "Show a summary of the results from the last colcon test run",
+          "example": "colcon test-result\ncolcon test-result --verbose",
+          "options": [
+            {
+              "flag": "--all",
+              "desc": "Show all tests, including passing ones"
+            },
+            {
+              "flag": "--verbose",
+              "desc": "Show verbose output"
+            }
+          ],
+          "notes": ""
+        },
+        {
+          "display": "graph",
+          "title": "colcon graph",
+          "cmd": "colcon graph",
+          "desc": "Show the dependency relationships between packages in the workspace as a graph",
+          "example": "colcon graph\ncolcon graph --dot",
+          "options": [
+            {
+              "flag": "--dot",
+              "desc": "Generate a Graphviz DOT format file"
+            },
+            {
+              "flag": "--legend",
+              "desc": "Show package type legend information"
+            }
+          ],
+          "notes": "Use colcon graph --dot to generate a .dot file, then render it with dot -Tpng dependencies.dot -o dependencies.png"
+        }
+      ]
+    },
     "topic": {
       "name": "Topic Commands",
       "commands": [

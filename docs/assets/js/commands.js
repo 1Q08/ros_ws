@@ -59,9 +59,12 @@ const T = I18N[PAGE_LANG];
 let commandsData = null;
 
 // ============================================================
-// 初始化：页面加载完成后获取命令数据
+// 初始化：页面加载完成后挂载全部交互（B3：合并为单一入口）
 // ============================================================
-document.addEventListener('DOMContentLoaded', function() {
+function initApp() {
+  setupSearch();
+  initCopyButtons(document);
+
   fetch(window.COMMANDS_DATA_URL || 'assets/data/commands.json')
     .then(response => response.json())
     .then(data => {
@@ -69,7 +72,9 @@ document.addEventListener('DOMContentLoaded', function() {
       renderSummaryTable();
     })
     .catch(error => console.error('加载命令数据失败:', error));
-});
+}
+
+document.addEventListener('DOMContentLoaded', initApp);
 
 // ============================================================
 // 三级联动下拉框 - 第一级：版本选择
@@ -215,7 +220,7 @@ function renderSummaryTable() {
             <td><span class="summary-version summary-version--${version}">${versionNames[version]}</span></td>
             <td>${cat.name}</td>
             <td><code>${highlightCode(cmd.cmd)}</code></td>
-            <td>${cmd.desc}</td>
+            <td>${escapeHtml(cmd.desc)}</td>
           </tr>
         `;
       });
@@ -243,11 +248,34 @@ function toggleSummary() {
 // 监听搜索框 input 事件，实时匹配命令名或中文描述
 // 匹配结果以卡片列表形式显示在搜索框下方
 // ============================================================
-document.addEventListener('DOMContentLoaded', function() {
+
+// HTML 转义（C5）：搜索结果与详情中的描述字段不再裸拼 innerHTML
+function escapeHtml(text) {
+  if (text === null || text === undefined) return '';
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+// 防抖（C6）：搜索输入触发频率降低，避免每次按键都全量遍历
+function debounce(fn, delay) {
+  let timer = null;
+  return function () {
+    const args = arguments;
+    const ctx = this;
+    clearTimeout(timer);
+    timer = setTimeout(function () { fn.apply(ctx, args); }, delay);
+  };
+}
+
+function setupSearch() {
   const searchInput = document.getElementById('searchInput');
   if (!searchInput) return;
 
-  searchInput.addEventListener('input', function(e) {
+  searchInput.addEventListener('input', debounce(function(e) {
     const keyword = e.target.value.toLowerCase().trim();
     const resultsDiv = document.getElementById('searchResults');
 
@@ -281,7 +309,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 无匹配结果时显示提示
     if (results.length === 0) {
-      resultsDiv.innerHTML = '<p class="no-results">' + T.noResults + '</p>';
+      resultsDiv.innerHTML = '<p class="no-results">' + escapeHtml(T.noResults) + '</p>';
       return;
     }
 
@@ -290,10 +318,10 @@ document.addEventListener('DOMContentLoaded', function() {
     results.forEach((cmd, index) => {
       html += `
         <div class="result-item" onclick="showSearchResult(${index})">
-          <span class="result-version">${cmd.version}</span>
-          <span class="result-category">${cmd.category}</span>
-          <code class="result-cmd">${cmd.cmd}</code>
-          <span class="result-desc">${cmd.desc}</span>
+          <span class="result-version">${escapeHtml(cmd.version)}</span>
+          <span class="result-category">${escapeHtml(cmd.category)}</span>
+          <code class="result-cmd">${escapeHtml(cmd.cmd)}</code>
+          <span class="result-desc">${escapeHtml(cmd.desc)}</span>
         </div>
       `;
     });
@@ -303,8 +331,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 保存当前搜索结果，供点击时获取完整数据
     window.currentSearchResults = results;
-  });
-});
+  }, 150));
+}
 
 // ============================================================
 // 搜索结果显示详情（点击搜索结果后触发）
@@ -328,7 +356,7 @@ function showSearchResult(index) {
   // 填充详情内容（HTML 模板字符串）
   const opts = cmd.options || [];
   const notesBlock = (cmd.notes && cmd.notes.trim())
-    ? '<p><strong>' + T.notes + ':</strong></p><pre>' + cmd.notes + '</pre>'
+    ? '<p><strong>' + T.notes + ':</strong></p><pre>' + escapeHtml(cmd.notes) + '</pre>'
     : '';
   const optionsBlock = opts.length
     ? '<p><strong>' + T.options + ':</strong></p>' +
@@ -337,18 +365,18 @@ function showSearchResult(index) {
       '<tbody>' +
       opts.map(function (o) {
         return '<tr><td class="opt-flag"><code>' + highlightCode(o.flag) + '</code></td>' +
-               '<td class="opt-desc">' + (o.desc || '') + '</td></tr>';
+               '<td class="opt-desc">' + escapeHtml(o.desc) + '</td></tr>';
       }).join('') +
       '</tbody></table>'
     : '';
 
   detailDiv.innerHTML = `
     <div class="search-detail-header">
-      <h3>${cmd.cmd}</h3>
+      <h3>${escapeHtml(cmd.cmd)}</h3>
       <button class="close-detail" onclick="closeSearchDetail()">×</button>
     </div>
-    <p><strong>${T.version}:</strong> ${cmd.version} / ${cmd.category}</p>
-    <p><strong>${T.description}:</strong> ${cmd.desc}</p>
+    <p><strong>${T.version}:</strong> ${escapeHtml(cmd.version)} / ${escapeHtml(cmd.category)}</p>
+    <p><strong>${T.description}:</strong> ${escapeHtml(cmd.desc)}</p>
     <p><strong>${T.example}:</strong></p>
     <pre class="highlight-code"><code>${highlightCode(cmd.example)}</code></pre>
     ${notesBlock}
@@ -411,7 +439,7 @@ function renderOptionsTable(options) {
 
   body.innerHTML = options.map(function (o) {
     return '<tr><td class="opt-flag"><code>' + highlightCode(o.flag) + '</code></td>' +
-           '<td class="opt-desc">' + (o.desc || '') + '</td></tr>';
+           '<td class="opt-desc">' + escapeHtml(o.desc) + '</td></tr>';
   }).join('');
 }
 
@@ -510,8 +538,5 @@ function fallbackCopy(text) {
   return ok;
 }
 
-// 页面加载完成后，为详情区已有的代码块添加复制按钮
-// （分类浏览详情的「命令」「示例」两个代码块在 HTML 中静态存在）
-document.addEventListener('DOMContentLoaded', function () {
-  initCopyButtons(document);
-});
+// 复制按钮已统一在 initApp()（DOMContentLoaded）中初始化，
+// 此处不再单独注册监听。

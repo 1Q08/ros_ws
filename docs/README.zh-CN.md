@@ -46,6 +46,11 @@ docs/                              # Jekyll 站点根目录
 ├── README.md                     # 英文说明文档
 ├── README.zh-CN.md               # 中文说明文档
 │
+├── _data/                        # 站点数据（统计数据单点维护）
+│   └── stats.yml                 # └─ 命令/分类计数（关于页引用）
+├── tools/                        # 维护脚本
+│   └── check_commands.py         # └─ 命令数据一致性校验脚本
+│
 ├── index.md                      # 首页（home 布局）
 ├── about.md                      # 关于页（page 布局）
 ├── commands.html                 # 命令速查交互页（核心功能）
@@ -93,11 +98,15 @@ docs/                              # Jekyll 站点根目录
     │   ├── icon-eye.svg               # ├─ 浏览图标
     │   └── icon-sort.svg              # └─ 排序图标（速查表按钮）
     ├── js/
-    │   ├── theme.js              # ├─ 主题切换逻辑（localStorage + 系统偏好）
+    │   ├── theme.js              # ├─ 主题切换（localStorage + 系统偏好，按钮文案 i18n，免闪烁初始化）
+    │   ├── favicon.js            # ├─ favicon 动态切换（跟随主题）
+    │   ├── giscus.js             # ├─ giscus 评论区懒加载（按钮 + 重试 + 主题同步）
     │   ├── bg-particles.js       # ├─ 背景粒子动画（Canvas，大小分层 + 发光）
-    │   └── commands.js           # └─ 命令速查页脚本（搜索 + 三级联动 + 高亮 + 文案 i18n）
+    │   └── commands.js           # └─ 命令速查页脚本（搜索防抖 + 三级联动 + 转义 + 文案 i18n）
     └── css/
-        └── commands.scss         # └─ 命令速查页专属样式（→ commands.css，含斑马条纹表格）
+        ├── commands.scss         # ├─ 命令速查页专属样式（含斑马条纹表格）
+        ├── about.scss            # ├─ 关于页专属样式
+        └── 404.scss              # └─ 404 页专属样式（ROS 终端风格）
 
 _site/                             # Jekyll 编译输出（自动生成，不手动编辑）
 ```
@@ -136,6 +145,7 @@ _site/                             # Jekyll 编译输出（自动生成，不手
 
 - 数据与视图分离：`commands.json` / `commands.en.json` 为数据源，`commands.js` 实现交互逻辑，`commands.scss` 控制样式
 - 页面文案国际化：脚本根据 `<html lang>` 自动切换中英文 UI 文案与数据文件，无需维护两份 JS
+- 搜索输入防抖处理，避免每次按键都全量遍历命令集
 - 概览表采用斑马条纹（偶数行底色复用 `--bg-secondary`），低对比、深浅主题均辅助横向扫视
 - 代码块中 `ros1`/`ros2` 关键字橙黄色高亮（`<span class="hl-ros">`）
 - HTML 实体转义，防止 `<param>` 被浏览器解析为标签
@@ -144,7 +154,7 @@ _site/                             # Jekyll 编译输出（自动生成，不手
 
 ## 命令数据库
 
-中英文数据源分离：`commands.json` 为中文源，`commands.en.json` 为其逐条英文翻译（结构完全一致）。速查页脚本根据页面语言（`<html lang>`）自动加载对应文件，命令文本（`display`/`title`/`cmd`/`example`）保持一致，仅 `desc`/`notes` 本地化。
+中英文数据源分离：`commands.json` 为中文源，`commands.en.json` 为其逐条英文翻译（结构完全一致）
 
 **数据结构**：
 
@@ -172,8 +182,8 @@ _site/                             # Jekyll 编译输出（自动生成，不手
 | 版本           | 分类数       | 命令总数     |
 | -------------- | ------------ | ------------ |
 | ROS 1          | 6            | 18           |
-| ROS 2          | 10           | 57           |
-| **合计**       | **16**       | **75**       |
+| ROS 2          | 11           | 62           |
+| **合计**       | **17**       | **80**       |
 
 ---
 
@@ -207,7 +217,7 @@ bundle exec jekyll serve --baseurl=""
 
 ### 添加新命令
 
-编辑 `assets/data/commands.json`，在对应版本和分类的 `commands` 数组中添加；随后在 `assets/data/commands.en.json` 的相同位置补一条英文翻译（保持两条 JSON 结构一致，否则中英文速查表条目数会不一致）：
+编辑 `assets/data/commands.json`，在对应版本和分类的 `commands` 数组中添加；随后在 `assets/data/commands.en.json` 的相同位置补一条英文翻译（保持两条 JSON 结构一致，否则中英文速查表条目数会不一致）。最后同步更新 `_data/stats.yml` 中的计数并运行 `python3 tools/check_commands.py` 校验：
 
 ```json
 {
@@ -224,6 +234,7 @@ bundle exec jekyll serve --baseurl=""
 
 1. 在 `commands.json` 的对应版本对象中添加新键值，并在 `commands.en.json` 中同步添加英文分类名
 2. 该键会自动出现在分类下拉框中（无需修改 JS）
+3. 更新 `_data/stats.yml` 中的分类计数并运行 `python3 tools/check_commands.py` 校验
 
 ### 添加英文页面
 
@@ -246,6 +257,8 @@ bundle exec jekyll serve --baseurl=""
 | `github-pages` gem                        | GitHub Pages 环境（含 Jekyll 3.x + minima 主题） |
 | `jekyll-feed`                             | RSS feed 生成                                    |
 | `jekyll-seo-tag`                          | SEO meta 标签                                    |
+| `jekyll-sitemap`                          | sitemap.xml 生成                                 |
+| `faraday-retry`                           | faraday 1.x 重试兼容层（构建期网络请求）         |
 | [giscus](https://github.com/giscus/giscus) | 评论区，依托 GitHub Discussions 存储             |
 | [hits.sh](https://hits.sh)                 | 零代码的访客计数徽章服务（页脚访问量）           |
 

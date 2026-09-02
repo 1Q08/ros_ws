@@ -1,3 +1,5 @@
 source "https://rubygems.org"
 
 gem "github-pages", group: :jekyll_plugins
+# 修复 jekyll-build 远程主题/URL 解析告警（faraday 1.x 兼容层）
+gem "faraday-retry", group: :jekyll_plugins

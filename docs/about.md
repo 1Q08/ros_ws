@@ -18,7 +18,7 @@ custom_css: /assets/css/about.css
       <span class="term-title">ros — stats</span>
     </div>
     <div class="stat-body">
-      <span class="stat-number">75</span>
+      <span class="stat-number">{{ site.data.stats.commands }}</span>
       <span class="stat-label">常用命令</span>
     </div>
   </div>
@@ -30,7 +30,7 @@ custom_css: /assets/css/about.css
       <span class="term-title">ros — stats</span>
     </div>
     <div class="stat-body">
-      <span class="stat-number">16</span>
+      <span class="stat-number">{{ site.data.stats.categories }}</span>
       <span class="stat-label">命令分类</span>
     </div>
   </div>
@@ -42,7 +42,7 @@ custom_css: /assets/css/about.css
       <span class="term-title">ros — stats</span>
     </div>
     <div class="stat-body">
-      <span class="stat-number">2</span>
+      <span class="stat-number">{{ site.data.stats.versions }}</span>
       <span class="stat-label">支持版本</span>
     </div>
   </div>
@@ -87,6 +87,30 @@ custom_css: /assets/css/about.css
     <div class="card-body">
       <ul>
         <li>GitHub: <a href="https://github.com/1q08">1Q08</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="about-changelog">
+  <div class="changelog-card">
+    <div class="term-bar">
+      <span class="dot dot-red"></span>
+      <span class="dot dot-yellow"></span>
+      <span class="dot dot-green"></span>
+      <span class="term-title">🕒 更新记录</span>
+    </div>
+    <div class="card-body changelog-body">
+      <ul class="changelog-list">
+        <li><span class="cl-date">2026-09-02</span> 重构命令数据文件：统一为 7 字段结构，新增 colcon 构建命令分类（累计 80 条命令）</li>
+        <li><span class="cl-date">2026-08-28</span> 新增英文版站点（`/en/`），优化命令速查表体验，美化主页与关于页面</li>
+        <li><span class="cl-date">2026-08-27</span> 首页新增 giscus 评论区（懒加载 + 深浅色切换）、全站背景粒子动画、404 页面升级为 ROS 终端风格、页脚访问量徽章</li>
+        <li><span class="cl-date">2026-08-26</span> 新增代码块复制、favicon 图标（跟随深浅色），优化首页内容与外链</li>
+        <li><span class="cl-date">2026-08-21</span> 新增三篇教程文章</li>
+        <li><span class="cl-date">2026-08-14</span> 新增 `ros2 component` / `ros2 doctor` 相关命令</li>
+        <li><span class="cl-date">2026-08-06</span> 新增 `ros2 pkg` 相关命令</li>
+        <li><span class="cl-date">2026-08-04</span> 新增多条命令及详情，优化页脚与代码块样式</li>
+        <li><span class="cl-date">2026-07-29</span> 站点基本成形，首次发布页面</li>
       </ul>
     </div>
   </div>

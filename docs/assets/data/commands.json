@@ -255,7 +255,7 @@
           "display": "ros2 doctor",
           "title": "ros2 doctor",
           "cmd": "ros2 doctor",
-          "desc": "检查 ROS2 环境配置是否正常，环境变量、网络、系统等设置，报告潜在问题",
+          "desc": "检查 ROS 2 环境配置是否正常，环境变量、网络、系统等设置，报告潜在问题",
           "example": "ros2 doctor",
           "options": [
             {
@@ -305,7 +305,7 @@
           "display": "create",
           "title": "ros2 pkg create",
           "cmd": "ros2 pkg create <package_name>",
-          "desc": "创建一个新的 ROS2 功能包",
+          "desc": "创建一个新的 ROS 2 功能包",
           "example": "# 创建一个 Python 包（带依赖与节点文件）\nros2 pkg create my_package --build-type ament_python --dependencies std_msgs --node-name my_node\n# 创建一个带许可证、描述与维护者信息的包\nros2 pkg create my_robot_pkg --license Apache-2.0 --description \"My robot description\" --maintainer-email \"you@example.com\" --maintainer-name \"Your Name\"",
           "options": [
             {
@@ -347,6 +347,113 @@
           "example": "ros2 pkg xml turtlesim",
           "options": [],
           "notes": ""
+        }
+      ]
+    },
+    "build": {
+      "name": "构建命令",
+      "commands": [
+        {
+          "display": "build",
+          "title": "colcon build",
+          "cmd": "colcon build",
+          "desc": "构建工作空间中的所有包（或通过参数指定部分包）",
+          "example": "colcon build\n# 只构建指定包\ncolcon build --packages-select my_package\n# 使用符号链接安装，便于开发调试\ncolcon build --symlink-install",
+          "options": [
+            {
+              "flag": "--packages-select <pkg>",
+              "desc": "只构建指定的包（可多个，空格分隔）"
+            },
+            {
+              "flag": "--packages-up-to <pkg>",
+              "desc": "构建指定包及其所有依赖包"
+            },
+            {
+              "flag": "--symlink-install",
+              "desc": "使用符号链接安装，修改代码后无需重新构建"
+            },
+            {
+              "flag": "--cmake-args <args>",
+              "desc": "向 CMake 传递额外参数"
+            }
+          ],
+          "notes": "需在已配置环境的工作空间根目录运行；构建前确保已 source 对应 ROS 2 发行版与依赖"
+        },
+        {
+          "display": "list",
+          "title": "colcon list",
+          "cmd": "colcon list",
+          "desc": "列出工作空间中的所有包及其路径",
+          "example": "colcon list\ncolcon list --names-only",
+          "options": [
+            {
+              "flag": "--names-only",
+              "desc": "只显示包名，不显示路径"
+            },
+            {
+              "flag": "--paths-only",
+              "desc": "只显示包所在路径"
+            }
+          ],
+          "notes": ""
+        },
+        {
+          "display": "test",
+          "title": "colcon test",
+          "cmd": "colcon test",
+          "desc": "运行工作空间中所有包（或指定包）的测试",
+          "example": "colcon test\ncolcon test --packages-select my_package",
+          "options": [
+            {
+              "flag": "--packages-select <pkg>",
+              "desc": "只测试指定的包（可多个，空格分隔）"
+            },
+            {
+              "flag": "--pytest-args <args>",
+              "desc": "向 pytest 传递额外参数"
+            },
+            {
+              "flag": "--ctest-args <args>",
+              "desc": "向 CTest 传递额外参数"
+            }
+          ],
+          "notes": "运行 colcon test 前需先执行 colcon build"
+        },
+        {
+          "display": "test-result",
+          "title": "colcon test-result",
+          "cmd": "colcon test-result",
+          "desc": "显示上一次 colcon test 的测试结果摘要",
+          "example": "colcon test-result\ncolcon test-result --verbose",
+          "options": [
+            {
+              "flag": "--all",
+              "desc": "显示所有测试（含通过）"
+            },
+            {
+              "flag": "--verbose",
+              "desc": "显示详细输出"
+            }
+          ],
+          "notes": ""
+        },
+        {
+          "display": "graph",
+          "title": "colcon graph",
+          "cmd": "colcon graph",
+          "desc": "以依赖图形式展示工作空间中各包之间的依赖关系",
+          "example": "colcon graph\ncolcon graph --dot",
+          "options": [
+            {
+              "flag": "--dot",
+              "desc": "生成 Graphviz DOT 格式文件"
+            },
+            {
+              "flag": "--legend",
+              "desc": "在图例中显示包类型图例信息"
+            }
+          ],
+          "notes": "可用 colcon graph --dot 生成 .dot 文件，再用 dot -Tpng dependencies.dot -o dependencies.png 渲染为图片"
         }
       ]
     },

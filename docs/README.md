@@ -46,6 +46,11 @@ docs/                              # Jekyll site root
 ├── README.md                     # This document (English)
 ├── README.zh-CN.md               # Chinese version of this document
 │
+├── _data/                        # Site data (single-source stats)
+│   └── stats.yml                 # └─ Command/category counts (used by About page)
+├── tools/                        # Maintenance scripts
+│   └── check_commands.py         # └─ Command data consistency checker
+│
 ├── index.md                      # Home page (home layout)
 ├── about.md                      # About page (page layout)
 ├── commands.html                 # Interactive command reference (core feature)
@@ -93,11 +98,15 @@ docs/                              # Jekyll site root
     │   ├── icon-eye.svg               # ├─ Browse icon
     │   └── icon-sort.svg              # └─ Sort icon (reference table button)
     ├── js/
-    │   ├── theme.js              # ├─ Theme toggle logic (localStorage + system preference)
+    │   ├── theme.js              # ├─ Theme toggle (localStorage + system, i18n button, FOUC-free init)
+    │   ├── favicon.js            # ├─ Dynamic favicon switching (follows theme)
+    │   ├── giscus.js             # ├─ Lazy-loaded giscus comments (button + retry + theme sync)
     │   ├── bg-particles.js       # ├─ Background particle animation (Canvas, layered + glow)
-    │   └── commands.js           # └─ Command reference script (search + cascading selects + highlight + i18n)
+    │   └── commands.js           # └─ Command reference (search + debounce + cascading selects + escaping + i18n)
     └── css/
-        └── commands.scss         # └─ Command reference page styles (→ commands.css, zebra-striped table)
+        ├── commands.scss         # ├─ Command reference page styles (zebra-striped table)
+        ├── about.scss            # ├─ About page styles
+        └── 404.scss              # └─ 404 page styles (ROS terminal)
 
 _site/                             # Jekyll build output (auto-generated, do not edit)
 ```
@@ -136,6 +145,7 @@ The site defaults to Chinese, with an English version mounted at `/en/` that sha
 
 - Data/view separation: `commands.json` / `commands.en.json` as data sources, `commands.js` for interaction, `commands.scss` for styling
 - UI i18n: the script switches UI copy and data file based on `<html lang>` — no need to maintain two JS files
+- Search input is debounced to avoid scanning the whole command set on every keystroke
 - Zebra-striped overview table (even rows reuse `--bg-secondary`) for low-contrast, scan-friendly reading in both themes
 - `ros1`/`ros2` keywords highlighted in orange-yellow (`<span class="hl-ros">`)
 - HTML entity escaping prevents `<param>` from being parsed as a tag
@@ -144,7 +154,7 @@ The site defaults to Chinese, with an English version mounted at `/en/` that sha
 
 ## Command Database
 
-Separate data sources: `commands.json` (Chinese) and `commands.en.json` (English translation with an identical structure). The page script loads the matching file based on the page language (`<html lang>`); command text (`display`/`title`/`cmd`/`example`) stays identical, only `desc`/`notes` are localized.
+Separate data sources: `commands.json` (Chinese) and `commands.en.json` (English translation with an identical structure).
 
 **Data structure**:
 
@@ -172,8 +182,8 @@ Command fields:
 | Version   | Categories | Commands |
 | --------- | ---------- | -------- |
 | ROS 1     | 6          | 18       |
-| ROS 2     | 10         | 57       |
-| **Total** | **16**     | **75**   |
+| ROS 2     | 11         | 62       |
+| **Total** | **17**     | **80**   |
 
 ---
 
@@ -207,7 +217,7 @@ bundle exec jekyll serve --baseurl=""
 
 ### Add a command
 
-Edit `assets/data/commands.json` and add the command to the `commands` array under the matching version/category; then add a matching English translation to `assets/data/commands.en.json` at the same position (keep both JSON files structurally identical, otherwise entry counts will mismatch):
+Edit `assets/data/commands.json` and add the command to the `commands` array under the matching version/category; then add a matching English translation to `assets/data/commands.en.json` at the same position (keep both JSON files structurally identical, otherwise entry counts will mismatch). Finally update the counts in `_data/stats.yml` and run `python3 tools/check_commands.py` to verify:
 
 ```json
 {
@@ -224,6 +234,7 @@ Edit `assets/data/commands.json` and add the command to the `commands` array und
 
 1. Add a new key to the corresponding version object in `commands.json`, and add the English category name to `commands.en.json`
 2. The key appears automatically in the category dropdown (no JS changes needed)
+3. Update the category counts in `_data/stats.yml` and run `python3 tools/check_commands.py`
 
 ### Add an English page
 
@@ -246,6 +257,8 @@ Edit `assets/data/commands.json` and add the command to the `commands` array und
 | `github-pages` gem                             | GitHub Pages environment (Jekyll 3.x + minima) |
 | `jekyll-feed`                                  | RSS feed generation                            |
 | `jekyll-seo-tag`                               | SEO meta tags                                  |
+| `jekyll-sitemap`                               | sitemap.xml generation                         |
+| `faraday-retry`                                | faraday 1.x retry compatibility for builds     |
 | [giscus](https://github.com/giscus/giscus)  | Comments, backed by GitHub Discussions         |
 | [hits.sh](https://hits.sh)                  | Zero-code visitor counter badge (footer)       |
 

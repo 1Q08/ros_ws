@@ -8,35 +8,7 @@
         href="{{ "/assets/icons/favicon.svg" | relative_url }}"
         data-light="{{ "/assets/icons/favicon.svg" | relative_url }}"
         data-dark="{{ "/assets/icons/favicon-dark.svg" | relative_url }}">
-  <script>
-    (function () {
-      function applyFavicon(theme) {
-        var link = document.getElementById('dynamic-favicon');
-        if (!link) return;
-        var src = theme === 'dark' ? link.getAttribute('data-dark') : link.getAttribute('data-light');
-        if (src) link.href = src;
-        // 同步更新页眉站点标题图标
-        var titleIcon = document.getElementById('site-title-icon');
-        if (titleIcon) {
-          var iconSrc = theme === 'dark' ? titleIcon.getAttribute('data-dark') : titleIcon.getAttribute('data-light');
-          if (iconSrc) titleIcon.src = iconSrc;
-        }
-      }
-      function detectTheme() {
-        try {
-          var saved = localStorage.getItem('theme');
-          if (saved === 'dark' || saved === 'light') return saved;
-        } catch (e) {}
-        return (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
-      }
-      document.addEventListener('themechange', function (e) {
-        applyFavicon(e.detail && e.detail.theme);
-      });
-      document.addEventListener('DOMContentLoaded', function () {
-        applyFavicon(document.documentElement.getAttribute('data-theme') || detectTheme());
-      });
-    })();
-  </script>
+  <script src="{{ "/assets/js/favicon.js" | relative_url }}" defer></script>
   {%- if page.lang == 'en' -%}
   <link rel="alternate" hreflang="en" href="{{ page.url | absolute_url }}">
   <link rel="alternate" hreflang="zh-CN" href="{{ page.url | remove_first: '/en' | absolute_url }}">

@@ -20,7 +20,7 @@ custom_css: /assets/css/about.css
       <span class="term-title">ros — stats</span>
     </div>
     <div class="stat-body">
-      <span class="stat-number">75</span>
+      <span class="stat-number">{{ site.data.stats.commands }}</span>
       <span class="stat-label">Commands</span>
     </div>
   </div>
@@ -32,7 +32,7 @@ custom_css: /assets/css/about.css
       <span class="term-title">ros — stats</span>
     </div>
     <div class="stat-body">
-      <span class="stat-number">16</span>
+      <span class="stat-number">{{ site.data.stats.categories }}</span>
       <span class="stat-label">Categories</span>
     </div>
   </div>
@@ -44,7 +44,7 @@ custom_css: /assets/css/about.css
       <span class="term-title">ros — stats</span>
     </div>
     <div class="stat-body">
-      <span class="stat-number">2</span>
+      <span class="stat-number">{{ site.data.stats.versions }}</span>
       <span class="stat-label">ROS Versions</span>
     </div>
   </div>
@@ -89,6 +89,30 @@ custom_css: /assets/css/about.css
     <div class="card-body">
       <ul>
         <li>GitHub: <a href="https://github.com/1q08">1Q08</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="about-changelog">
+  <div class="changelog-card">
+    <div class="term-bar">
+      <span class="dot dot-red"></span>
+      <span class="dot dot-yellow"></span>
+      <span class="dot dot-green"></span>
+      <span class="term-title">🕒 Changelog</span>
+    </div>
+    <div class="card-body changelog-body">
+      <ul class="changelog-list">
+        <li><span class="cl-date">2026-09-02</span> Refactored the command data into a unified 7-field structure and added a colcon build-command category (80 commands total)</li>
+        <li><span class="cl-date">2026-08-28</span> Added the English site (`/en/`), improved the command cheatsheet experience, and beautified the home &amp; about pages</li>
+        <li><span class="cl-date">2026-08-27</span> Added giscus comments (lazy loading + theme switching), a full-site particle background, a ROS-terminal-style 404 page, and a traffic badge in the footer</li>
+        <li><span class="cl-date">2026-08-26</span> Added code block copy and a theme-aware favicon; improved home page content and external links</li>
+        <li><span class="cl-date">2026-08-21</span> Added three tutorial articles</li>
+        <li><span class="cl-date">2026-08-14</span> Added `ros2 component` / `ros2 doctor` commands</li>
+        <li><span class="cl-date">2026-08-06</span> Added `ros2 pkg` commands</li>
+        <li><span class="cl-date">2026-08-04</span> Added multiple commands and details; improved footer and code block styles</li>
+        <li><span class="cl-date">2026-07-29</span> Initial release: first version of the site published</li>
       </ul>
     </div>
   </div>
