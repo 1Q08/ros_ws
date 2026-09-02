@@ -9,23 +9,26 @@
           "cmd": "roscore",
           "desc": "启动 ROS Master 和参数服务器",
           "example": "roscore",
+          "options": [],
           "notes": "必须在运行任何 ROS 节点之前启动"
         },
         {
           "display": "rosrun",
           "title": "rosrun",
-          "cmd": "rosrun",
-          "desc": "运行指定包中的节点",
+          "cmd": "rosrun <package> <node>",
+          "desc": "运行指定包中的节点,",
           "example": "rosrun turtlesim turtlesim_node",
-          "notes": "格式: rosrun <package> <node>"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "roslaunch",
           "title": "roslaunch",
-          "cmd": "roslaunch",
-          "desc": "通过 launch 文件启动多个节点",
+          "cmd": "roslaunch <package> <launch_file>",
+          "desc": "通过 launch 文件启动多个节点，支持参数传递和节点组合",
           "example": "roslaunch my_package my_launch.launch",
-          "notes": "支持参数传递和节点分组"
+          "options": [],
+          "notes": "Launch 文件是 XML 格式，定义了节点、参数、话题和服务的启动配置"
         }
       ]
     },
@@ -36,33 +39,42 @@
           "display": "rostopic list",
           "title": "rostopic list",
           "cmd": "rostopic list",
-          "desc": "列出所有活跃的话题",
+          "desc": "列出当前系统中所有发布/订阅的话题",
           "example": "rostopic list",
-          "notes": "显示当前系统中所有发布/订阅的话题"
+          "options": [],
+          "notes": "可用 grep 过滤，如 rostopic list | grep chatter"
         },
         {
           "display": "rostopic echo",
           "title": "rostopic echo",
-          "cmd": "rostopic echo",
-          "desc": "实时显示话题消息内容",
+          "cmd": "rostopic echo <topic_name>",
+          "desc": "实时打印话题发布的消息内容，按 Ctrl+C 停止显示",
           "example": "rostopic echo /chatter",
-          "notes": "按 Ctrl+C 停止显示"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "rostopic pub",
           "title": "rostopic pub",
-          "cmd": "rostopic pub",
+          "cmd": "rostopic pub <topic_name> <message_type> <message>",
           "desc": "向话题发布消息",
           "example": "rostopic pub /chatter std_msgs/String \"hello\"",
-          "notes": "支持 -r 参数设置发布频率"
+          "options": [
+            {
+              "flag": "-r <rate>",
+              "desc": "以指定频率持续发布消息"
+            }
+          ],
+          "notes": ""
         },
         {
           "display": "rostopic hz",
           "title": "rostopic hz",
-          "cmd": "rostopic hz",
-          "desc": "显示话题发布频率",
+          "cmd": "rostopic hz <topic_name>",
+          "desc": "显示话题发布频率，用于检查话题是否按预期频率发布",
           "example": "rostopic hz /chatter",
-          "notes": "用于检查话题是否按预期频率发布"
+          "options": [],
+          "notes": ""
         }
       ]
     },
@@ -75,22 +87,25 @@
           "cmd": "rosnode list",
           "desc": "列出所有运行的节点",
           "example": "rosnode list",
-          "notes": "显示当前系统中所有活跃的节点名称"
+          "options": [],
+          "notes": "显示当前系统中所有活跃的 ROS 节点"
         },
         {
           "display": "rosnode info",
           "title": "rosnode info",
-          "cmd": "rosnode info",
-          "desc": "显示节点详细信息",
+          "cmd": "rosnode info <node_name>",
+          "desc": "显示节点详细信息，包括发布/订阅的话题、服务和参数",
           "example": "rosnode info /talker",
-          "notes": "包括发布/订阅的话题和服务"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "rosnode kill",
           "title": "rosnode kill",
-          "cmd": "rosnode kill",
-          "desc": "终止指定节点",
+          "cmd": "rosnode kill <node_name>",
+          "desc": "强制关闭节点",
           "example": "rosnode kill /talker",
+          "options": [],
           "notes": "强制关闭节点，可能产生警告"
         }
       ]
@@ -104,15 +119,17 @@
           "cmd": "rosservice list",
           "desc": "列出所有可用的服务",
           "example": "rosservice list",
-          "notes": "显示当前系统中所有服务"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "rosservice call",
           "title": "rosservice call",
-          "cmd": "rosservice call",
-          "desc": "调用服务",
+          "cmd": "rosservice call <service> <args>",
+          "desc": "调用服务并返回结果，args 为 YAML 格式的参数",
           "example": "rosservice call /add_two_ints \"a: 1, b: 2\"",
-          "notes": "格式: rosservice call <service> <args>"
+          "options": [],
+          "notes": "调用服务时，参数需要按照服务定义的格式传递"
         }
       ]
     },
@@ -123,25 +140,28 @@
           "display": "rosparam list",
           "title": "rosparam list",
           "cmd": "rosparam list",
-          "desc": "列出所有参数",
+          "desc": "列出参数服务器中的所有参数",
           "example": "rosparam list",
-          "notes": "显示参数服务器中的所有参数"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "rosparam set",
           "title": "rosparam set",
-          "cmd": "rosparam set",
+          "cmd": "rosparam set <param> <value>",
           "desc": "设置参数值",
           "example": "rosparam set /my_param 10",
-          "notes": "格式: rosparam set <param> <value>"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "rosparam get",
           "title": "rosparam get",
-          "cmd": "rosparam get",
+          "cmd": "rosparam get <param>",
           "desc": "获取参数值",
           "example": "rosparam get /my_param",
-          "notes": "格式: rosparam get <param>"
+          "options": [],
+          "notes": ""
         }
       ]
     },
@@ -151,26 +171,43 @@
         {
           "display": "rosbag record",
           "title": "rosbag record",
-          "cmd": "rosbag record",
+          "cmd": "rosbag record <topic_names>",
           "desc": "录制话题数据到 bag 文件",
           "example": "rosbag record -a",
-          "notes": "-a 录制所有话题，可指定话题名"
+          "options": [
+            {
+              "flag": "-o <prefix>",
+              "desc": "指定输出文件前缀"
+            },
+            {
+              "flag": "-a",
+              "desc": "录制所有话题"
+            }
+          ],
+          "notes": ""
         },
         {
           "display": "rosbag play",
           "title": "rosbag play",
-          "cmd": "rosbag play",
-          "desc": "回放 bag 文件",
+          "cmd": "rosbag play <bag_file>",
+          "desc": "回放 bag 文件中的数据，支持调整回放速度、循环播放等选项",
           "example": "rosbag play my_data.bag",
-          "notes": "支持 -r 参数调整回放速度"
+          "options": [
+            {
+              "flag": "-r <rate>",
+              "desc": "调整回放速度"
+            }
+          ],
+          "notes": "可用于测试和仿真，回放时会按照原始时间戳发布消息"
         },
         {
           "display": "rosbag info",
           "title": "rosbag info",
           "cmd": "rosbag info",
-          "desc": "显示 bag 文件信息",
+          "desc": "显示 bag 文件信息，包括时长、话题、消息类型等",
           "example": "rosbag info my_data.bag",
-          "notes": "显示时长、话题、消息类型等信息"
+          "options": [],
+          "notes": ""
         }
       ]
     }
@@ -184,24 +221,53 @@
           "title": "ros2 run",
           "cmd": "ros2 run <package_name> <executable_name>",
           "desc": "运行指定包中的节点",
-          "example": "ros2 run turtlesim turtlesim_node --ros-args --params-file params.yaml",
-          "notes": "运行节点时可通过 --ros-args --params-file 加载参数文件：\n  ros2 run <pkg> <node> --ros-args --params-file <file>\n\n常用选项：\n  --ros-args --params-file <file>   从 YAML 文件加载参数\n  --ros-args --remap <from>:=<to>   重映射话题/服务名"
+          "example": "ros2 run turtlesim turtlesim_node --ros-args --params-file ~/Desktop/turtlesim.yaml",
+          "options": [
+            {
+              "flag": "--ros-args --params-file <file>",
+              "desc": "从 YAML 文件加载参数"
+            },
+            {
+              "flag": "--ros-args -p <param>:=<value>",
+              "desc": "直接在命令行设置参数（-p 即 --param）"
+            },
+            {
+              "flag": "--ros-args --log-level <level>",
+              "desc": "设置日志级别（debug / info / warn / error / fatal）"
+            },
+            {
+              "flag": "--ros-args --remap <from>:=<to>",
+              "desc": "重映射话题/服务名"
+            }
+          ],
+          "notes": ""
         },
         {
           "display": "ros2 launch",
           "title": "ros2 launch",
-          "cmd": "ros2 launch",
+          "cmd": "ros2 launch <package_name> <launch_file>",
           "desc": "通过 launch 文件启动多个节点",
           "example": "ros2 launch my_package my_launch.py",
-          "notes": "ROS2 使用 Python launch 文件"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "ros2 doctor",
           "title": "ros2 doctor",
           "cmd": "ros2 doctor",
-          "desc": "检查 ROS2 环境配置是否正常",
+          "desc": "检查 ROS2 环境配置是否正常，环境变量、网络、系统等设置，报告潜在问题",
           "example": "ros2 doctor",
-          "notes": "检查环境变量、网络、系统等设置，报告潜在问题\n\n常用选项：\n  --report             生成完整的诊断报告\n  --fail-on-error      存在错误时以非零状态退出"
+          "options": [
+            {
+              "flag": "--report",
+              "desc": "生成完整的诊断报告"
+            },
+            {
+              "flag": "--fail-on-error",
+              "desc": "存在错误时以非零状态退出"
+            }
+          ],
+          "notes": ""
         }
       ]
     },
@@ -214,15 +280,17 @@
           "cmd": "ros2 pkg list",
           "desc": "列出当前环境中所有可用的包",
           "example": "ros2 pkg list",
-          "notes": "显示所有已安装的 ROS2 包，可用 grep 过滤，如 ros2 pkg list | grep turtlesim"
+          "options": [],
+          "notes": "可用 grep 过滤，如 ros2 pkg list | grep turtlesim"
         },
         {
           "display": "prefix",
           "title": "ros2 pkg prefix",
           "cmd": "ros2 pkg prefix <package_name>",
-          "desc": "显示指定包的安装前缀（安装路径）",
+          "desc": "返回包的安装目录，可用于查看包的源码或资源位置",
           "example": "ros2 pkg prefix turtlesim",
-          "notes": "格式: ros2 pkg prefix <pkg>\n\n返回包的安装目录，可用于查看包的源码或资源位置"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "executables",
@@ -230,6 +298,7 @@
           "cmd": "ros2 pkg executables [package_name]",
           "desc": "列出包内提供的所有可执行文件",
           "example": "ros2 pkg executables turtlesim",
+          "options": [],
           "notes": "不带包名时列出所有包的可执行文件，带包名时只列出指定包的"
         },
         {
@@ -237,16 +306,47 @@
           "title": "ros2 pkg create",
           "cmd": "ros2 pkg create <package_name>",
           "desc": "创建一个新的 ROS2 功能包",
-          "example": "ros2 pkg create --build-type ament_python my_package",
-          "notes": "格式: ros2 pkg create <pkg> [options]\n\n常用选项：\n  --build-type <type>   指定构建类型（ament_python / ament_cmake / ament_cmake_python）\n  --dependencies <deps> 指定依赖包，如 --dependencies rclpy std_msgs\n  --node-name <name>    同时创建一个节点文件"
+          "example": "# 创建一个 Python 包（带依赖与节点文件）\nros2 pkg create my_package --build-type ament_python --dependencies std_msgs --node-name my_node\n# 创建一个带许可证、描述与维护者信息的包\nros2 pkg create my_robot_pkg --license Apache-2.0 --description \"My robot description\" --maintainer-email \"you@example.com\" --maintainer-name \"Your Name\"",
+          "options": [
+            {
+              "flag": "--build-type <type>",
+              "desc": "指定构建类型（ament_python / ament_cmake / ament_cmake_python）"
+            },
+            {
+              "flag": "--dependencies <deps>",
+              "desc": "指定依赖包，如 --dependencies rclpy std_msgs"
+            },
+            {
+              "flag": "--node-name <name>",
+              "desc": "同时创建一个节点文件"
+            },
+            {
+              "flag": "--license <license>",
+              "desc": "指定许可证，例如 Apache-2.0"
+            },
+            {
+              "flag": "--description <description>",
+              "desc": "添加包描述，会写入 package.xml"
+            },
+            {
+              "flag": "--maintainer-email <email>",
+              "desc": "设置维护者邮箱"
+            },
+            {
+              "flag": "--maintainer-name <name>",
+              "desc": "设置维护者姓名"
+            }
+          ],
+          "notes": ""
         },
         {
           "display": "xml",
           "title": "ros2 pkg xml",
           "cmd": "ros2 pkg xml <package_name>",
-          "desc": "输出指定包的 package.xml 内容",
+          "desc": "输出指定包的 package.xml 内容，可用于查看包的元信息，如依赖、版本、许可证等",
           "example": "ros2 pkg xml turtlesim",
-          "notes": "格式: ros2 pkg xml <pkg>\n\n直接打印包的 package.xml 文件内容，便于快速查看包元信息"
+          "options": [],
+          "notes": ""
         }
       ]
     },
@@ -259,47 +359,116 @@
           "cmd": "ros2 topic -h",
           "desc": "查看话题命令的帮助信息",
           "example": "ros2 topic -h",
+          "options": [],
           "notes": "显示 ros2 topic 的所有子命令和用法说明，也可用于子命令，如 ros2 topic pub -h"
         },
         {
           "display": "list",
           "title": "ros2 topic list",
           "cmd": "ros2 topic list [options]",
-          "desc": "列出所有活跃的话题",
+          "desc": "列出当前系统中所有发布/订阅的话题",
           "example": "ros2 topic list",
-          "notes": "显示当前系统中所有发布/订阅的话题\n\n常用选项：\n  -t, --show-types    同时显示话题类型\n  -v, --verbose       显示详细信息（包括 QoS 配置、发布/订阅节点数等）"
+          "options": [
+            {
+              "flag": "-t, --show-types",
+              "desc": "同时显示话题类型"
+            },
+            {
+              "flag": "-v, --verbose",
+              "desc": "显示详细信息（包括 QoS 配置、发布/订阅节点数等）"
+            }
+          ],
+          "notes": "可用 grep 过滤，如 ros2 topic list | grep chatter"
         },
         {
           "display": "echo",
           "title": "ros2 topic echo",
           "cmd": "ros2 topic echo <topic_name>",
-          "desc": "实时打印话题发布的消息内容",
+          "desc": "实时打印话题发布的消息内容，按 Ctrl+C 停止显示",
           "example": "ros2 topic echo /chatter",
-          "notes": "按 Ctrl+C 停止显示"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "info",
           "title": "ros2 topic info",
           "cmd": "ros2 topic info <topic_name>",
-          "desc": "显示一个话题的详细信息，包括其消息类型、发布者和订阅者的数量等",
+          "desc": "显示一个话题的详细信息，包括其消息类型、发布者和订阅者的数量等，按 Ctrl+C 停止显示",
           "example": "ros2 topic info /chatter",
-          "notes": "按 Ctrl+C 停止显示\n\n常用选项：\n  -v, --verbose       显示详细信息（包括 QoS 配置、发布/订阅节点数等）"
+          "options": [
+            {
+              "flag": "-v, --verbose",
+              "desc": "显示详细信息（包括 QoS 配置、发布/订阅节点数等）"
+            }
+          ],
+          "notes": ""
         },
         {
           "display": "pub",
           "title": "ros2 topic pub",
           "cmd": "ros2 topic pub [options] <topic_name> <msg_type> \"<args>\"",
-          "desc": "手动向话题发布消息",
+          "desc": "手动向话题发布消息，支持持续发布或只发布一次，消息内容使用 YAML 格式传递，持续发布时按 Ctrl+C 停止",
           "example": "ros2 topic pub /chatter std_msgs/msg/String \"data: hello\"",
-          "notes": "ROS2 使用 YAML 格式传递消息\n\n常用选项：\n  --once            只发布一次消息后退出\n  -r 1, --rate 1    以 1Hz 频率持续发布（默认 1Hz）"
+          "options": [
+            {
+              "flag": "--once",
+              "desc": "只发布一次消息后退出"
+            },
+            {
+              "flag": "-r 1, --rate 1",
+              "desc": "以 1Hz 频率持续发布（默认 1Hz）"
+            },
+            {
+              "flag": "-w N",
+              "desc": "等待匹配的订阅者数量达到 N 后再开始发布"
+            },
+            {
+              "flag": "--yaml-file FILE",
+              "desc": "从 YAML 文件读取消息内容（如 ros2 topic echo 的 STDOUT 输出）"
+            }
+          ],
+          "notes": "提示：输入话题名和消息类型后按 Tab 可自动补全 YAML 字段模板，直接修改数值后回车发布\n示例：\n  ros2 topic pub /turtle1/cmd_vel geometry_msgs/msg/Twist <TAB>"
         },
         {
           "display": "hz",
           "title": "ros2 topic hz",
           "cmd": "ros2 topic hz <topic_name>",
-          "desc": "显示话题发布频率",
+          "desc": "显示话题发布频率，用于检查话题是否按预期频率发布",
           "example": "ros2 topic hz /chatter",
-          "notes": "用于检查话题是否按预期频率发布"
+          "options": [],
+          "notes": ""
+        },
+        {
+          "display": "bw",
+          "title": "ros2 topic bw",
+          "cmd": "ros2 topic bw [options] <topic_name>",
+          "desc": "显示话题占用的带宽",
+          "example": "ros2 topic bw /chatter",
+          "options": [
+            {
+              "flag": "-w N, --window N",
+              "desc": "用于计算速率的最大窗口大小（消息数，默认 100）"
+            },
+            {
+              "flag": "--spin-time SECS",
+              "desc": "等待发现节点的秒数"
+            }
+          ],
+          "notes": "带宽反映订阅端的接收速率，可能受平台资源与 QoS 配置影响，未必与发布端带宽完全一致"
+        },
+        {
+          "display": "find",
+          "title": "ros2 topic find",
+          "cmd": "ros2 topic find [options] <topic_type>",
+          "desc": "列出指定消息类型的可用话题",
+          "example": "ros2 topic find std_msgs/msg/String",
+          "options": [
+            {
+              "flag": "-c, --count-topics",
+              "desc": "只显示匹配到的话题数量"
+            }
+          ],
+          "notes": "按消息类型过滤并输出所有匹配的话题名"
         }
       ]
     },
@@ -312,23 +481,26 @@
           "cmd": "ros2 node -h",
           "desc": "查看节点命令的帮助信息",
           "example": "ros2 node -h",
+          "options": [],
           "notes": "显示 ros2 node 的所有子命令和用法说明，也可用于子命令，如 ros2 node list -h"
         },
         {
           "display": "list",
           "title": "ros2 node list",
           "cmd": "ros2 node list",
-          "desc": "列出所有运行的节点，例如：/turtlesim",
+          "desc": "列出所有运行的节点",
           "example": "ros2 node list",
-          "notes": "显示当前系统中所有活跃的节点名称"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "info",
           "title": "ros2 node info",
           "cmd": "ros2 node info <node_name>",
-          "desc": "显示节点详细信息",
+          "desc": "显示节点详细信息，包括发布/订阅的话题、服务和动作",
           "example": "ros2 node info /talker",
-          "notes": "包括发布/订阅的话题、服务和动作"
+          "options": [],
+          "notes": ""
         }
       ]
     },
@@ -341,6 +513,7 @@
           "cmd": "ros2 component container <container_name>",
           "desc": "启动一个组件容器节点",
           "example": "ros2 component container /my_container",
+          "options": [],
           "notes": "容器节点可在同一进程中运行多个组件，实现节点组合（composition）和零拷贝通信"
         },
         {
@@ -349,15 +522,17 @@
           "cmd": "ros2 component list [container_name]",
           "desc": "列出容器节点中的所有组件",
           "example": "ros2 component list",
-          "notes": "显示指定容器节点中已加载的组件信息，不带容器名时列出所有"
+          "options": [],
+          "notes": "可显示指定容器节点中已加载的组件信息，不带容器名时列出所有"
         },
         {
           "display": "types",
           "title": "ros2 component types",
           "cmd": "ros2 component types",
-          "desc": "列出可用的组件类型",
+          "desc": "列出可用的组件类型，",
           "example": "ros2 component types",
-          "notes": "显示当前环境中所有可加载的组件类型，如 composition::Talker"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "load",
@@ -365,7 +540,17 @@
           "cmd": "ros2 component load <container_name> <package_name> <component_type>",
           "desc": "将组件加载到容器节点",
           "example": "ros2 component load /my_container composition composition::Talker",
-          "notes": "格式: ros2 component load <容器节点> <包名> <组件类型>\n\n常用选项：\n  --node-name <name>   指定组件节点名称\n  --remap <from>:=<to>  重映射话题/服务名"
+          "options": [
+            {
+              "flag": "--node-name <name>",
+              "desc": "指定组件节点名称"
+            },
+            {
+              "flag": "--remap <from>:=<to>",
+              "desc": "重映射话题/服务名"
+            }
+          ],
+          "notes": "组件类型可通过 ros2 component types 查看，加载后组件会在容器节点中运行"
         },
         {
           "display": "unload",
@@ -373,7 +558,8 @@
           "cmd": "ros2 component unload <container_name> <component_id>",
           "desc": "从容器节点卸载组件",
           "example": "ros2 component unload /my_container 1",
-          "notes": "格式: ros2 component unload <容器节点> <组件ID>\n\n组件 ID 可通过 ros2 component list 查看"
+          "options": [],
+          "notes": "组件 ID 可通过 ros2 component list 查看"
         },
         {
           "display": "standalone",
@@ -381,7 +567,8 @@
           "cmd": "ros2 component standalone <package_name> <component_type>",
           "desc": "将组件作为独立节点运行",
           "example": "ros2 component standalone composition composition::Talker",
-          "notes": "格式: ros2 component standalone <包名> <组件类型>\n\n以独立进程运行，不放入容器"
+          "options": [],
+          "notes": "以独立进程运行，不放入容器"
         },
         {
           "display": "nodes",
@@ -389,7 +576,8 @@
           "cmd": "ros2 component nodes",
           "desc": "列出所有运行的组件容器节点",
           "example": "ros2 component nodes",
-          "notes": "显示当前系统中所有容器节点的名称"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "register",
@@ -397,15 +585,17 @@
           "cmd": "ros2 component register <container_name> <package_name> <component_type>",
           "desc": "注册组件类型到容器（不加载）",
           "example": "ros2 component register /my_container composition composition::Talker",
-          "notes": "格式: ros2 component register <容器节点> <包名> <组件类型>\n\n仅注册组件类型，便于后续通过 ID 加载"
+          "options": [],
+          "notes": "仅注册组件类型，便于后续通过 ID 加载"
         },
         {
           "display": "unregister",
           "title": "ros2 component unregister",
           "cmd": "ros2 component unregister <container_name> <component_type>",
-          "desc": "从容器取消注册组件类型",
+          "desc": "从容器取消注册组件类型，取消注册后该组件类型将无法再加载",
           "example": "ros2 component unregister /my_container composition::Talker",
-          "notes": "格式: ros2 component unregister <容器节点> <组件类型>\n\n取消注册后该组件类型将无法再加载"
+          "options": [],
+          "notes": "ID 可通过 ros2 component list 查看"
         }
       ]
     },
@@ -418,31 +608,80 @@
           "cmd": "ros2 service list",
           "desc": "列出所有可用的服务",
           "example": "ros2 service list",
-          "notes": "显示当前系统中所有服务\n\n常用选项：\n  -t, --show-types    同时显示服务类型"
+          "options": [
+            {
+              "flag": "-t, --show-types",
+              "desc": "同时显示服务类型"
+            }
+          ],
+          "notes": ""
+        },
+        {
+          "display": "info",
+          "title": "ros2 service info",
+          "cmd": "ros2 service info <service_name>",
+          "desc": "显示指定服务的详细信息",
+          "example": "ros2 service info /add_two_ints",
+          "options": [
+            {
+              "flag": "--spin-time SECS",
+              "desc": "等待发现节点的秒数"
+            }
+          ],
+          "notes": "打印指定服务的信息，包括服务类型与 QoS 配置"
         },
         {
           "display": "type",
           "title": "ros2 service type",
           "cmd": "ros2 service type <service_name>",
-          "desc": "查看指定服务的接口类型",
+          "desc": "显示服务的类型",
           "example": "ros2 service type /add_two_ints",
-          "notes": "返回该服务使用的服务接口类型"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "find",
           "title": "ros2 service find",
           "cmd": "ros2 service find <type_name>",
-          "desc": "根据接口类型查找使用该类型的服务",
+          "desc": "列出指定类型的可用服务",
           "example": "ros2 service find example_interfaces/srv/AddTwoInts",
-          "notes": "列出所有使用指定服务接口类型的服务名称"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "call",
           "title": "ros2 service call",
           "cmd": "ros2 service call <service_name> <service_type> <arguments>",
-          "desc": "调用服务",
+          "desc": "调用服务并返回结果，使用 YAML 格式传递请求参数，按 Ctrl+C 停止等待响应",
           "example": "ros2 service call /add_two_ints example_interfaces/srv/AddTwoInts \"{a: 1, b: 2}\"",
-          "notes": "ROS2 使用 YAML 格式传递服务请求参数"
+          "options": [],
+          "notes": ""
+        },
+        {
+          "display": "echo",
+          "title": "ros2 service echo",
+          "cmd": "ros2 service echo <service_name> [service_type]",
+          "desc": "回显服务请求数据（服务内省），持续监听并打印发送到该服务的请求数据，按 Ctrl+C 停止",
+          "example": "ros2 service echo /add_two_ints example_interfaces/srv/AddTwoInts",
+          "options": [
+            {
+              "flag": "--flow-style",
+              "desc": "以流式风格输出消息（字段间无换行）"
+            },
+            {
+              "flag": "--csv",
+              "desc": "以逗号分隔输出所有递归字段（便于绘图）"
+            },
+            {
+              "flag": "-f, --full-length",
+              "desc": "完整输出数组、字节与超长字符串，不截断"
+            },
+            {
+              "flag": "-l N, --truncate-length N",
+              "desc": "截断数组、字节与字符串的长度（默认 128）"
+            }
+          ],
+          "notes": ""
         }
       ]
     },
@@ -455,23 +694,45 @@
           "cmd": "ros2 action list",
           "desc": "列出所有可用的动作",
           "example": "ros2 action list",
-          "notes": "显示当前系统中所有动作服务器\n\n常用选项：\n  -t, --show-types    同时显示动作类型"
+          "options": [
+            {
+              "flag": "-t, --show-types",
+              "desc": "同时显示动作类型"
+            }
+          ],
+          "notes": ""
         },
         {
           "display": "info",
           "title": "ros2 action info",
           "cmd": "ros2 action info <action_name>",
-          "desc": "显示指定动作的详细信息",
+          "desc": "显示指定动作的详细信息，包括动作类型、服务器和客户端节点名称等",
           "example": "ros2 action info /turtle1/rotate_absolute",
-          "notes": "显示动作服务器和客户端的节点名称、动作类型等信息"
+          "options": [],
+          "notes": ""
+        },
+        {
+          "display": "type",
+          "title": "ros2 action type",
+          "cmd": "ros2 action type <action_name>",
+          "desc": "显示动作的类型",
+          "example": "ros2 action type /turtle1/rotate_absolute",
+          "options": [],
+          "notes": ""
         },
         {
           "display": "send_goal",
           "title": "ros2 action send_goal",
           "cmd": "ros2 action send_goal <action_name> <action_type> <values>",
-          "desc": "发送动作目标",
+          "desc": "发送动作目标，使用 YAML 格式传递目标值，按 Ctrl+C 停止等待响应",
           "example": "ros2 action send_goal /turtle1/rotate_absolute turtlesim/action/RotateAbsolute \"{theta: 1.57}\"",
-          "notes": "使用 YAML 格式传递目标值\n\n常用选项：\n  --feedback    显示反馈信息"
+          "options": [
+            {
+              "flag": "--feedback",
+              "desc": "显示反馈信息"
+            }
+          ],
+          "notes": ""
         }
       ]
     },
@@ -482,41 +743,56 @@
           "display": "list",
           "title": "ros2 param list",
           "cmd": "ros2 param list",
-          "desc": "列出节点的所有参数",
+          "desc": "列出指定节点的所有参数，包括参数名、类型和当前值",
           "example": "ros2 param list /my_node",
-          "notes": "ROS2 参数属于特定节点"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "set",
           "title": "ros2 param set",
           "cmd": "ros2 param set <node_name> <parameter_name> <value>",
-          "desc": "设置参数值",
+          "desc": "设置参数值，支持 int、float、bool、string、list 等类型，按 Ctrl+C 停止等待响应",
           "example": "ros2 param set /my_node my_param 10",
-          "notes": "在运行时更改参数的值"
+          "options": [],
+          "notes": "设置参数值后，节点会收到参数更新事件，可在节点中处理"
         },
         {
           "display": "get",
           "title": "ros2 param get",
           "cmd": "ros2 param get <node_name> <parameter_name>",
-          "desc": "获取参数值",
+          "desc": "获取参数值，显示参数的类型和当前值，按 Ctrl+C 停止等待响应",
           "example": "ros2 param get /my_node my_param",
-          "notes": "显示参数的类型和当前值"
+          "options": [],
+          "notes": "获取指定节点的参数值，可用于调试和验证参数设置"
         },
         {
           "display": "dump",
           "title": "ros2 param dump",
           "cmd": "ros2 param dump <node_name>",
-          "desc": "将节点的所有参数导出到文件（不会自动创建文件）",
-          "example": "ros2 param dump /my_node",
-          "notes": "将指定节点的所有参数及其值保存到 YAML 文件\n\n常用选项：\n  --output-dir    指定输出目录"
+          "desc": "将指定节点的所有参数及其值保存到 YAML 文件（需要手动创建文件或使用 > 操作符），便于备份和迁移配置",
+          "example": "ros2 param dump /turtlesim > ~/Desktop/turtlesim.yaml  # 将当前配置保存到桌面",
+          "options": [
+            {
+              "flag": "--output-dir",
+              "desc": "指定输出目录"
+            }
+          ],
+          "notes": ""
         },
         {
           "display": "load",
           "title": "ros2 param load",
           "cmd": "ros2 param load <node_name> <parameter_file>",
-          "desc": "从文件加载参数到节点",
+          "desc": "从 YAML 文件加载参数值到指定节点，支持 int、float、bool、string、list 等类型，按 Ctrl+C 停止等待响应",
           "example": "ros2 param load /my_node params.yaml",
-          "notes": "从 YAML 文件加载参数值到指定节点\n\n常用选项：\n  --node-type    指定节点类型"
+          "options": [
+            {
+              "flag": "--node-type",
+              "desc": "指定节点类型"
+            }
+          ],
+          "notes": ""
         }
       ]
     },
@@ -529,31 +805,35 @@
           "cmd": "ros2 bag -h",
           "desc": "查看 bag 命令的帮助信息",
           "example": "ros2 bag -h",
+          "options": [],
           "notes": "显示 ros2 bag 的所有子命令和用法说明，也可用于子命令，如 ros2 bag record -h"
         },
         {
           "display": "burst",
           "title": "ros2 bag burst",
           "cmd": "ros2 bag burst <bag_file> <topic_name>",
-          "desc": "突发（burst）回放 bag 中指定话题的数据",
+          "desc": "突发（burst）回放 bag 中指定话题的数据，用于快速回放或测试",
           "example": "ros2 bag burst my_data.db3 /chatter",
-          "notes": "以尽可能快的速度回放单个话题的数据，常用于性能测试"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "convert",
           "title": "ros2 bag convert",
           "cmd": "ros2 bag convert -i <input_bag> -o <output_dir>",
-          "desc": "将输入 bag 转换为不同设置的新 bag",
+          "desc": "将 bag 文件转换为指定存储/序列化格式的新 bag",
           "example": "ros2 bag convert -i input.bag -o output_dir --output-options 'storage: mcap'",
-          "notes": "可转换存储/序列化格式，例如从 rosbag1（.bag）转为 sqlite3/mcap 等"
+          "options": [],
+          "notes": "可转换存储/序列化格式，例如从 rosbag1（.bag）转为 sqlite3/mcap；可通过 --output-options 指定 storage、serialization 等输出选项"
         },
         {
           "display": "info",
           "title": "ros2 bag info",
           "cmd": "ros2 bag info <bag_file_name>",
-          "desc": "显示 bag 文件信息",
+          "desc": "显示 bag 文件信息，包括时长、话题、消息类型等",
           "example": "ros2 bag info my_data.db3",
-          "notes": "显示时长、话题、消息类型等信息"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "list",
@@ -561,15 +841,34 @@
           "cmd": "ros2 bag list",
           "desc": "显示可用的 bag 插件信息",
           "example": "ros2 bag list",
+          "options": [],
           "notes": "列出可用的存储（storage）和序列化（serialization）插件，如 sqlite3、mcap 等"
         },
         {
           "display": "play",
           "title": "ros2 bag play",
           "cmd": "ros2 bag play <bag_file_name>",
-          "desc": "回放 bag 文件",
+          "desc": "回放 bag 文件中的数据，支持调整回放速度、循环播放等选项",
           "example": "ros2 bag play my_data.db3",
-          "notes": "ROS2 使用 SQLite3 格式存储"
+          "options": [
+            {
+              "flag": "-r, --rate <factor>",
+              "desc": "设置回放速度倍数（默认 1.0）"
+            },
+            {
+              "flag": "-l, --loop",
+              "desc": "循环播放 bag 文件"
+            },
+            {
+              "flag": "--start-paused",
+              "desc": "启动时暂停回放，需手动继续"
+            },
+            {
+              "flag": "--clock",
+              "desc": "发布 /clock 话题以同步时间"
+            }
+          ],
+          "notes": ""
         },
         {
           "display": "record",
@@ -577,14 +876,30 @@
           "cmd": "ros2 bag record <topic_name>",
           "desc": "录制话题数据到 bag 文件",
           "example": "ros2 bag record -a",
-          "notes": "-a 录制所有话题，可指定话题名"
+          "options": [
+            {
+              "flag": "-o, --output <dir>",
+              "desc": "指定输出目录/文件前缀"
+            },
+            {
+              "flag": "--services <name>...",
+              "desc": "只录制指定服务的服务事件"
+            },
+            {
+              "flag": "-a, --all-services",
+              "desc": "录制所有服务的服务事件"
+            }
+
+          ],
+          "notes": ""
         },
         {
           "display": "reindex",
           "title": "ros2 bag reindex",
           "cmd": "ros2 bag reindex",
-          "desc": "重建 bag 文件的元数据文件",
+          "desc": "重新索引 bag 文件的元数据，修复丢失或损坏的索引",
           "example": "ros2 bag reindex my_data.db3",
+          "options": [],
           "notes": "当元数据文件丢失或损坏时用于重建"
         }
       ]
@@ -598,6 +913,7 @@
           "cmd": "ros2 interface -h",
           "desc": "查看接口命令的帮助信息",
           "example": "ros2 interface -h",
+          "options": [],
           "notes": "显示 ros2 interface 的所有子命令和用法说明，也可用于子命令，如 ros2 interface show -h"
         },
         {
@@ -606,39 +922,49 @@
           "cmd": "ros2 interface list",
           "desc": "列出所有可用的接口类型（msg/srv/action）",
           "example": "ros2 interface list",
-          "notes": "显示当前工作空间中所有消息、服务和动作接口"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "show",
           "title": "ros2 interface show",
-          "cmd": "ros2 interface show <type_name>.srv",
-          "desc": "显示指定接口（.msg/.srv/.action）的详细定义",
+          "cmd": "ros2 interface show <type>",
+          "desc": "显示指定接口类型的定义，包括消息（.msg）、服务（.srv）和动作（.action）的内部字段定义",
           "example": "ros2 interface show std_msgs/msg/String",
-          "notes": "可查看的消息（.msg）、服务（.srv）和动作（.action）的内部字段定义\n\n常用选项：\n  --no-comments    不显示注释"
+          "options": [
+            {
+              "flag": "--no-comments",
+              "desc": "不显示注释"
+            }
+          ],
+          "notes": ""
         },
         {
           "display": "package",
           "title": "ros2 interface package",
-          "cmd": "ros2 interface package",
-          "desc": "列出指定包中定义的所有接口",
+          "cmd": "ros2 interface package <package>",
+          "desc": "列出指定包中所有接口类型（msg/srv/action），包括消息、服务和动作的完整列表",
           "example": "ros2 interface package std_msgs",
-          "notes": "格式: ros2 interface package <package>\n\n显示该包提供的所有消息、服务和动作类型"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "packages",
           "title": "ros2 interface packages",
           "cmd": "ros2 interface packages",
-          "desc": "列出所有包含接口定义的包",
+          "desc": "列出所有提供接口定义的包",
           "example": "ros2 interface packages",
-          "notes": "列出当前环境中所有提供了 msg/srv/action 接口的 ROS 包"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "proto",
           "title": "ros2 interface proto",
-          "cmd": "ros2 interface proto",
-          "desc": "以 Protobuf 格式显示接口定义",
+          "cmd": "ros2 interface proto <type>",
+          "desc": "将 ROS 接口定义转换为 Protocol Buffers 格式（用于跨语言通信）",
           "example": "ros2 interface proto std_msgs/msg/String",
-          "notes": "格式: ros2 interface proto <type>\n\n将 ROS 接口定义转换为 Protocol Buffers 格式（用于跨语言通信）"
+          "options": [],
+          "notes": ""
         }
       ]
     }

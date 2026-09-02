@@ -570,6 +570,69 @@
 }
 
 /* ============================================================
+   常用选项独立板块（终端风格表格）
+   ============================================================
+   标题 + 两列表格：选项名（等宽代码）+ 说明
+   ============================================================ */
+.detail-options {
+  margin-top: 15px;
+}
+
+.options-title {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.options-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  background: var(--bg-primary);
+}
+
+.options-table td {
+  padding: 8px 10px;
+  border: 1px solid var(--border-color);
+  vertical-align: top;
+  color: var(--text-primary);
+}
+
+.options-table thead th {
+  padding: 8px 10px;
+  border: 1px solid var(--border-color);
+  text-align: left;
+  font-weight: bold;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.options-table thead th.opt-flag {
+  width: 1%;
+}
+
+.options-table thead th.opt-desc {
+  width: auto;
+}
+
+.options-table .opt-flag {
+  white-space: nowrap;
+  width: 1%;
+  font-family: "Cascadia Code", "Fira Code", "JetBrains Mono", "SF Mono", Consolas, "Liberation Mono", monospace;
+}
+
+.options-table .opt-flag code {
+  background: transparent;
+  padding: 0;
+  color: var(--text-primary);
+}
+
+.options-table .opt-desc {
+  text-align: left;
+}
+
+/* ============================================================
    响应式设计
    ============================================================
    断点：768px（平板/手机）

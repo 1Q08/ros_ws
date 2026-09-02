@@ -164,6 +164,7 @@ Command fields:
 | `cmd`     | Command (with placeholders)      | `"ros2 topic echo <topic_name>"`     |
 | `desc`    | Description                      | `"Print topic messages in real time"` |
 | `example` | Example                          | `"ros2 topic echo /chatter"`         |
+| `options` | Common options (optional)        | `[{ "flag": "--csv", "desc": "..." }]` |
 | `notes`   | Notes                            | `"Press Ctrl+C to stop"`             |
 
 **Command counts**:
@@ -171,8 +172,8 @@ Command fields:
 | Version   | Categories | Commands |
 | --------- | ---------- | -------- |
 | ROS 1     | 6          | 18       |
-| ROS 2     | 10         | 52       |
-| **Total** | **16**     | **70**   |
+| ROS 2     | 10         | 57       |
+| **Total** | **16**     | **75**   |
 
 ---
 

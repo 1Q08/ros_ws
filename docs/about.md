@@ -18,7 +18,7 @@ custom_css: /assets/css/about.css
       <span class="term-title">ros — stats</span>
     </div>
     <div class="stat-body">
-      <span class="stat-number">70</span>
+      <span class="stat-number">75</span>
       <span class="stat-label">常用命令</span>
     </div>
   </div>

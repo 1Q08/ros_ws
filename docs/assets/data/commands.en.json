@@ -1,7 +1,7 @@
 {
   "ros1": {
     "core": {
-      "name": "Core",
+      "name": "Core Commands",
       "commands": [
         {
           "display": "roscore",
@@ -9,65 +9,77 @@
           "cmd": "roscore",
           "desc": "Start the ROS Master and the parameter server",
           "example": "roscore",
+          "options": [],
           "notes": "Must be started before running any ROS nodes"
         },
         {
           "display": "rosrun",
           "title": "rosrun",
-          "cmd": "rosrun",
-          "desc": "Run a node from a specified package",
+          "cmd": "rosrun <package> <node>",
+          "desc": "Run a node from the specified package",
           "example": "rosrun turtlesim turtlesim_node",
-          "notes": "Usage: rosrun <package> <node>"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "roslaunch",
           "title": "roslaunch",
-          "cmd": "roslaunch",
-          "desc": "Launch multiple nodes from a launch file",
+          "cmd": "roslaunch <package> <launch_file>",
+          "desc": "Launch multiple nodes from a launch file, with support for parameter passing and node composition",
           "example": "roslaunch my_package my_launch.launch",
-          "notes": "Supports parameter passing and node grouping"
+          "options": [],
+          "notes": "Launch files are XML-based and define the launch configuration for nodes, parameters, topics, and services"
         }
       ]
     },
     "topic": {
-      "name": "Topics",
+      "name": "Topic Commands",
       "commands": [
         {
           "display": "rostopic list",
           "title": "rostopic list",
           "cmd": "rostopic list",
-          "desc": "List all active topics",
+          "desc": "List all topics currently published/subscribed in the system",
           "example": "rostopic list",
-          "notes": "Shows all published/subscribed topics in the current system"
+          "options": [],
+          "notes": "Filter with grep, e.g. rostopic list | grep chatter"
         },
         {
           "display": "rostopic echo",
           "title": "rostopic echo",
-          "cmd": "rostopic echo",
-          "desc": "Print topic messages in real time",
+          "cmd": "rostopic echo <topic_name>",
+          "desc": "Print messages published on a topic in real time; press Ctrl+C to stop",
           "example": "rostopic echo /chatter",
-          "notes": "Press Ctrl+C to stop"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "rostopic pub",
           "title": "rostopic pub",
-          "cmd": "rostopic pub",
+          "cmd": "rostopic pub <topic_name> <message_type> <message>",
           "desc": "Publish a message to a topic",
           "example": "rostopic pub /chatter std_msgs/String \"hello\"",
-          "notes": "Supports -r to set the publish rate"
+          "options": [
+            {
+              "flag": "-r <rate>",
+              "desc": "Publish messages continuously at the specified rate"
+            }
+          ],
+          "notes": ""
         },
         {
           "display": "rostopic hz",
           "title": "rostopic hz",
-          "cmd": "rostopic hz",
-          "desc": "Display the topic publish rate",
+          "cmd": "rostopic hz <topic_name>",
+          "desc": "Display the topic publish rate, and check whether a topic publishes at the expected rate",
           "example": "rostopic hz /chatter",
-          "notes": "Useful for checking whether a topic publishes at the expected rate"
+          "options": [],
+          "notes": ""
         }
       ]
     },
     "node": {
-      "name": "Nodes",
+      "name": "Node Commands",
       "commands": [
         {
           "display": "rosnode list",
@@ -75,28 +87,31 @@
           "cmd": "rosnode list",
           "desc": "List all running nodes",
           "example": "rosnode list",
-          "notes": "Shows the names of all active nodes in the current system"
+          "options": [],
+          "notes": "Shows all active ROS nodes in the current system"
         },
         {
           "display": "rosnode info",
           "title": "rosnode info",
-          "cmd": "rosnode info",
-          "desc": "Show detailed information about a node",
+          "cmd": "rosnode info <node_name>",
+          "desc": "Show detailed node information, including its published/subscribed topics, services, and parameters",
           "example": "rosnode info /talker",
-          "notes": "Includes published/subscribed topics and services"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "rosnode kill",
           "title": "rosnode kill",
-          "cmd": "rosnode kill",
-          "desc": "Terminate a specified node",
+          "cmd": "rosnode kill <node_name>",
+          "desc": "Forcefully shut down a node",
           "example": "rosnode kill /talker",
+          "options": [],
           "notes": "Forcefully shuts down the node and may produce warnings"
         }
       ]
     },
     "service": {
-      "name": "Services",
+      "name": "Service Commands",
       "commands": [
         {
           "display": "rosservice list",
@@ -104,44 +119,49 @@
           "cmd": "rosservice list",
           "desc": "List all available services",
           "example": "rosservice list",
-          "notes": "Shows all services in the current system"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "rosservice call",
           "title": "rosservice call",
-          "cmd": "rosservice call",
-          "desc": "Call a service",
+          "cmd": "rosservice call <service> <args>",
+          "desc": "Call a service and return the result; args are passed in YAML format",
           "example": "rosservice call /add_two_ints \"a: 1, b: 2\"",
-          "notes": "Usage: rosservice call <service> <args>"
+          "options": [],
+          "notes": "Arguments must be passed in the format defined by the service"
         }
       ]
     },
     "param": {
-      "name": "Parameters",
+      "name": "Parameter Commands",
       "commands": [
         {
           "display": "rosparam list",
           "title": "rosparam list",
           "cmd": "rosparam list",
-          "desc": "List all parameters",
+          "desc": "List all parameters on the parameter server",
           "example": "rosparam list",
-          "notes": "Shows all parameters on the parameter server"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "rosparam set",
           "title": "rosparam set",
-          "cmd": "rosparam set",
+          "cmd": "rosparam set <param> <value>",
           "desc": "Set a parameter value",
           "example": "rosparam set /my_param 10",
-          "notes": "Usage: rosparam set <param> <value>"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "rosparam get",
           "title": "rosparam get",
-          "cmd": "rosparam get",
+          "cmd": "rosparam get <param>",
           "desc": "Get a parameter value",
           "example": "rosparam get /my_param",
-          "notes": "Usage: rosparam get <param>"
+          "options": [],
+          "notes": ""
         }
       ]
     },
@@ -151,57 +171,103 @@
         {
           "display": "rosbag record",
           "title": "rosbag record",
-          "cmd": "rosbag record",
+          "cmd": "rosbag record <topic_names>",
           "desc": "Record topic data to a bag file",
           "example": "rosbag record -a",
-          "notes": "-a records all topics; otherwise specify topic names"
+          "options": [
+            {
+              "flag": "-o <prefix>",
+              "desc": "Specify the output file prefix"
+            },
+            {
+              "flag": "-a",
+              "desc": "Record all topics"
+            }
+          ],
+          "notes": ""
         },
         {
           "display": "rosbag play",
           "title": "rosbag play",
-          "cmd": "rosbag play",
-          "desc": "Replay a bag file",
+          "cmd": "rosbag play <bag_file>",
+          "desc": "Replay data from a bag file, with options such as playback rate and looping",
           "example": "rosbag play my_data.bag",
-          "notes": "Supports -r to adjust the playback rate"
+          "options": [
+            {
+              "flag": "-r <rate>",
+              "desc": "Adjust the playback rate"
+            }
+          ],
+          "notes": "Useful for testing and simulation; messages are published with their original timestamps during replay"
         },
         {
           "display": "rosbag info",
           "title": "rosbag info",
           "cmd": "rosbag info",
-          "desc": "Show bag file information",
+          "desc": "Show bag file information, including duration, topics, and message types",
           "example": "rosbag info my_data.bag",
-          "notes": "Shows duration, topics, message types, and more"
+          "options": [],
+          "notes": ""
         }
       ]
     }
   },
   "ros2": {
     "core": {
-      "name": "Core",
+      "name": "Core Commands",
       "commands": [
         {
           "display": "ros2 run",
           "title": "ros2 run",
           "cmd": "ros2 run <package_name> <executable_name>",
-          "desc": "Run a node from a specified package",
-          "example": "ros2 run turtlesim turtlesim_node --ros-args --params-file params.yaml",
-          "notes": "Load parameters with --ros-args --params-file when running a node:\n  ros2 run <pkg> <node> --ros-args --params-file <file>\n\nCommon options:\n  --ros-args --params-file <file>   Load parameters from a YAML file\n  --ros-args --remap <from>:=<to>   Remap topic/service names"
+          "desc": "Run a node from the specified package",
+          "example": "ros2 run turtlesim turtlesim_node --ros-args --params-file ~/Desktop/turtlesim.yaml",
+          "options": [
+            {
+              "flag": "--ros-args --params-file <file>",
+              "desc": "Load parameters from a YAML file"
+            },
+            {
+              "flag": "--ros-args -p <param>:=<value>",
+              "desc": "Set a parameter directly on the command line (-p is short for --param)"
+            },
+            {
+              "flag": "--ros-args --log-level <level>",
+              "desc": "Set the log level (debug / info / warn / error / fatal)"
+            },
+            {
+              "flag": "--ros-args --remap <from>:=<to>",
+              "desc": "Remap topic/service names"
+            }
+          ],
+          "notes": ""
         },
         {
           "display": "ros2 launch",
           "title": "ros2 launch",
-          "cmd": "ros2 launch",
+          "cmd": "ros2 launch <package_name> <launch_file>",
           "desc": "Launch multiple nodes from a launch file",
           "example": "ros2 launch my_package my_launch.py",
-          "notes": "ROS 2 uses Python launch files"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "ros2 doctor",
           "title": "ros2 doctor",
           "cmd": "ros2 doctor",
-          "desc": "Check whether the ROS 2 environment is configured correctly",
+          "desc": "Check whether the ROS 2 environment is configured correctly, and report potential issues with environment variables, network, system settings, etc.",
           "example": "ros2 doctor",
-          "notes": "Checks environment variables, network, and system settings, and reports potential issues\n\nCommon options:\n  --report             Generate a full diagnostic report\n  --fail-on-error      Exit with a non-zero status when errors are found"
+          "options": [
+            {
+              "flag": "--report",
+              "desc": "Generate a full diagnostic report"
+            },
+            {
+              "flag": "--fail-on-error",
+              "desc": "Exit with a non-zero status when an error is found"
+            }
+          ],
+          "notes": ""
         }
       ]
     },
@@ -214,15 +280,17 @@
           "cmd": "ros2 pkg list",
           "desc": "List all available packages in the current environment",
           "example": "ros2 pkg list",
-          "notes": "Shows all installed ROS 2 packages; filter with grep, e.g. ros2 pkg list | grep turtlesim"
+          "options": [],
+          "notes": "Filter with grep, e.g. ros2 pkg list | grep turtlesim"
         },
         {
           "display": "prefix",
           "title": "ros2 pkg prefix",
           "cmd": "ros2 pkg prefix <package_name>",
-          "desc": "Show the install prefix (path) of a package",
+          "desc": "Return the installation directory of a package, useful for locating its source code or resources",
           "example": "ros2 pkg prefix turtlesim",
-          "notes": "Usage: ros2 pkg prefix <pkg>\n\nReturns the package's install directory, useful for locating its source or resources"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "executables",
@@ -230,28 +298,60 @@
           "cmd": "ros2 pkg executables [package_name]",
           "desc": "List all executables provided by a package",
           "example": "ros2 pkg executables turtlesim",
-          "notes": "Without a package name, lists executables of all packages; with one, only that package's"
+          "options": [],
+          "notes": "Without a package name, lists executables of all packages; with a package name, only that package's"
         },
         {
           "display": "create",
           "title": "ros2 pkg create",
           "cmd": "ros2 pkg create <package_name>",
           "desc": "Create a new ROS 2 package",
-          "example": "ros2 pkg create --build-type ament_python my_package",
-          "notes": "Usage: ros2 pkg create <pkg> [options]\n\nCommon options:\n  --build-type <type>   Set the build type (ament_python / ament_cmake / ament_cmake_python)\n  --dependencies <deps> Specify dependencies, e.g. --dependencies rclpy std_msgs\n  --node-name <name>    Also create a node file"
+          "example": "# Create a Python package with dependencies and a node file\nros2 pkg create my_package --build-type ament_python --dependencies std_msgs --node-name my_node\n# Create a package with license, description, and maintainer info\nros2 pkg create my_robot_pkg --license Apache-2.0 --description \"My robot description\" --maintainer-email \"you@example.com\" --maintainer-name \"Your Name\"",
+          "options": [
+            {
+              "flag": "--build-type <type>",
+              "desc": "Specify the build type (ament_python / ament_cmake / ament_cmake_python)"
+            },
+            {
+              "flag": "--dependencies <deps>",
+              "desc": "Specify dependency packages, e.g. --dependencies rclpy std_msgs"
+            },
+            {
+              "flag": "--node-name <name>",
+              "desc": "Also create a node file"
+            },
+            {
+              "flag": "--license <license>",
+              "desc": "Specify the license, e.g. Apache-2.0"
+            },
+            {
+              "flag": "--description <description>",
+              "desc": "Add a package description, written to package.xml"
+            },
+            {
+              "flag": "--maintainer-email <email>",
+              "desc": "Set the maintainer's email"
+            },
+            {
+              "flag": "--maintainer-name <name>",
+              "desc": "Set the maintainer's name"
+            }
+          ],
+          "notes": ""
         },
         {
           "display": "xml",
           "title": "ros2 pkg xml",
           "cmd": "ros2 pkg xml <package_name>",
-          "desc": "Print the package.xml contents of a package",
+          "desc": "Print the package.xml contents of the specified package, for viewing package metadata such as dependencies, version, and license",
           "example": "ros2 pkg xml turtlesim",
-          "notes": "Usage: ros2 pkg xml <pkg>\n\nPrints the package.xml file directly for quick inspection of package metadata"
+          "options": [],
+          "notes": ""
         }
       ]
     },
     "topic": {
-      "name": "Topics",
+      "name": "Topic Commands",
       "commands": [
         {
           "display": "-h",
@@ -259,52 +359,121 @@
           "cmd": "ros2 topic -h",
           "desc": "Show help for topic commands",
           "example": "ros2 topic -h",
+          "options": [],
           "notes": "Shows all ros2 topic subcommands and usage; also works for subcommands, e.g. ros2 topic pub -h"
         },
         {
           "display": "list",
           "title": "ros2 topic list",
           "cmd": "ros2 topic list [options]",
-          "desc": "List all active topics",
+          "desc": "List all topics currently published/subscribed in the system",
           "example": "ros2 topic list",
-          "notes": "Shows all published/subscribed topics in the current system\n\nCommon options:\n  -t, --show-types    Also show topic types\n  -v, --verbose       Show detailed info (QoS settings, publisher/subscriber counts, etc.)"
+          "options": [
+            {
+              "flag": "-t, --show-types",
+              "desc": "Also show topic types"
+            },
+            {
+              "flag": "-v, --verbose",
+              "desc": "Show detailed info (including QoS settings and publisher/subscriber counts)"
+            }
+          ],
+          "notes": "Filter with grep, e.g. ros2 topic list | grep chatter"
         },
         {
           "display": "echo",
           "title": "ros2 topic echo",
           "cmd": "ros2 topic echo <topic_name>",
-          "desc": "Print messages published on a topic in real time",
+          "desc": "Print messages published on a topic in real time; press Ctrl+C to stop",
           "example": "ros2 topic echo /chatter",
-          "notes": "Press Ctrl+C to stop"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "info",
           "title": "ros2 topic info",
           "cmd": "ros2 topic info <topic_name>",
-          "desc": "Show detailed information about a topic, including its message type and publisher/subscriber counts",
+          "desc": "Show detailed information about a topic, including its message type and publisher/subscriber counts; press Ctrl+C to stop",
           "example": "ros2 topic info /chatter",
-          "notes": "Common options:\n  -v, --verbose       Show detailed info (QoS settings, publisher/subscriber counts, etc.)"
+          "options": [
+            {
+              "flag": "-v, --verbose",
+              "desc": "Show detailed info (including QoS settings and publisher/subscriber counts)"
+            }
+          ],
+          "notes": ""
         },
         {
           "display": "pub",
           "title": "ros2 topic pub",
           "cmd": "ros2 topic pub [options] <topic_name> <msg_type> \"<args>\"",
-          "desc": "Publish a message to a topic manually",
+          "desc": "Publish a message to a topic manually, once or continuously; message contents are passed in YAML format, and continuous publishing stops with Ctrl+C",
           "example": "ros2 topic pub /chatter std_msgs/msg/String \"data: hello\"",
-          "notes": "ROS 2 passes messages in YAML format\n\nCommon options:\n  --once            Publish once and exit\n  -r 1, --rate 1    Publish continuously at 1 Hz (default 1 Hz)"
+          "options": [
+            {
+              "flag": "--once",
+              "desc": "Publish once and exit"
+            },
+            {
+              "flag": "-r 1, --rate 1",
+              "desc": "Publish continuously at 1 Hz (default 1 Hz)"
+            },
+            {
+              "flag": "-w N",
+              "desc": "Wait until N matching subscribers are found before publishing"
+            },
+            {
+              "flag": "--yaml-file FILE",
+              "desc": "Read message contents from a YAML file (e.g. the STDOUT of ros2 topic echo)"
+            }
+          ],
+          "notes": "Tip: after entering the topic name and message type, press Tab to auto-complete the YAML field template, edit the values, and press Enter to publish\nExample:\n  ros2 topic pub /turtle1/cmd_vel geometry_msgs/msg/Twist <TAB>"
         },
         {
           "display": "hz",
           "title": "ros2 topic hz",
           "cmd": "ros2 topic hz <topic_name>",
-          "desc": "Display the topic publish rate",
+          "desc": "Display the topic publish rate, and check whether a topic publishes at the expected rate",
           "example": "ros2 topic hz /chatter",
-          "notes": "Useful for checking whether a topic publishes at the expected rate"
+          "options": [],
+          "notes": ""
+        },
+        {
+          "display": "bw",
+          "title": "ros2 topic bw",
+          "cmd": "ros2 topic bw [options] <topic_name>",
+          "desc": "Display the bandwidth used by a topic",
+          "example": "ros2 topic bw /chatter",
+          "options": [
+            {
+              "flag": "-w N, --window N",
+              "desc": "Maximum window size, in number of messages, for calculating the rate (default 100)"
+            },
+            {
+              "flag": "--spin-time SECS",
+              "desc": "Seconds to wait for node discovery"
+            }
+          ],
+          "notes": "Bandwidth reflects the receiving rate on the subscription side, which may be affected by platform resources and QoS settings, and may not exactly match the publisher's bandwidth"
+        },
+        {
+          "display": "find",
+          "title": "ros2 topic find",
+          "cmd": "ros2 topic find [options] <topic_type>",
+          "desc": "List available topics of the specified message type",
+          "example": "ros2 topic find std_msgs/msg/String",
+          "options": [
+            {
+              "flag": "-c, --count-topics",
+              "desc": "Only display the number of matching topics"
+            }
+          ],
+          "notes": "Filters topics by message type and outputs all matching topic names"
         }
       ]
     },
     "node": {
-      "name": "Nodes",
+      "name": "Node Commands",
       "commands": [
         {
           "display": "-h",
@@ -312,28 +481,31 @@
           "cmd": "ros2 node -h",
           "desc": "Show help for node commands",
           "example": "ros2 node -h",
+          "options": [],
           "notes": "Shows all ros2 node subcommands and usage; also works for subcommands, e.g. ros2 node list -h"
         },
         {
           "display": "list",
           "title": "ros2 node list",
           "cmd": "ros2 node list",
-          "desc": "List all running nodes, e.g. /turtlesim",
+          "desc": "List all running nodes",
           "example": "ros2 node list",
-          "notes": "Shows the names of all active nodes in the current system"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "info",
           "title": "ros2 node info",
           "cmd": "ros2 node info <node_name>",
-          "desc": "Show detailed information about a node",
+          "desc": "Show detailed node information, including published/subscribed topics, services, and actions",
           "example": "ros2 node info /talker",
-          "notes": "Includes published/subscribed topics, services, and actions"
+          "options": [],
+          "notes": ""
         }
       ]
     },
     "component": {
-      "name": "Components",
+      "name": "Component Commands",
       "commands": [
         {
           "display": "container",
@@ -341,7 +513,8 @@
           "cmd": "ros2 component container <container_name>",
           "desc": "Start a component container node",
           "example": "ros2 component container /my_container",
-          "notes": "A container node runs multiple components in a single process, enabling composition and zero-copy communication"
+          "options": [],
+          "notes": "A container node runs multiple components in a single process, enabling node composition and zero-copy communication"
         },
         {
           "display": "list",
@@ -349,7 +522,8 @@
           "cmd": "ros2 component list [container_name]",
           "desc": "List all components in a container node",
           "example": "ros2 component list",
-          "notes": "Shows loaded components in a container; without a container name, lists all"
+          "options": [],
+          "notes": "Shows loaded components in the specified container node; without a container name, lists all"
         },
         {
           "display": "types",
@@ -357,7 +531,8 @@
           "cmd": "ros2 component types",
           "desc": "List available component types",
           "example": "ros2 component types",
-          "notes": "Shows all loadable component types in the current environment, e.g. composition::Talker"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "load",
@@ -365,7 +540,17 @@
           "cmd": "ros2 component load <container_name> <package_name> <component_type>",
           "desc": "Load a component into a container node",
           "example": "ros2 component load /my_container composition composition::Talker",
-          "notes": "Usage: ros2 component load <container> <package> <component_type>\n\nCommon options:\n  --node-name <name>   Set the component node name\n  --remap <from>:=<to>  Remap topic/service names"
+          "options": [
+            {
+              "flag": "--node-name <name>",
+              "desc": "Set the component node name"
+            },
+            {
+              "flag": "--remap <from>:=<to>",
+              "desc": "Remap topic/service names"
+            }
+          ],
+          "notes": "Component types can be listed with ros2 component types; once loaded, the component runs inside the container node"
         },
         {
           "display": "unload",
@@ -373,7 +558,8 @@
           "cmd": "ros2 component unload <container_name> <component_id>",
           "desc": "Unload a component from a container node",
           "example": "ros2 component unload /my_container 1",
-          "notes": "Usage: ros2 component unload <container> <component_id>\n\nThe component ID can be found with ros2 component list"
+          "options": [],
+          "notes": "The component ID can be found with ros2 component list"
         },
         {
           "display": "standalone",
@@ -381,7 +567,8 @@
           "cmd": "ros2 component standalone <package_name> <component_type>",
           "desc": "Run a component as a standalone node",
           "example": "ros2 component standalone composition composition::Talker",
-          "notes": "Usage: ros2 component standalone <package> <component_type>\n\nRuns in its own process, outside a container"
+          "options": [],
+          "notes": "Runs in its own process, outside a container"
         },
         {
           "display": "nodes",
@@ -389,7 +576,8 @@
           "cmd": "ros2 component nodes",
           "desc": "List all running component container nodes",
           "example": "ros2 component nodes",
-          "notes": "Shows the names of all container nodes in the current system"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "register",
@@ -397,20 +585,22 @@
           "cmd": "ros2 component register <container_name> <package_name> <component_type>",
           "desc": "Register a component type with a container (without loading it)",
           "example": "ros2 component register /my_container composition composition::Talker",
-          "notes": "Usage: ros2 component register <container> <package> <component_type>\n\nRegisters the type only, so it can be loaded later by ID"
+          "options": [],
+          "notes": "Only registers the component type, so it can be loaded later by ID"
         },
         {
           "display": "unregister",
           "title": "ros2 component unregister",
           "cmd": "ros2 component unregister <container_name> <component_type>",
-          "desc": "Unregister a component type from a container",
+          "desc": "Unregister a component type from a container; once unregistered, the type can no longer be loaded",
           "example": "ros2 component unregister /my_container composition::Talker",
-          "notes": "Usage: ros2 component unregister <container> <component_type>\n\nOnce unregistered, the type can no longer be loaded"
+          "options": [],
+          "notes": "The ID can be found with ros2 component list"
         }
       ]
     },
     "service": {
-      "name": "Services",
+      "name": "Service Commands",
       "commands": [
         {
           "display": "list",
@@ -418,36 +608,85 @@
           "cmd": "ros2 service list",
           "desc": "List all available services",
           "example": "ros2 service list",
-          "notes": "Shows all services in the current system\n\nCommon options:\n  -t, --show-types    Also show service types"
+          "options": [
+            {
+              "flag": "-t, --show-types",
+              "desc": "Also show service types"
+            }
+          ],
+          "notes": ""
+        },
+        {
+          "display": "info",
+          "title": "ros2 service info",
+          "cmd": "ros2 service info <service_name>",
+          "desc": "Show detailed information about the specified service",
+          "example": "ros2 service info /add_two_ints",
+          "options": [
+            {
+              "flag": "--spin-time SECS",
+              "desc": "Seconds to wait for node discovery"
+            }
+          ],
+          "notes": "Prints information about the specified service, including its type and QoS settings"
         },
         {
           "display": "type",
           "title": "ros2 service type",
           "cmd": "ros2 service type <service_name>",
-          "desc": "Show the interface type of a service",
+          "desc": "Show the type of a service",
           "example": "ros2 service type /add_two_ints",
-          "notes": "Returns the service interface type used by the service"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "find",
           "title": "ros2 service find",
           "cmd": "ros2 service find <type_name>",
-          "desc": "Find services that use a given interface type",
+          "desc": "List available services of the specified type",
           "example": "ros2 service find example_interfaces/srv/AddTwoInts",
-          "notes": "Lists the names of all services that use the specified interface type"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "call",
           "title": "ros2 service call",
           "cmd": "ros2 service call <service_name> <service_type> <arguments>",
-          "desc": "Call a service",
+          "desc": "Call a service and return the result; request arguments are passed in YAML format, and press Ctrl+C to stop waiting for a response",
           "example": "ros2 service call /add_two_ints example_interfaces/srv/AddTwoInts \"{a: 1, b: 2}\"",
-          "notes": "ROS 2 passes service request arguments in YAML format"
+          "options": [],
+          "notes": ""
+        },
+        {
+          "display": "echo",
+          "title": "ros2 service echo",
+          "cmd": "ros2 service echo <service_name> [service_type]",
+          "desc": "Echo service request data (service introspection); continuously listens and prints the request data sent to the service, and press Ctrl+C to stop",
+          "example": "ros2 service echo /add_two_ints example_interfaces/srv/AddTwoInts",
+          "options": [
+            {
+              "flag": "--flow-style",
+              "desc": "Print messages in flow style (no line breaks between fields)"
+            },
+            {
+              "flag": "--csv",
+              "desc": "Output all recursive fields separated by commas (for plotting)"
+            },
+            {
+              "flag": "-f, --full-length",
+              "desc": "Output arrays, bytes, and long strings fully without truncation"
+            },
+            {
+              "flag": "-l N, --truncate-length N",
+              "desc": "Truncate arrays, bytes, and strings to the given length (default 128)"
+            }
+          ],
+          "notes": ""
         }
       ]
     },
     "action": {
-      "name": "Actions",
+      "name": "Action Commands",
       "commands": [
         {
           "display": "list",
@@ -455,68 +694,105 @@
           "cmd": "ros2 action list",
           "desc": "List all available actions",
           "example": "ros2 action list",
-          "notes": "Shows all action servers in the current system\n\nCommon options:\n  -t, --show-types    Also show action types"
+          "options": [
+            {
+              "flag": "-t, --show-types",
+              "desc": "Also show action types"
+            }
+          ],
+          "notes": ""
         },
         {
           "display": "info",
           "title": "ros2 action info",
           "cmd": "ros2 action info <action_name>",
-          "desc": "Show detailed information about an action",
+          "desc": "Show detailed information about the specified action, including its type and server/client node names",
           "example": "ros2 action info /turtle1/rotate_absolute",
-          "notes": "Shows the node names, action types, and other details of the action server and client"
+          "options": [],
+          "notes": ""
+        },
+        {
+          "display": "type",
+          "title": "ros2 action type",
+          "cmd": "ros2 action type <action_name>",
+          "desc": "Show the type of an action",
+          "example": "ros2 action type /turtle1/rotate_absolute",
+          "options": [],
+          "notes": ""
         },
         {
           "display": "send_goal",
           "title": "ros2 action send_goal",
           "cmd": "ros2 action send_goal <action_name> <action_type> <values>",
-          "desc": "Send an action goal",
+          "desc": "Send an action goal; goal values are passed in YAML format, and press Ctrl+C to stop waiting for a response",
           "example": "ros2 action send_goal /turtle1/rotate_absolute turtlesim/action/RotateAbsolute \"{theta: 1.57}\"",
-          "notes": "Passes goal values in YAML format\n\nCommon options:\n  --feedback    Show feedback messages"
+          "options": [
+            {
+              "flag": "--feedback",
+              "desc": "Show feedback messages"
+            }
+          ],
+          "notes": ""
         }
       ]
     },
     "param": {
-      "name": "Parameters",
+      "name": "Parameter Commands",
       "commands": [
         {
           "display": "list",
           "title": "ros2 param list",
           "cmd": "ros2 param list",
-          "desc": "List all parameters of a node",
+          "desc": "List all parameters of the specified node, including their names, types, and current values",
           "example": "ros2 param list /my_node",
-          "notes": "In ROS 2, parameters belong to a specific node"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "set",
           "title": "ros2 param set",
           "cmd": "ros2 param set <node_name> <parameter_name> <value>",
-          "desc": "Set a parameter value",
+          "desc": "Set a parameter value, supporting int, float, bool, string, list, and other types; press Ctrl+C to stop waiting for a response",
           "example": "ros2 param set /my_node my_param 10",
-          "notes": "Change a parameter's value at runtime"
+          "options": [],
+          "notes": "After setting a parameter, the node receives a parameter update event that can be handled inside the node"
         },
         {
           "display": "get",
           "title": "ros2 param get",
           "cmd": "ros2 param get <node_name> <parameter_name>",
-          "desc": "Get a parameter value",
+          "desc": "Get a parameter value, showing its type and current value; press Ctrl+C to stop waiting for a response",
           "example": "ros2 param get /my_node my_param",
-          "notes": "Shows the parameter's type and current value"
+          "options": [],
+          "notes": "Gets a parameter value from the specified node, useful for debugging and verifying parameter settings"
         },
         {
           "display": "dump",
           "title": "ros2 param dump",
           "cmd": "ros2 param dump <node_name>",
-          "desc": "Export all of a node's parameters to a file (the file is not created automatically)",
-          "example": "ros2 param dump /my_node",
-          "notes": "Saves all parameters and their values to a YAML file\n\nCommon options:\n  --output-dir    Specify the output directory"
+          "desc": "Save all parameters of the specified node and their values to a YAML file (you need to create the file manually or use the > operator), useful for backup and migration",
+          "example": "ros2 param dump /turtlesim > ~/Desktop/turtlesim.yaml  # Save current config to the desktop",
+          "options": [
+            {
+              "flag": "--output-dir",
+              "desc": "Specify the output directory"
+            }
+          ],
+          "notes": ""
         },
         {
           "display": "load",
           "title": "ros2 param load",
           "cmd": "ros2 param load <node_name> <parameter_file>",
-          "desc": "Load parameters into a node from a file",
+          "desc": "Load parameter values from a YAML file into the specified node, supporting int, float, bool, string, list, and other types; press Ctrl+C to stop waiting for a response",
           "example": "ros2 param load /my_node params.yaml",
-          "notes": "Loads parameter values into a node from a YAML file\n\nCommon options:\n  --node-type    Specify the node type"
+          "options": [
+            {
+              "flag": "--node-type",
+              "desc": "Specify the node type"
+            }
+          ],
+          "notes": ""
         }
       ]
     },
@@ -529,31 +805,35 @@
           "cmd": "ros2 bag -h",
           "desc": "Show help for bag commands",
           "example": "ros2 bag -h",
+          "options": [],
           "notes": "Shows all ros2 bag subcommands and usage; also works for subcommands, e.g. ros2 bag record -h"
         },
         {
           "display": "burst",
           "title": "ros2 bag burst",
           "cmd": "ros2 bag burst <bag_file> <topic_name>",
-          "desc": "Burst-replay data for a specific topic in a bag",
+          "desc": "Burst-replay the data of a specified topic in a bag, for fast replay or testing",
           "example": "ros2 bag burst my_data.db3 /chatter",
-          "notes": "Replays a single topic's data as fast as possible, often used for performance testing"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "convert",
           "title": "ros2 bag convert",
           "cmd": "ros2 bag convert -i <input_bag> -o <output_dir>",
-          "desc": "Convert an input bag into a new bag with different settings",
+          "desc": "Convert a bag file into a new bag with the specified storage/serialization format",
           "example": "ros2 bag convert -i input.bag -o output_dir --output-options 'storage: mcap'",
-          "notes": "Converts storage/serialization formats, e.g. from rosbag1 (.bag) to sqlite3/mcap"
+          "options": [],
+          "notes": "Converts storage/serialization formats, e.g. from rosbag1 (.bag) to sqlite3/mcap; use --output-options to set output options such as storage and serialization"
         },
         {
           "display": "info",
           "title": "ros2 bag info",
           "cmd": "ros2 bag info <bag_file_name>",
-          "desc": "Show bag file information",
+          "desc": "Show bag file information, including duration, topics, and message types",
           "example": "ros2 bag info my_data.db3",
-          "notes": "Shows duration, topics, message types, and more"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "list",
@@ -561,15 +841,34 @@
           "cmd": "ros2 bag list",
           "desc": "Show available bag plugin information",
           "example": "ros2 bag list",
-          "notes": "Lists available storage and serialization plugins, e.g. sqlite3, mcap"
+          "options": [],
+          "notes": "Lists available storage and serialization plugins, such as sqlite3 and mcap"
         },
         {
           "display": "play",
           "title": "ros2 bag play",
           "cmd": "ros2 bag play <bag_file_name>",
-          "desc": "Replay a bag file",
+          "desc": "Replay data from a bag file, with options such as playback rate and looping",
           "example": "ros2 bag play my_data.db3",
-          "notes": "ROS 2 stores bags in SQLite3 format"
+          "options": [
+            {
+              "flag": "-r, --rate <factor>",
+              "desc": "Set the playback rate multiplier (default 1.0)"
+            },
+            {
+              "flag": "-l, --loop",
+              "desc": "Loop playback of the bag file"
+            },
+            {
+              "flag": "--start-paused",
+              "desc": "Start playback paused, requiring manual resume"
+            },
+            {
+              "flag": "--clock",
+              "desc": "Publish the /clock topic to synchronize time"
+            }
+          ],
+          "notes": ""
         },
         {
           "display": "record",
@@ -577,20 +876,35 @@
           "cmd": "ros2 bag record <topic_name>",
           "desc": "Record topic data to a bag file",
           "example": "ros2 bag record -a",
-          "notes": "-a records all topics; otherwise specify topic names"
+          "options": [
+            {
+              "flag": "-o, --output <dir>",
+              "desc": "Specify the output directory / file prefix"
+            },
+            {
+              "flag": "--services <name>...",
+              "desc": "Record service events for the specified services only"
+            },
+            {
+              "flag": "-a, --all-services",
+              "desc": "Record service events for all services"
+            }
+          ],
+          "notes": ""
         },
         {
           "display": "reindex",
           "title": "ros2 bag reindex",
           "cmd": "ros2 bag reindex",
-          "desc": "Rebuild a bag file's metadata",
+          "desc": "Re-index a bag file's metadata and rebuild missing or corrupted indexes",
           "example": "ros2 bag reindex my_data.db3",
-          "notes": "Use when the metadata file is missing or corrupted"
+          "options": [],
+          "notes": "Used to rebuild when the metadata file is missing or corrupted"
         }
       ]
     },
     "interface": {
-      "name": "Interfaces",
+      "name": "Interface Commands",
       "commands": [
         {
           "display": "-h",
@@ -598,6 +912,7 @@
           "cmd": "ros2 interface -h",
           "desc": "Show help for interface commands",
           "example": "ros2 interface -h",
+          "options": [],
           "notes": "Shows all ros2 interface subcommands and usage; also works for subcommands, e.g. ros2 interface show -h"
         },
         {
@@ -606,39 +921,49 @@
           "cmd": "ros2 interface list",
           "desc": "List all available interface types (msg/srv/action)",
           "example": "ros2 interface list",
-          "notes": "Shows all message, service, and action interfaces in the current workspace"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "show",
           "title": "ros2 interface show",
-          "cmd": "ros2 interface show <type_name>.srv",
-          "desc": "Show the detailed definition of an interface (.msg/.srv/.action)",
+          "cmd": "ros2 interface show <type>",
+          "desc": "Show the definition of the specified interface type, including the internal field definitions of messages (.msg), services (.srv), and actions (.action)",
           "example": "ros2 interface show std_msgs/msg/String",
-          "notes": "Shows the field definitions of a message (.msg), service (.srv), or action (.action)\n\nCommon options:\n  --no-comments    Hide comments"
+          "options": [
+            {
+              "flag": "--no-comments",
+              "desc": "Do not show comments"
+            }
+          ],
+          "notes": ""
         },
         {
           "display": "package",
           "title": "ros2 interface package",
-          "cmd": "ros2 interface package",
-          "desc": "List all interfaces defined in a package",
+          "cmd": "ros2 interface package <package>",
+          "desc": "List all interface types (msg/srv/action) in the specified package, including the complete list of messages, services, and actions",
           "example": "ros2 interface package std_msgs",
-          "notes": "Usage: ros2 interface package <package>\n\nShows all message, service, and action types provided by the package"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "packages",
           "title": "ros2 interface packages",
           "cmd": "ros2 interface packages",
-          "desc": "List all packages that define interfaces",
+          "desc": "List all packages that provide interface definitions",
           "example": "ros2 interface packages",
-          "notes": "Lists all ROS packages in the current environment that provide msg/srv/action interfaces"
+          "options": [],
+          "notes": ""
         },
         {
           "display": "proto",
           "title": "ros2 interface proto",
-          "cmd": "ros2 interface proto",
-          "desc": "Show an interface definition in Protobuf format",
+          "cmd": "ros2 interface proto <type>",
+          "desc": "Convert a ROS interface definition to Protocol Buffers format (for cross-language communication)",
           "example": "ros2 interface proto std_msgs/msg/String",
-          "notes": "Usage: ros2 interface proto <type>\n\nConverts a ROS interface definition to Protocol Buffers format (for cross-language communication)"
+          "options": [],
+          "notes": ""
         }
       ]
     }

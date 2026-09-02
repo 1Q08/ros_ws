@@ -29,7 +29,10 @@ const I18N = {
     version: '版本',
     description: '说明',
     example: '示例',
-    notes: '注意事项'
+    notes: '注意事项',
+    options: '常用选项',
+    optionFlag: '选项',
+    optionDesc: '说明'
   },
   en: {
     selectPlaceholder: '-- Select --',
@@ -42,7 +45,10 @@ const I18N = {
     version: 'Version',
     description: 'Description',
     example: 'Example',
-    notes: 'Notes'
+    notes: 'Notes',
+    options: 'Common options',
+    optionFlag: 'Option',
+    optionDesc: 'Description'
   }
 };
 
@@ -165,7 +171,15 @@ function onCommandChange() {
   document.getElementById('detailCmd').innerHTML = highlightCode(cmd.cmd);
   document.getElementById('detailDesc').textContent = cmd.desc;
   document.getElementById('detailExample').innerHTML = highlightCode(cmd.example);
-  document.getElementById('detailNotesContent').textContent = cmd.notes;
+
+  // 注意事项：为空时隐藏整块（含标题），否则展示剩余文字
+  const notesWrap = document.getElementById('detailNotes');
+  const notesText = (cmd.notes || '').trim();
+  if (notesWrap) notesWrap.style.display = notesText ? '' : 'none';
+  document.getElementById('detailNotesContent').textContent = notesText;
+
+  // 常用选项：来自独立 options 字段
+  renderOptionsTable(cmd.options);
 
   detailDiv.style.display = 'block';
 }
@@ -312,6 +326,22 @@ function showSearchResult(index) {
   }
 
   // 填充详情内容（HTML 模板字符串）
+  const opts = cmd.options || [];
+  const notesBlock = (cmd.notes && cmd.notes.trim())
+    ? '<p><strong>' + T.notes + ':</strong></p><pre>' + cmd.notes + '</pre>'
+    : '';
+  const optionsBlock = opts.length
+    ? '<p><strong>' + T.options + ':</strong></p>' +
+      '<table class="options-table">' +
+      '<thead><tr><th>' + T.optionFlag + '</th><th>' + T.optionDesc + '</th></tr></thead>' +
+      '<tbody>' +
+      opts.map(function (o) {
+        return '<tr><td class="opt-flag"><code>' + highlightCode(o.flag) + '</code></td>' +
+               '<td class="opt-desc">' + (o.desc || '') + '</td></tr>';
+      }).join('') +
+      '</tbody></table>'
+    : '';
+
   detailDiv.innerHTML = `
     <div class="search-detail-header">
       <h3>${cmd.cmd}</h3>
@@ -321,8 +351,8 @@ function showSearchResult(index) {
     <p><strong>${T.description}:</strong> ${cmd.desc}</p>
     <p><strong>${T.example}:</strong></p>
     <pre class="highlight-code"><code>${highlightCode(cmd.example)}</code></pre>
-    <p><strong>${T.notes}:</strong></p>
-    <pre>${cmd.notes}</pre>
+    ${notesBlock}
+    ${optionsBlock}
   `;
 
   initCopyButtons(detailDiv);
@@ -356,11 +386,42 @@ function clearSearch() {
 }
 
 // ============================================================
+// 渲染「常用选项」表格
+// ============================================================
+// 数据源为命令对象上的独立 options 字段：[{ flag, desc }, ...]
+// 有选项时显示标题 + 表头 + 终端风格表格；无选项时隐藏整个板块
+// ============================================================
+function renderOptionsTable(options) {
+  const wrap = document.getElementById('detailOptions');
+  const title = document.getElementById('detailOptionsTitle');
+  const head = document.getElementById('detailOptionsHead');
+  const body = document.getElementById('detailOptionsBody');
+
+  if (!wrap || !body) return;
+  const hasOptions = options && options.length;
+  wrap.style.display = hasOptions ? 'block' : 'none';
+  if (!hasOptions) return;
+
+  if (title) title.textContent = T.options + ':';
+
+  if (head) {
+    head.innerHTML = '<tr><th class="opt-flag">' + T.optionFlag + '</th>' +
+                     '<th class="opt-desc">' + T.optionDesc + '</th></tr>';
+  }
+
+  body.innerHTML = options.map(function (o) {
+    return '<tr><td class="opt-flag"><code>' + highlightCode(o.flag) + '</code></td>' +
+           '<td class="opt-desc">' + (o.desc || '') + '</td></tr>';
+  }).join('');
+}
+
+// ============================================================
 // 代码关键字高亮
 // ============================================================
 // 对命令行文本做简单的关键字着色
 // 匹配规则：
-//   ros1 / ros2  →  橙黄色（品牌色）
+//   ros1 / ros2 以及 roscore/rosrun/roslaunch/rosnode/rosparam/rosservice/rostopic/rosbag
+//   →  橙黄色（品牌色）
 //   后续可扩展更多关键字
 // ============================================================
 function highlightCode(text) {
@@ -370,8 +431,8 @@ function highlightCode(text) {
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
-    // ros1 / ros2 橙黄色高亮（大小写不敏感）
-    .replace(/\b(ros1|ros2)\b/gi, '<span class="hl-ros">$1</span>');
+    // ros1 / ros2 及 ROS1 子命令橙黄色高亮（大小写不敏感）
+    .replace(/\b(ros1|ros2|roscore|rosrun|roslaunch|rosnode|rosparam|rosservice|rostopic|rosbag)\b/gi, '<span class="hl-ros">$1</span>');
 }
 
 // ============================================================
