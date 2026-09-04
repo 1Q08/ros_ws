@@ -37,9 +37,12 @@ custom_js: /assets/js/commands.js
     <h2><img src="{{ "/assets/icons/icon-search.svg" | relative_url }}" alt="Search" class="section-icon"> Search Commands</h2>
 
     <div class="search-box">
-      <input type="text" id="searchInput" placeholder="Type a command or keyword to search..." autocomplete="off">
+      <input type="text" id="searchInput" placeholder="Type a command or keyword" autocomplete="off" aria-label="Search commands">
       <button onclick="clearSearch()">Clear</button>
     </div>
+
+    <!-- Search scope hint -->
+    <p class="search-hint">Search across ROS 1 / ROS 2 command names, descriptions, and keywords. Fuzzy matching supported (e.g. pkg matches ros2 pkg list).</p>
 
     <div id="searchResults" class="search-results"></div>
   </div>

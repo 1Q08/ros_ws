@@ -268,6 +268,15 @@
             }
           ],
           "notes": ""
+        },
+        {
+          "display": "doctor hello",
+          "title": "ros2 doctor hello",
+          "cmd": "ros2 doctor hello",
+          "desc": "检查多台主机之间的网络连通性",
+          "example": "ros2 doctor hello",
+          "options": [],
+          "notes": "与 ros2 wtf hello 功能相同"
         }
       ]
     },
@@ -576,6 +585,24 @@
             }
           ],
           "notes": "按消息类型过滤并输出所有匹配的话题名"
+        },
+        {
+          "display": "type",
+          "title": "ros2 topic type",
+          "cmd": "ros2 topic type <topic_name>",
+          "desc": "显示话题的消息类型",
+          "example": "ros2 topic type /chatter",
+          "options": [],
+          "notes": ""
+        },
+        {
+          "display": "delay",
+          "title": "ros2 topic delay",
+          "cmd": "ros2 topic delay <topic_name>",
+          "desc": "根据消息头中的时间戳显示话题的传输延迟",
+          "example": "ros2 topic delay /chatter",
+          "options": [],
+          "notes": ""
         }
       ]
     },
@@ -614,15 +641,6 @@
     "component": {
       "name": "组件命令",
       "commands": [
-        {
-          "display": "container",
-          "title": "ros2 component container",
-          "cmd": "ros2 component container <container_name>",
-          "desc": "启动一个组件容器节点",
-          "example": "ros2 component container /my_container",
-          "options": [],
-          "notes": "容器节点可在同一进程中运行多个组件，实现节点组合（composition）和零拷贝通信"
-        },
         {
           "display": "list",
           "title": "ros2 component list",
@@ -676,33 +694,6 @@
           "example": "ros2 component standalone composition composition::Talker",
           "options": [],
           "notes": "以独立进程运行，不放入容器"
-        },
-        {
-          "display": "nodes",
-          "title": "ros2 component nodes",
-          "cmd": "ros2 component nodes",
-          "desc": "列出所有运行的组件容器节点",
-          "example": "ros2 component nodes",
-          "options": [],
-          "notes": ""
-        },
-        {
-          "display": "register",
-          "title": "ros2 component register",
-          "cmd": "ros2 component register <container_name> <package_name> <component_type>",
-          "desc": "注册组件类型到容器（不加载）",
-          "example": "ros2 component register /my_container composition composition::Talker",
-          "options": [],
-          "notes": "仅注册组件类型，便于后续通过 ID 加载"
-        },
-        {
-          "display": "unregister",
-          "title": "ros2 component unregister",
-          "cmd": "ros2 component unregister <container_name> <component_type>",
-          "desc": "从容器取消注册组件类型，取消注册后该组件类型将无法再加载",
-          "example": "ros2 component unregister /my_container composition::Talker",
-          "options": [],
-          "notes": "ID 可通过 ros2 component list 查看"
         }
       ]
     },
@@ -846,6 +837,24 @@
     "param": {
       "name": "参数命令",
       "commands": [
+        {
+          "display": "delete",
+          "title": "ros2 param delete",
+          "cmd": "ros2 param delete <node_name> <parameter_name>",
+          "desc": "删除节点上的指定参数",
+          "example": "ros2 param delete /my_node my_param",
+          "options": [],
+          "notes": ""
+        },
+        {
+          "display": "describe",
+          "title": "ros2 param describe",
+          "cmd": "ros2 param describe <node_name> <parameter_name>",
+          "desc": "显示已声明参数的描述性信息，包括类型、范围和约束等",
+          "example": "ros2 param describe /my_node my_param",
+          "options": [],
+          "notes": ""
+        },
         {
           "display": "list",
           "title": "ros2 param list",
@@ -996,7 +1005,6 @@
               "flag": "-a, --all-services",
               "desc": "录制所有服务的服务事件"
             }
-
           ],
           "notes": ""
         },
@@ -1070,6 +1078,320 @@
           "cmd": "ros2 interface proto <type>",
           "desc": "将 ROS 接口定义转换为 Protocol Buffers 格式（用于跨语言通信）",
           "example": "ros2 interface proto std_msgs/msg/String",
+          "options": [],
+          "notes": ""
+        }
+      ]
+    },
+    "control": {
+      "name": "控制器命令",
+      "commands": [
+        {
+          "display": "cleanup_controller",
+          "title": "ros2 control cleanup_controller",
+          "cmd": "ros2 control cleanup_controller <controller_manager_name> <controller_name>",
+          "desc": "清理控制器管理器中的控制器",
+          "example": "ros2 control cleanup_controller /controller_manager joint_state_broadcaster",
+          "options": [],
+          "notes": ""
+        },
+        {
+          "display": "list_controller_types",
+          "title": "ros2 control list_controller_types",
+          "cmd": "ros2 control list_controller_types <controller_manager_name>",
+          "desc": "列出可用的控制器类型及其基类",
+          "example": "ros2 control list_controller_types /controller_manager",
+          "options": [],
+          "notes": ""
+        },
+        {
+          "display": "list_controllers",
+          "title": "ros2 control list_controllers",
+          "cmd": "ros2 control list_controllers <controller_manager_name>",
+          "desc": "列出已加载的控制器、类型与状态",
+          "example": "ros2 control list_controllers /controller_manager",
+          "options": [],
+          "notes": ""
+        },
+        {
+          "display": "list_hardware_components",
+          "title": "ros2 control list_hardware_components",
+          "cmd": "ros2 control list_hardware_components <controller_manager_name>",
+          "desc": "列出可用的硬件组件",
+          "example": "ros2 control list_hardware_components /controller_manager",
+          "options": [],
+          "notes": ""
+        },
+        {
+          "display": "list_hardware_interfaces",
+          "title": "ros2 control list_hardware_interfaces",
+          "cmd": "ros2 control list_hardware_interfaces <controller_manager_name>",
+          "desc": "列出可用的命令接口与状态接口",
+          "example": "ros2 control list_hardware_interfaces /controller_manager",
+          "options": [],
+          "notes": ""
+        },
+        {
+          "display": "load_controller",
+          "title": "ros2 control load_controller",
+          "cmd": "ros2 control load_controller <controller_manager_name> <controller_name>",
+          "desc": "在控制器管理器中加载一个控制器",
+          "example": "ros2 control load_controller /controller_manager joint_state_broadcaster",
+          "options": [],
+          "notes": ""
+        },
+        {
+          "display": "reload_controller_libraries",
+          "title": "ros2 control reload_controller_libraries",
+          "cmd": "ros2 control reload_controller_libraries <controller_manager_name>",
+          "desc": "重新加载控制器库",
+          "example": "ros2 control reload_controller_libraries /controller_manager",
+          "options": [],
+          "notes": ""
+        },
+        {
+          "display": "set_controller_state",
+          "title": "ros2 control set_controller_state",
+          "cmd": "ros2 control set_controller_state <controller_manager_name> <controller_name> <state>",
+          "desc": "调整控制器的状态",
+          "example": "ros2 control set_controller_state /controller_manager joint_state_broadcaster active",
+          "options": [],
+          "notes": ""
+        },
+        {
+          "display": "set_hardware_component_state",
+          "title": "ros2 control set_hardware_component_state",
+          "cmd": "ros2 control set_hardware_component_state <controller_manager_name> <hardware_component_name> <state>",
+          "desc": "调整硬件组件的状态",
+          "example": "ros2 control set_hardware_component_state /controller_manager robot active",
+          "options": [],
+          "notes": ""
+        },
+        {
+          "display": "switch_controllers",
+          "title": "ros2 control switch_controllers",
+          "cmd": "ros2 control switch_controllers <controller_manager_name> ...",
+          "desc": "在控制器管理器中切换控制器",
+          "example": "ros2 control switch_controllers /controller_manager --activate joint_state_broadcaster",
+          "options": [],
+          "notes": ""
+        },
+        {
+          "display": "unload_controller",
+          "title": "ros2 control unload_controller",
+          "cmd": "ros2 control unload_controller <controller_manager_name> <controller_name>",
+          "desc": "在控制器管理器中卸载一个控制器",
+          "example": "ros2 control unload_controller /controller_manager joint_state_broadcaster",
+          "options": [],
+          "notes": ""
+        },
+        {
+          "display": "view_controller_chains",
+          "title": "ros2 control view_controller_chains",
+          "cmd": "ros2 control view_controller_chains <controller_manager_name>",
+          "desc": "生成已加载链式控制器的示意图（/tmp/controller_diagram.gv.pdf）",
+          "example": "ros2 control view_controller_chains /controller_manager",
+          "options": [],
+          "notes": ""
+        }
+      ]
+    },
+    "security": {
+      "name": "安全命令",
+      "commands": [
+        {
+          "display": "create_enclave",
+          "title": "ros2 security create_enclave",
+          "cmd": "ros2 security create_enclave <keystore_path> <enclave_path>",
+          "desc": "在密钥库中创建安全域（enclave）",
+          "example": "ros2 security create_enclave keystore enclaves/talker",
+          "options": [],
+          "notes": ""
+        },
+        {
+          "display": "create_key",
+          "title": "ros2 security create_key",
+          "cmd": "ros2 security create_key <keystore_path> <enclave>",
+          "desc": "已弃用：创建安全域。请改用 create_enclave",
+          "example": "ros2 security create_key keystore enclaves/talker",
+          "options": [],
+          "notes": "已弃用，推荐使用 ros2 security create_enclave"
+        },
+        {
+          "display": "create_keystore",
+          "title": "ros2 security create_keystore",
+          "cmd": "ros2 security create_keystore <keystore_path>",
+          "desc": "创建密钥库（keystore）",
+          "example": "ros2 security create_keystore keystore",
+          "options": [],
+          "notes": ""
+        },
+        {
+          "display": "create_permission",
+          "title": "ros2 security create_permission",
+          "cmd": "ros2 security create_permission <keystore_path> <enclave> <permissions_file>",
+          "desc": "创建权限文件",
+          "example": "ros2 security create_permission keystore enclaves/talker talker_permissions.xml",
+          "options": [],
+          "notes": ""
+        },
+        {
+          "display": "generate_artifacts",
+          "title": "ros2 security generate_artifacts",
+          "cmd": "ros2 security generate_artifacts <keystore_path> <policies_file>",
+          "desc": "根据身份和策略文件生成密钥与权限文件",
+          "example": "ros2 security generate_artifacts keystore policies.xml",
+          "options": [],
+          "notes": ""
+        },
+        {
+          "display": "generate_policy",
+          "title": "ros2 security generate_policy",
+          "cmd": "ros2 security generate_policy <policy_file>",
+          "desc": "从 ROS 图数据生成 XML 策略文件",
+          "example": "ros2 security generate_policy policies.xml",
+          "options": [],
+          "notes": ""
+        },
+        {
+          "display": "list_enclaves",
+          "title": "ros2 security list_enclaves",
+          "cmd": "ros2 security list_enclaves <keystore_path>",
+          "desc": "列出密钥库中的安全域",
+          "example": "ros2 security list_enclaves keystore",
+          "options": [],
+          "notes": ""
+        },
+        {
+          "display": "list_keys",
+          "title": "ros2 security list_keys",
+          "cmd": "ros2 security list_keys <keystore_path>",
+          "desc": "已弃用：列出密钥库中的安全域。请改用 list_enclaves",
+          "example": "ros2 security list_keys keystore",
+          "options": [],
+          "notes": "已弃用，推荐使用 ros2 security list_enclaves"
+        }
+      ]
+    },
+    "lifecycle": {
+      "name": "生命周期命令",
+      "commands": [
+        {
+          "display": "get",
+          "title": "ros2 lifecycle get",
+          "cmd": "ros2 lifecycle get <node_name>",
+          "desc": "获取一个或多个节点的生命周期状态",
+          "example": "ros2 lifecycle get /my_node",
+          "options": [],
+          "notes": ""
+        },
+        {
+          "display": "list",
+          "title": "ros2 lifecycle list",
+          "cmd": "ros2 lifecycle list <node_name>",
+          "desc": "列出可用的生命周期转换",
+          "example": "ros2 lifecycle list /my_node",
+          "options": [],
+          "notes": ""
+        },
+        {
+          "display": "nodes",
+          "title": "ros2 lifecycle nodes",
+          "cmd": "ros2 lifecycle nodes",
+          "desc": "列出具有生命周期管理的节点",
+          "example": "ros2 lifecycle nodes",
+          "options": [],
+          "notes": ""
+        },
+        {
+          "display": "set",
+          "title": "ros2 lifecycle set",
+          "cmd": "ros2 lifecycle set <node_name> <transition>",
+          "desc": "触发生命周期状态转换",
+          "example": "ros2 lifecycle set /my_node activate",
+          "options": [],
+          "notes": ""
+        }
+      ]
+    },
+    "daemon": {
+      "name": "守护进程命令",
+      "commands": [
+        {
+          "display": "start",
+          "title": "ros2 daemon start",
+          "cmd": "ros2 daemon start",
+          "desc": "启动守护进程（如果尚未运行）",
+          "example": "ros2 daemon start",
+          "options": [],
+          "notes": ""
+        },
+        {
+          "display": "status",
+          "title": "ros2 daemon status",
+          "cmd": "ros2 daemon status",
+          "desc": "显示守护进程的状态",
+          "example": "ros2 daemon status",
+          "options": [],
+          "notes": ""
+        },
+        {
+          "display": "stop",
+          "title": "ros2 daemon stop",
+          "cmd": "ros2 daemon stop",
+          "desc": "停止守护进程（如果正在运行）",
+          "example": "ros2 daemon stop",
+          "options": [],
+          "notes": ""
+        }
+      ]
+    },
+    "multicast": {
+      "name": "组播命令",
+      "commands": [
+        {
+          "display": "receive",
+          "title": "ros2 multicast receive",
+          "cmd": "ros2 multicast receive",
+          "desc": "接收单个 UDP 组播包",
+          "example": "ros2 multicast receive",
+          "options": [],
+          "notes": ""
+        },
+        {
+          "display": "send",
+          "title": "ros2 multicast send",
+          "cmd": "ros2 multicast send",
+          "desc": "发送单个 UDP 组播包",
+          "example": "ros2 multicast send",
+          "options": [],
+          "notes": ""
+        }
+      ]
+    },
+    "plugin": {
+      "name": "插件命令",
+      "commands": [
+        {
+          "display": "list",
+          "title": "ros2 plugin list",
+          "cmd": "ros2 plugin list",
+          "desc": "列出可用的插件",
+          "example": "ros2 plugin list",
+          "options": [],
+          "notes": ""
+        }
+      ]
+    },
+    "wtf": {
+      "name": "诊断命令",
+      "commands": [
+        {
+          "display": "hello",
+          "title": "ros2 wtf hello",
+          "cmd": "ros2 wtf hello",
+          "desc": "检查多台主机之间的网络连通性",
+          "example": "ros2 wtf hello",
           "options": [],
           "notes": ""
         }

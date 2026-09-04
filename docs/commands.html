@@ -54,10 +54,13 @@ custom_js: /assets/js/commands.js
     
     <!-- 搜索输入框 + 清除按钮（横向排列） -->
     <div class="search-box">
-      <input type="text" id="searchInput" placeholder="输入命令或关键词搜索..." autocomplete="off">
+      <input type="text" id="searchInput" placeholder="输入命令名或关键词" autocomplete="off" aria-label="搜索命令">
       <button onclick="clearSearch()">清除</button>
     </div>
-    
+
+    <!-- 搜索范围提示 -->
+    <p class="search-hint">搜索范围：ROS 1 / ROS 2 的命令名、说明与关键词，支持模糊匹配（如输入 pkg 可匹配 ros2 pkg list）</p>
+
     <!-- 搜索结果容器（动态填充） -->
     <div id="searchResults" class="search-results"></div>
   </div>

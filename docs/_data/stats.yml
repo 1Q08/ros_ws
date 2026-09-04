@@ -1,7 +1,7 @@
 # 站点统计数字（单点维护）
 # 修改命令数据后，请同步更新此处数字，并运行 tools/check_commands.py 校验
-commands: 80
-categories: 17
+commands: 112
+categories: 24
 versions: 2
 
 ros1:
@@ -9,5 +9,5 @@ ros1:
   categories: 6
 
 ros2:
-  commands: 62
-  categories: 11
+  commands: 94
+  categories: 18

@@ -58,6 +58,11 @@ const T = I18N[PAGE_LANG];
 // 结构: { ros1: { core: {...}, topic: {...}, ... }, ros2: {...} }
 let commandsData = null;
 
+// 扁平化搜索索引（数据加载后构建一次，避免每次按键全量遍历 + 重复归一化）
+// 元素: { versionKey, versionName, category, rawCmd, normCmd, rawDisplay,
+//         normDisplay, rawDesc, normDesc, rawCat, normCat, cmd }
+let searchIndex = [];
+
 // ============================================================
 // 初始化：页面加载完成后挂载全部交互（B3：合并为单一入口）
 // ============================================================
@@ -69,6 +74,7 @@ function initApp() {
     .then(response => response.json())
     .then(data => {
       commandsData = data;
+      buildSearchIndex();
       renderSummaryTable();
     })
     .catch(error => console.error('加载命令数据失败:', error));
@@ -271,6 +277,78 @@ function debounce(fn, delay) {
   };
 }
 
+// 归一化：去除空格、下划线、连字符、斜杠、标点等分隔符，便于模糊匹配
+function normalizeSearch(s) {
+  return String(s || '').toLowerCase().replace(/[\s_\-/<>:=[]{}.,'\"()|;]/g, '');
+}
+
+// 判断 needle 是否为 haystack 的子序列（字符按顺序出现即可）
+function isSubsequence(needle, haystack) {
+  let i = 0;
+  for (let j = 0; j < haystack.length && i < needle.length; j++) {
+    if (haystack[j] === needle[i]) i++;
+  }
+  return i === needle.length;
+}
+
+// 构建扁平化搜索索引（数据加载后调用一次）
+// 预计算各字段的小写原文与归一化文本，后续搜索无需重复处理
+function buildSearchIndex() {
+  const versionNames = { ros1: 'ROS 1', ros2: 'ROS 2' };
+  const idx = [];
+
+  for (const version in commandsData) {
+    if (version !== 'ros1' && version !== 'ros2') continue;
+    for (const category in commandsData[version]) {
+      const catName = commandsData[version][category].name;
+      commandsData[version][category].commands.forEach(function (cmd) {
+        idx.push({
+          versionKey: version,
+          versionName: versionNames[version],
+          category: catName,
+          rawCmd: String(cmd.cmd || '').toLowerCase(),
+          normCmd: normalizeSearch(cmd.cmd),
+          rawDisplay: String(cmd.display || '').toLowerCase(),
+          normDisplay: normalizeSearch(cmd.display),
+          rawDesc: String(cmd.desc || '').toLowerCase(),
+          normDesc: normalizeSearch(cmd.desc),
+          rawCat: catName.toLowerCase(),
+          normCat: normalizeSearch(catName),
+          cmd: cmd
+        });
+      });
+    }
+  }
+
+  searchIndex = idx;
+}
+
+// 基于预计算字段评分：精确包含 > 归一化包含 > 子序列，未命中返回 0
+function scoreField(kwRaw, kwNorm, rawText, normText) {
+  if (!rawText) return 0;
+  if (rawText.includes(kwRaw)) return 100;
+  if (!kwNorm || !normText) return 0;
+  if (normText.includes(kwNorm)) return 80;
+  if (isSubsequence(kwNorm, normText)) return 60 - Math.min(kwNorm.length, 20);
+  return 0;
+}
+
+// 正则特殊字符转义
+function escapeRegExp(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+// 高亮命中片段：先转义 HTML，再对忽略大小写的关键词加 <mark> 标记
+// 仅对“精确包含”命中做高亮；子序列/归一化命中因无法无损映射回原文，不做标记
+function highlightText(text, keyword) {
+  if (!text) return '';
+  const esc = escapeHtml(text);
+  if (!keyword) return esc;
+  const kw = escapeHtml(keyword);
+  if (!kw || esc.toLowerCase().indexOf(kw.toLowerCase()) === -1) return esc;
+  return esc.replace(new RegExp(escapeRegExp(kw), 'gi'), '<mark>$&</mark>');
+}
+
 function setupSearch() {
   const searchInput = document.getElementById('searchInput');
   if (!searchInput) return;
@@ -285,27 +363,31 @@ function setupSearch() {
       return;
     }
 
+    const kwNorm = normalizeSearch(keyword);
     const results = [];
 
-    // 遍历所有版本（跳过 common，已删除）
-    for (const version in commandsData) {
-      if (version === 'common') continue;
-
-      // 遍历该版本下的所有分类
-      for (const category in commandsData[version]) {
-        commandsData[version][category].commands.forEach(cmd => {
-          // 匹配条件：命令名或中文描述包含关键词
-          if (cmd.cmd.toLowerCase().includes(keyword) ||
-              cmd.desc.toLowerCase().includes(keyword)) {
-            results.push({
-              version: version.toUpperCase(),      // ROS1 / ROS2
-              category: commandsData[version][category].name,  // 中文分类名
-              ...cmd  // 展开命令对象（cmd, desc, example, notes）
-            });
-          }
+    // 遍历预建索引，对命令名、显示名、说明、分类名评分（字段已预计算，无需每次归一化）
+    for (let i = 0; i < searchIndex.length; i++) {
+      const entry = searchIndex[i];
+      const score = Math.max(
+        scoreField(keyword, kwNorm, entry.rawCmd, entry.normCmd),
+        scoreField(keyword, kwNorm, entry.rawDisplay, entry.normDisplay),
+        scoreField(keyword, kwNorm, entry.rawDesc, entry.normDesc),
+        scoreField(keyword, kwNorm, entry.rawCat, entry.normCat)
+      );
+      if (score > 0) {
+        results.push({
+          versionKey: entry.versionKey,
+          versionName: entry.versionName,
+          category: entry.category,
+          score: score,
+          ...entry.cmd  // 展开命令对象（cmd, desc, example, notes）
         });
       }
     }
+
+    // 按匹配质量降序排列，让更贴切的命令排在前列
+    results.sort(function (a, b) { return b.score - a.score; });
 
     // 无匹配结果时显示提示
     if (results.length === 0) {
@@ -313,15 +395,15 @@ function setupSearch() {
       return;
     }
 
-    // 渲染搜索结果列表
+    // 渲染搜索结果列表（版本胶囊按 ros1/ros2 使用不同颜色）
     let html = '<div class="results-list">';
     results.forEach((cmd, index) => {
       html += `
         <div class="result-item" onclick="showSearchResult(${index})">
-          <span class="result-version">${escapeHtml(cmd.version)}</span>
+          <span class="result-version result-version--${cmd.versionKey}">${escapeHtml(cmd.versionName)}</span>
           <span class="result-category">${escapeHtml(cmd.category)}</span>
-          <code class="result-cmd">${escapeHtml(cmd.cmd)}</code>
-          <span class="result-desc">${escapeHtml(cmd.desc)}</span>
+          <code class="result-cmd">${highlightText(cmd.cmd, keyword)}</code>
+          <span class="result-desc">${highlightText(cmd.desc, keyword)}</span>
         </div>
       `;
     });
@@ -329,8 +411,9 @@ function setupSearch() {
 
     resultsDiv.innerHTML = html;
 
-    // 保存当前搜索结果，供点击时获取完整数据
+    // 保存当前搜索结果与关键词，供点击时获取完整数据与命中高亮
     window.currentSearchResults = results;
+    window.currentSearchKeyword = keyword;
   }, 150));
 }
 
@@ -375,8 +458,8 @@ function showSearchResult(index) {
       <h3>${escapeHtml(cmd.cmd)}</h3>
       <button class="close-detail" onclick="closeSearchDetail()">×</button>
     </div>
-    <p><strong>${T.version}:</strong> ${escapeHtml(cmd.version)} / ${escapeHtml(cmd.category)}</p>
-    <p><strong>${T.description}:</strong> ${escapeHtml(cmd.desc)}</p>
+    <p><strong>${T.version}:</strong> ${escapeHtml(cmd.versionName)} / ${escapeHtml(cmd.category)}</p>
+    <p><strong>${T.description}:</strong> ${highlightText(cmd.desc, window.currentSearchKeyword || '')}</p>
     <p><strong>${T.example}:</strong></p>
     <pre class="highlight-code"><code>${highlightCode(cmd.example)}</code></pre>
     ${notesBlock}

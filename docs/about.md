@@ -58,8 +58,9 @@ custom_css: /assets/css/about.css
     </div>
     <div class="card-body">
       <ul>
-        <li>内容以 Markdown 编写，托管在 GitHub Pages。</li>
-        <li>欢迎提交 Issue 或 PR 补充你常用的命令。</li>
+        <li>内容以 Markdown 编写，托管在 GitHub Pages</li>
+        <li>欢迎提交 Issue 或 PR 补充你常用的命令</li>
+        <li>有想法也可以在评论区提意见，一起把这个工具做得更好</li>
       </ul>
     </div>
   </div>
@@ -102,6 +103,7 @@ custom_css: /assets/css/about.css
     </div>
     <div class="card-body changelog-body">
       <ul class="changelog-list">
+        <li><span class="cl-date">2026-09-04</span> 搜索板块支持模糊搜索、命中高亮并优化搜索性能，完善命令数据</li>
         <li><span class="cl-date">2026-09-02</span> 重构命令数据文件、修复 giscus 评论区概率性填充不完全、优化项目代码</li>
         <li><span class="cl-date">2026-08-28</span> 新增英文版站点（`/en/`），优化命令速查表体验，美化主页与关于页面</li>
         <li><span class="cl-date">2026-08-27</span> 首页新增 giscus 评论区（懒加载 + 深浅色切换）、全站背景粒子动画、404 页面升级为 ROS 终端风格、页脚访问量徽章</li>

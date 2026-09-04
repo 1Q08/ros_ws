@@ -60,8 +60,9 @@ custom_css: /assets/css/about.css
     </div>
     <div class="card-body">
       <ul>
-        <li>Content is written in Markdown and hosted on GitHub Pages.</li>
-        <li>Issues and pull requests are welcome to add your frequently used commands.</li>
+        <li>Content is written in Markdown and hosted on GitHub Pages</li>
+        <li>Issues and pull requests are welcome to add your frequently used commands</li>
+        <li>Feel free to share your ideas in the comments section too — let's make this tool better together</li>
       </ul>
     </div>
   </div>
@@ -104,6 +105,7 @@ custom_css: /assets/css/about.css
     </div>
     <div class="card-body changelog-body">
       <ul class="changelog-list">
+        <li><span class="cl-date">2026-09-04</span> Added fuzzy search, hit highlighting, and search performance optimization; completed command data</li>
         <li><span class="cl-date">2026-09-02</span> Refactored command data, fixed giscus comments occasionally rendering incompletely, and optimized the codebase</li>
         <li><span class="cl-date">2026-08-28</span> Added the English site (`/en/`), improved the command cheatsheet experience, and beautified the home &amp; about pages</li>
         <li><span class="cl-date">2026-08-27</span> Added giscus comments (lazy loading + theme switching), a full-site particle background, a ROS-terminal-style 404 page, and a traffic badge in the footer</li>
