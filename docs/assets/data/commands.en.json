@@ -10,7 +10,10 @@
           "desc": "Start the ROS Master and the parameter server",
           "example": "roscore",
           "options": [],
-          "notes": "Must be started before running any ROS nodes"
+          "notes": "Must be started before running any ROS nodes",
+          "distros": [
+            "noetic"
+          ]
         },
         {
           "display": "rosrun",
@@ -19,7 +22,10 @@
           "desc": "Run a node from the specified package",
           "example": "rosrun turtlesim turtlesim_node",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "noetic"
+          ]
         },
         {
           "display": "roslaunch",
@@ -28,7 +34,10 @@
           "desc": "Launch multiple nodes from a launch file, with support for parameter passing and node composition",
           "example": "roslaunch my_package my_launch.launch",
           "options": [],
-          "notes": "Launch files are XML-based and define the launch configuration for nodes, parameters, topics, and services"
+          "notes": "Launch files are XML-based and define the launch configuration for nodes, parameters, topics, and services",
+          "distros": [
+            "noetic"
+          ]
         }
       ]
     },
@@ -42,7 +51,10 @@
           "desc": "List all topics currently published/subscribed in the system",
           "example": "rostopic list",
           "options": [],
-          "notes": "Filter with grep, e.g. rostopic list | grep chatter"
+          "notes": "Filter with grep, e.g. rostopic list | grep chatter",
+          "distros": [
+            "noetic"
+          ]
         },
         {
           "display": "rostopic echo",
@@ -51,7 +63,10 @@
           "desc": "Print messages published on a topic in real time; press Ctrl+C to stop",
           "example": "rostopic echo /chatter",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "noetic"
+          ]
         },
         {
           "display": "rostopic pub",
@@ -65,7 +80,10 @@
               "desc": "Publish messages continuously at the specified rate"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "noetic"
+          ]
         },
         {
           "display": "rostopic hz",
@@ -74,7 +92,10 @@
           "desc": "Display the topic publish rate, and check whether a topic publishes at the expected rate",
           "example": "rostopic hz /chatter",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "noetic"
+          ]
         }
       ]
     },
@@ -88,7 +109,10 @@
           "desc": "List all running nodes",
           "example": "rosnode list",
           "options": [],
-          "notes": "Shows all active ROS nodes in the current system"
+          "notes": "Shows all active ROS nodes in the current system",
+          "distros": [
+            "noetic"
+          ]
         },
         {
           "display": "rosnode info",
@@ -97,7 +121,10 @@
           "desc": "Show detailed node information, including its published/subscribed topics, services, and parameters",
           "example": "rosnode info /talker",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "noetic"
+          ]
         },
         {
           "display": "rosnode kill",
@@ -106,7 +133,10 @@
           "desc": "Forcefully shut down a node",
           "example": "rosnode kill /talker",
           "options": [],
-          "notes": "Forcefully shuts down the node and may produce warnings"
+          "notes": "Forcefully shuts down the node and may produce warnings",
+          "distros": [
+            "noetic"
+          ]
         }
       ]
     },
@@ -120,7 +150,10 @@
           "desc": "List all available services",
           "example": "rosservice list",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "noetic"
+          ]
         },
         {
           "display": "rosservice call",
@@ -129,7 +162,10 @@
           "desc": "Call a service and return the result; args are passed in YAML format",
           "example": "rosservice call /add_two_ints \"a: 1, b: 2\"",
           "options": [],
-          "notes": "Arguments must be passed in the format defined by the service"
+          "notes": "Arguments must be passed in the format defined by the service",
+          "distros": [
+            "noetic"
+          ]
         }
       ]
     },
@@ -143,7 +179,10 @@
           "desc": "List all parameters on the parameter server",
           "example": "rosparam list",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "noetic"
+          ]
         },
         {
           "display": "rosparam set",
@@ -152,7 +191,10 @@
           "desc": "Set a parameter value",
           "example": "rosparam set /my_param 10",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "noetic"
+          ]
         },
         {
           "display": "rosparam get",
@@ -161,7 +203,10 @@
           "desc": "Get a parameter value",
           "example": "rosparam get /my_param",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "noetic"
+          ]
         }
       ]
     },
@@ -184,7 +229,10 @@
               "desc": "Record all topics"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "noetic"
+          ]
         },
         {
           "display": "rosbag play",
@@ -198,7 +246,10 @@
               "desc": "Adjust the playback rate"
             }
           ],
-          "notes": "Useful for testing and simulation; messages are published with their original timestamps during replay"
+          "notes": "Useful for testing and simulation; messages are published with their original timestamps during replay",
+          "distros": [
+            "noetic"
+          ]
         },
         {
           "display": "rosbag info",
@@ -207,7 +258,10 @@
           "desc": "Show bag file information, including duration, topics, and message types",
           "example": "rosbag info my_data.bag",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "noetic"
+          ]
         }
       ]
     }
@@ -240,7 +294,11 @@
               "desc": "Remap topic/service names"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "ros2 launch",
@@ -249,7 +307,11 @@
           "desc": "Launch multiple nodes from a launch file",
           "example": "ros2 launch my_package my_launch.py",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "ros2 doctor",
@@ -267,7 +329,11 @@
               "desc": "Exit with a non-zero status when an error is found"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "doctor hello",
@@ -276,7 +342,11 @@
           "desc": "Check network connectivity between multiple hosts",
           "example": "ros2 doctor hello",
           "options": [],
-          "notes": "Same functionality as ros2 wtf hello"
+          "notes": "Same functionality as ros2 wtf hello",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -290,7 +360,11 @@
           "desc": "List all available packages in the current environment",
           "example": "ros2 pkg list",
           "options": [],
-          "notes": "Filter with grep, e.g. ros2 pkg list | grep turtlesim"
+          "notes": "Filter with grep, e.g. ros2 pkg list | grep turtlesim",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "prefix",
@@ -299,7 +373,11 @@
           "desc": "Return the installation directory of a package, useful for locating its source code or resources",
           "example": "ros2 pkg prefix turtlesim",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "executables",
@@ -308,7 +386,11 @@
           "desc": "List all executables provided by a package",
           "example": "ros2 pkg executables turtlesim",
           "options": [],
-          "notes": "Without a package name, lists executables of all packages; with a package name, only that package's"
+          "notes": "Without a package name, lists executables of all packages; with a package name, only that package's",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "create",
@@ -346,7 +428,11 @@
               "desc": "Set the maintainer's name"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "xml",
@@ -355,7 +441,11 @@
           "desc": "Print the package.xml contents of the specified package, for viewing package metadata such as dependencies, version, and license",
           "example": "ros2 pkg xml turtlesim",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -386,7 +476,11 @@
               "desc": "Pass additional arguments to CMake"
             }
           ],
-          "notes": "Run from the workspace root with the environment sourced; source the target ROS 2 distribution and dependencies before building"
+          "notes": "Run from the workspace root with the environment sourced; source the target ROS 2 distribution and dependencies before building",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "list",
@@ -404,7 +498,11 @@
               "desc": "Show only package paths"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "test",
@@ -426,7 +524,11 @@
               "desc": "Pass additional arguments to CTest"
             }
           ],
-          "notes": "Run colcon build before running colcon test"
+          "notes": "Run colcon build before running colcon test",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "test-result",
@@ -444,7 +546,11 @@
               "desc": "Show verbose output"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "graph",
@@ -462,7 +568,11 @@
               "desc": "Show package type legend information"
             }
           ],
-          "notes": "Use colcon graph --dot to generate a .dot file, then render it with dot -Tpng dependencies.dot -o dependencies.png"
+          "notes": "Use colcon graph --dot to generate a .dot file, then render it with dot -Tpng dependencies.dot -o dependencies.png",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -476,7 +586,11 @@
           "desc": "Show help for topic commands",
           "example": "ros2 topic -h",
           "options": [],
-          "notes": "Shows all ros2 topic subcommands and usage; also works for subcommands, e.g. ros2 topic pub -h"
+          "notes": "Shows all ros2 topic subcommands and usage; also works for subcommands, e.g. ros2 topic pub -h",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "list",
@@ -494,7 +608,11 @@
               "desc": "Show detailed info (including QoS settings and publisher/subscriber counts)"
             }
           ],
-          "notes": "Filter with grep, e.g. ros2 topic list | grep chatter"
+          "notes": "Filter with grep, e.g. ros2 topic list | grep chatter",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "echo",
@@ -503,7 +621,11 @@
           "desc": "Print messages published on a topic in real time; press Ctrl+C to stop",
           "example": "ros2 topic echo /chatter",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "info",
@@ -517,7 +639,11 @@
               "desc": "Show detailed info (including QoS settings and publisher/subscriber counts)"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "pub",
@@ -543,7 +669,11 @@
               "desc": "Read message contents from a YAML file (e.g. the STDOUT of ros2 topic echo)"
             }
           ],
-          "notes": "Tip: after entering the topic name and message type, press Tab to auto-complete the YAML field template, edit the values, and press Enter to publish\nExample:\n  ros2 topic pub /turtle1/cmd_vel geometry_msgs/msg/Twist <TAB>"
+          "notes": "Tip: after entering the topic name and message type, press Tab to auto-complete the YAML field template, edit the values, and press Enter to publish\nExample:\n  ros2 topic pub /turtle1/cmd_vel geometry_msgs/msg/Twist <TAB>",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "hz",
@@ -552,7 +682,11 @@
           "desc": "Display the topic publish rate, and check whether a topic publishes at the expected rate",
           "example": "ros2 topic hz /chatter",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "bw",
@@ -570,7 +704,11 @@
               "desc": "Seconds to wait for node discovery"
             }
           ],
-          "notes": "Bandwidth reflects the receiving rate on the subscription side, which may be affected by platform resources and QoS settings, and may not exactly match the publisher's bandwidth"
+          "notes": "Bandwidth reflects the receiving rate on the subscription side, which may be affected by platform resources and QoS settings, and may not exactly match the publisher's bandwidth",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "find",
@@ -584,7 +722,11 @@
               "desc": "Only display the number of matching topics"
             }
           ],
-          "notes": "Filters topics by message type and outputs all matching topic names"
+          "notes": "Filters topics by message type and outputs all matching topic names",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "type",
@@ -593,7 +735,11 @@
           "desc": "Print the message type of a topic",
           "example": "ros2 topic type /chatter",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "delay",
@@ -602,7 +748,11 @@
           "desc": "Display the delay of a topic computed from timestamps in the message header",
           "example": "ros2 topic delay /chatter",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -616,7 +766,11 @@
           "desc": "Show help for node commands",
           "example": "ros2 node -h",
           "options": [],
-          "notes": "Shows all ros2 node subcommands and usage; also works for subcommands, e.g. ros2 node list -h"
+          "notes": "Shows all ros2 node subcommands and usage; also works for subcommands, e.g. ros2 node list -h",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "list",
@@ -625,7 +779,11 @@
           "desc": "List all running nodes",
           "example": "ros2 node list",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "info",
@@ -634,7 +792,11 @@
           "desc": "Show detailed node information, including published/subscribed topics, services, and actions",
           "example": "ros2 node info /talker",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -648,7 +810,11 @@
           "desc": "List all components in a container node",
           "example": "ros2 component list",
           "options": [],
-          "notes": "Shows loaded components in the specified container node; without a container name, lists all"
+          "notes": "Shows loaded components in the specified container node; without a container name, lists all",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "types",
@@ -657,7 +823,11 @@
           "desc": "List available component types",
           "example": "ros2 component types",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "load",
@@ -675,7 +845,11 @@
               "desc": "Remap topic/service names"
             }
           ],
-          "notes": "Component types can be listed with ros2 component types; once loaded, the component runs inside the container node"
+          "notes": "Component types can be listed with ros2 component types; once loaded, the component runs inside the container node",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "unload",
@@ -684,7 +858,11 @@
           "desc": "Unload a component from a container node",
           "example": "ros2 component unload /my_container 1",
           "options": [],
-          "notes": "The component ID can be found with ros2 component list"
+          "notes": "The component ID can be found with ros2 component list",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "standalone",
@@ -693,7 +871,11 @@
           "desc": "Run a component as a standalone node",
           "example": "ros2 component standalone composition composition::Talker",
           "options": [],
-          "notes": "Runs in its own process, outside a container"
+          "notes": "Runs in its own process, outside a container",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -712,7 +894,11 @@
               "desc": "Also show service types"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "info",
@@ -726,7 +912,11 @@
               "desc": "Seconds to wait for node discovery"
             }
           ],
-          "notes": "Prints information about the specified service, including its type and QoS settings"
+          "notes": "Prints information about the specified service, including its type and QoS settings",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "type",
@@ -735,7 +925,11 @@
           "desc": "Show the type of a service",
           "example": "ros2 service type /add_two_ints",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "find",
@@ -744,7 +938,11 @@
           "desc": "List available services of the specified type",
           "example": "ros2 service find example_interfaces/srv/AddTwoInts",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "call",
@@ -753,7 +951,11 @@
           "desc": "Call a service and return the result; request arguments are passed in YAML format, and press Ctrl+C to stop waiting for a response",
           "example": "ros2 service call /add_two_ints example_interfaces/srv/AddTwoInts \"{a: 1, b: 2}\"",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "echo",
@@ -779,7 +981,11 @@
               "desc": "Truncate arrays, bytes, and strings to the given length (default 128)"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -798,7 +1004,11 @@
               "desc": "Also show action types"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "info",
@@ -807,7 +1017,11 @@
           "desc": "Show detailed information about the specified action, including its type and server/client node names",
           "example": "ros2 action info /turtle1/rotate_absolute",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "type",
@@ -816,7 +1030,11 @@
           "desc": "Show the type of an action",
           "example": "ros2 action type /turtle1/rotate_absolute",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "send_goal",
@@ -830,7 +1048,11 @@
               "desc": "Show feedback messages"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -844,7 +1066,11 @@
           "desc": "Delete a parameter from a node",
           "example": "ros2 param delete /my_node my_param",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "describe",
@@ -853,7 +1079,11 @@
           "desc": "Show descriptive information about a declared parameter, including type, range, and constraints",
           "example": "ros2 param describe /my_node my_param",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "list",
@@ -862,7 +1092,11 @@
           "desc": "List all parameters of the specified node, including their names, types, and current values",
           "example": "ros2 param list /my_node",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "set",
@@ -871,7 +1105,11 @@
           "desc": "Set a parameter value, supporting int, float, bool, string, list, and other types; press Ctrl+C to stop waiting for a response",
           "example": "ros2 param set /my_node my_param 10",
           "options": [],
-          "notes": "After setting a parameter, the node receives a parameter update event that can be handled inside the node"
+          "notes": "After setting a parameter, the node receives a parameter update event that can be handled inside the node",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "get",
@@ -880,7 +1118,11 @@
           "desc": "Get a parameter value, showing its type and current value; press Ctrl+C to stop waiting for a response",
           "example": "ros2 param get /my_node my_param",
           "options": [],
-          "notes": "Gets a parameter value from the specified node, useful for debugging and verifying parameter settings"
+          "notes": "Gets a parameter value from the specified node, useful for debugging and verifying parameter settings",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "dump",
@@ -894,7 +1136,11 @@
               "desc": "Specify the output directory"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "load",
@@ -908,7 +1154,11 @@
               "desc": "Specify the node type"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -922,7 +1172,11 @@
           "desc": "Show help for bag commands",
           "example": "ros2 bag -h",
           "options": [],
-          "notes": "Shows all ros2 bag subcommands and usage; also works for subcommands, e.g. ros2 bag record -h"
+          "notes": "Shows all ros2 bag subcommands and usage; also works for subcommands, e.g. ros2 bag record -h",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "burst",
@@ -931,7 +1185,11 @@
           "desc": "Burst-replay the data of a specified topic in a bag, for fast replay or testing",
           "example": "ros2 bag burst my_data.db3 /chatter",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "convert",
@@ -940,7 +1198,11 @@
           "desc": "Convert a bag file into a new bag with the specified storage/serialization format",
           "example": "ros2 bag convert -i input.bag -o output_dir --output-options 'storage: mcap'",
           "options": [],
-          "notes": "Converts storage/serialization formats, e.g. from rosbag1 (.bag) to sqlite3/mcap; use --output-options to set output options such as storage and serialization"
+          "notes": "Converts storage/serialization formats, e.g. from rosbag1 (.bag) to sqlite3/mcap; use --output-options to set output options such as storage and serialization",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "info",
@@ -949,7 +1211,11 @@
           "desc": "Show bag file information, including duration, topics, and message types",
           "example": "ros2 bag info my_data.db3",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "list",
@@ -958,7 +1224,11 @@
           "desc": "Show available bag plugin information",
           "example": "ros2 bag list",
           "options": [],
-          "notes": "Lists available storage and serialization plugins, such as sqlite3 and mcap"
+          "notes": "Lists available storage and serialization plugins, such as sqlite3 and mcap",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "play",
@@ -984,7 +1254,11 @@
               "desc": "Publish the /clock topic to synchronize time"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "record",
@@ -1006,7 +1280,11 @@
               "desc": "Record service events for all services"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "reindex",
@@ -1015,7 +1293,11 @@
           "desc": "Re-index a bag file's metadata and rebuild missing or corrupted indexes",
           "example": "ros2 bag reindex my_data.db3",
           "options": [],
-          "notes": "Used to rebuild when the metadata file is missing or corrupted"
+          "notes": "Used to rebuild when the metadata file is missing or corrupted",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -1029,7 +1311,11 @@
           "desc": "Show help for interface commands",
           "example": "ros2 interface -h",
           "options": [],
-          "notes": "Shows all ros2 interface subcommands and usage; also works for subcommands, e.g. ros2 interface show -h"
+          "notes": "Shows all ros2 interface subcommands and usage; also works for subcommands, e.g. ros2 interface show -h",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "list",
@@ -1038,7 +1324,11 @@
           "desc": "List all available interface types (msg/srv/action)",
           "example": "ros2 interface list",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "show",
@@ -1052,7 +1342,11 @@
               "desc": "Do not show comments"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "package",
@@ -1061,7 +1355,11 @@
           "desc": "List all interface types (msg/srv/action) in the specified package, including the complete list of messages, services, and actions",
           "example": "ros2 interface package std_msgs",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "packages",
@@ -1070,7 +1368,11 @@
           "desc": "List all packages that provide interface definitions",
           "example": "ros2 interface packages",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "proto",
@@ -1079,7 +1381,11 @@
           "desc": "Convert a ROS interface definition to Protocol Buffers format (for cross-language communication)",
           "example": "ros2 interface proto std_msgs/msg/String",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -1093,7 +1399,11 @@
           "desc": "Clean up a controller in a controller manager",
           "example": "ros2 control cleanup_controller /controller_manager joint_state_broadcaster",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "list_controller_types",
@@ -1102,7 +1412,11 @@
           "desc": "List the available controller types and their base classes",
           "example": "ros2 control list_controller_types /controller_manager",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "list_controllers",
@@ -1111,7 +1425,11 @@
           "desc": "List the loaded controllers, their type, and status",
           "example": "ros2 control list_controllers /controller_manager",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "list_hardware_components",
@@ -1120,7 +1438,11 @@
           "desc": "List the available hardware components",
           "example": "ros2 control list_hardware_components /controller_manager",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "list_hardware_interfaces",
@@ -1129,7 +1451,11 @@
           "desc": "List the available command and state interfaces",
           "example": "ros2 control list_hardware_interfaces /controller_manager",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "load_controller",
@@ -1138,7 +1464,11 @@
           "desc": "Load a controller in a controller manager",
           "example": "ros2 control load_controller /controller_manager joint_state_broadcaster",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "reload_controller_libraries",
@@ -1147,7 +1477,11 @@
           "desc": "Reload controller libraries",
           "example": "ros2 control reload_controller_libraries /controller_manager",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "set_controller_state",
@@ -1156,7 +1490,11 @@
           "desc": "Adjust the state of a controller",
           "example": "ros2 control set_controller_state /controller_manager joint_state_broadcaster active",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "set_hardware_component_state",
@@ -1165,7 +1503,11 @@
           "desc": "Adjust the state of a hardware component",
           "example": "ros2 control set_hardware_component_state /controller_manager robot active",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "switch_controllers",
@@ -1174,7 +1516,11 @@
           "desc": "Switch controllers in a controller manager",
           "example": "ros2 control switch_controllers /controller_manager --activate joint_state_broadcaster",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "unload_controller",
@@ -1183,7 +1529,11 @@
           "desc": "Unload a controller in a controller manager",
           "example": "ros2 control unload_controller /controller_manager joint_state_broadcaster",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "view_controller_chains",
@@ -1192,7 +1542,11 @@
           "desc": "Generate a diagram of the loaded chained controllers into /tmp/controller_diagram.gv.pdf",
           "example": "ros2 control view_controller_chains /controller_manager",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -1206,7 +1560,11 @@
           "desc": "Create an enclave in a keystore",
           "example": "ros2 security create_enclave keystore enclaves/talker",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "create_key",
@@ -1215,7 +1573,11 @@
           "desc": "DEPRECATED: Create an enclave. Use create_enclave instead",
           "example": "ros2 security create_key keystore enclaves/talker",
           "options": [],
-          "notes": "已弃用，推荐使用 ros2 security create_enclave"
+          "notes": "已弃用，推荐使用 ros2 security create_enclave",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "create_keystore",
@@ -1224,7 +1586,11 @@
           "desc": "Create a keystore",
           "example": "ros2 security create_keystore keystore",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "create_permission",
@@ -1233,7 +1599,11 @@
           "desc": "Create a permission file",
           "example": "ros2 security create_permission keystore enclaves/talker talker_permissions.xml",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "generate_artifacts",
@@ -1242,7 +1612,11 @@
           "desc": "Generate keys and permission files from a list of identities and policy files",
           "example": "ros2 security generate_artifacts keystore policies.xml",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "generate_policy",
@@ -1251,7 +1625,11 @@
           "desc": "Generate an XML policy file from ROS graph data",
           "example": "ros2 security generate_policy policies.xml",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "list_enclaves",
@@ -1260,7 +1638,11 @@
           "desc": "List enclaves in a keystore",
           "example": "ros2 security list_enclaves keystore",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "list_keys",
@@ -1269,7 +1651,11 @@
           "desc": "DEPRECATED: List enclaves in a keystore. Use list_enclaves instead",
           "example": "ros2 security list_keys keystore",
           "options": [],
-          "notes": "已弃用，推荐使用 ros2 security list_enclaves"
+          "notes": "已弃用，推荐使用 ros2 security list_enclaves",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -1283,7 +1669,11 @@
           "desc": "Get the lifecycle state of one or more nodes",
           "example": "ros2 lifecycle get /my_node",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "list",
@@ -1292,7 +1682,11 @@
           "desc": "List the available lifecycle transitions",
           "example": "ros2 lifecycle list /my_node",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "nodes",
@@ -1301,7 +1695,11 @@
           "desc": "List nodes with lifecycle management",
           "example": "ros2 lifecycle nodes",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "set",
@@ -1310,7 +1708,11 @@
           "desc": "Trigger a lifecycle state transition",
           "example": "ros2 lifecycle set /my_node activate",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -1324,7 +1726,11 @@
           "desc": "Start the daemon if it isn't running",
           "example": "ros2 daemon start",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "status",
@@ -1333,7 +1739,11 @@
           "desc": "Output the status of the daemon",
           "example": "ros2 daemon status",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "stop",
@@ -1342,7 +1752,11 @@
           "desc": "Stop the daemon if it is running",
           "example": "ros2 daemon stop",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -1356,7 +1770,11 @@
           "desc": "Receive a single UDP multicast packet",
           "example": "ros2 multicast receive",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "send",
@@ -1365,7 +1783,11 @@
           "desc": "Send a single UDP multicast packet",
           "example": "ros2 multicast send",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -1379,7 +1801,11 @@
           "desc": "List available plugins",
           "example": "ros2 plugin list",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -1393,7 +1819,10 @@
           "desc": "Check network connectivity between multiple hosts",
           "example": "ros2 wtf hello",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy"
+          ]
         }
       ]
     }

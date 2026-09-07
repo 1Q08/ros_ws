@@ -10,7 +10,10 @@
           "desc": "启动 ROS Master 和参数服务器",
           "example": "roscore",
           "options": [],
-          "notes": "必须在运行任何 ROS 节点之前启动"
+          "notes": "必须在运行任何 ROS 节点之前启动",
+          "distros": [
+            "noetic"
+          ]
         },
         {
           "display": "rosrun",
@@ -19,7 +22,10 @@
           "desc": "运行指定包中的节点,",
           "example": "rosrun turtlesim turtlesim_node",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "noetic"
+          ]
         },
         {
           "display": "roslaunch",
@@ -28,7 +34,10 @@
           "desc": "通过 launch 文件启动多个节点，支持参数传递和节点组合",
           "example": "roslaunch my_package my_launch.launch",
           "options": [],
-          "notes": "Launch 文件是 XML 格式，定义了节点、参数、话题和服务的启动配置"
+          "notes": "Launch 文件是 XML 格式，定义了节点、参数、话题和服务的启动配置",
+          "distros": [
+            "noetic"
+          ]
         }
       ]
     },
@@ -42,7 +51,10 @@
           "desc": "列出当前系统中所有发布/订阅的话题",
           "example": "rostopic list",
           "options": [],
-          "notes": "可用 grep 过滤，如 rostopic list | grep chatter"
+          "notes": "可用 grep 过滤，如 rostopic list | grep chatter",
+          "distros": [
+            "noetic"
+          ]
         },
         {
           "display": "rostopic echo",
@@ -51,7 +63,10 @@
           "desc": "实时打印话题发布的消息内容，按 Ctrl+C 停止显示",
           "example": "rostopic echo /chatter",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "noetic"
+          ]
         },
         {
           "display": "rostopic pub",
@@ -65,7 +80,10 @@
               "desc": "以指定频率持续发布消息"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "noetic"
+          ]
         },
         {
           "display": "rostopic hz",
@@ -74,7 +92,10 @@
           "desc": "显示话题发布频率，用于检查话题是否按预期频率发布",
           "example": "rostopic hz /chatter",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "noetic"
+          ]
         }
       ]
     },
@@ -88,7 +109,10 @@
           "desc": "列出所有运行的节点",
           "example": "rosnode list",
           "options": [],
-          "notes": "显示当前系统中所有活跃的 ROS 节点"
+          "notes": "显示当前系统中所有活跃的 ROS 节点",
+          "distros": [
+            "noetic"
+          ]
         },
         {
           "display": "rosnode info",
@@ -97,7 +121,10 @@
           "desc": "显示节点详细信息，包括发布/订阅的话题、服务和参数",
           "example": "rosnode info /talker",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "noetic"
+          ]
         },
         {
           "display": "rosnode kill",
@@ -106,7 +133,10 @@
           "desc": "强制关闭节点",
           "example": "rosnode kill /talker",
           "options": [],
-          "notes": "强制关闭节点，可能产生警告"
+          "notes": "强制关闭节点，可能产生警告",
+          "distros": [
+            "noetic"
+          ]
         }
       ]
     },
@@ -120,7 +150,10 @@
           "desc": "列出所有可用的服务",
           "example": "rosservice list",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "noetic"
+          ]
         },
         {
           "display": "rosservice call",
@@ -129,7 +162,10 @@
           "desc": "调用服务并返回结果，args 为 YAML 格式的参数",
           "example": "rosservice call /add_two_ints \"a: 1, b: 2\"",
           "options": [],
-          "notes": "调用服务时，参数需要按照服务定义的格式传递"
+          "notes": "调用服务时，参数需要按照服务定义的格式传递",
+          "distros": [
+            "noetic"
+          ]
         }
       ]
     },
@@ -143,7 +179,10 @@
           "desc": "列出参数服务器中的所有参数",
           "example": "rosparam list",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "noetic"
+          ]
         },
         {
           "display": "rosparam set",
@@ -152,7 +191,10 @@
           "desc": "设置参数值",
           "example": "rosparam set /my_param 10",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "noetic"
+          ]
         },
         {
           "display": "rosparam get",
@@ -161,7 +203,10 @@
           "desc": "获取参数值",
           "example": "rosparam get /my_param",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "noetic"
+          ]
         }
       ]
     },
@@ -184,7 +229,10 @@
               "desc": "录制所有话题"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "noetic"
+          ]
         },
         {
           "display": "rosbag play",
@@ -198,7 +246,10 @@
               "desc": "调整回放速度"
             }
           ],
-          "notes": "可用于测试和仿真，回放时会按照原始时间戳发布消息"
+          "notes": "可用于测试和仿真，回放时会按照原始时间戳发布消息",
+          "distros": [
+            "noetic"
+          ]
         },
         {
           "display": "rosbag info",
@@ -207,7 +258,10 @@
           "desc": "显示 bag 文件信息，包括时长、话题、消息类型等",
           "example": "rosbag info my_data.bag",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "noetic"
+          ]
         }
       ]
     }
@@ -240,7 +294,11 @@
               "desc": "重映射话题/服务名"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "ros2 launch",
@@ -249,7 +307,11 @@
           "desc": "通过 launch 文件启动多个节点",
           "example": "ros2 launch my_package my_launch.py",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "ros2 doctor",
@@ -267,7 +329,11 @@
               "desc": "存在错误时以非零状态退出"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "doctor hello",
@@ -276,7 +342,11 @@
           "desc": "检查多台主机之间的网络连通性",
           "example": "ros2 doctor hello",
           "options": [],
-          "notes": "与 ros2 wtf hello 功能相同"
+          "notes": "与 ros2 wtf hello 功能相同",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -290,7 +360,11 @@
           "desc": "列出当前环境中所有可用的包",
           "example": "ros2 pkg list",
           "options": [],
-          "notes": "可用 grep 过滤，如 ros2 pkg list | grep turtlesim"
+          "notes": "可用 grep 过滤，如 ros2 pkg list | grep turtlesim",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "prefix",
@@ -299,7 +373,11 @@
           "desc": "返回包的安装目录，可用于查看包的源码或资源位置",
           "example": "ros2 pkg prefix turtlesim",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "executables",
@@ -308,7 +386,11 @@
           "desc": "列出包内提供的所有可执行文件",
           "example": "ros2 pkg executables turtlesim",
           "options": [],
-          "notes": "不带包名时列出所有包的可执行文件，带包名时只列出指定包的"
+          "notes": "不带包名时列出所有包的可执行文件，带包名时只列出指定包的",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "create",
@@ -346,7 +428,11 @@
               "desc": "设置维护者姓名"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "xml",
@@ -355,7 +441,11 @@
           "desc": "输出指定包的 package.xml 内容，可用于查看包的元信息，如依赖、版本、许可证等",
           "example": "ros2 pkg xml turtlesim",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -386,7 +476,11 @@
               "desc": "向 CMake 传递额外参数"
             }
           ],
-          "notes": "需在已配置环境的工作空间根目录运行；构建前确保已 source 对应 ROS 2 发行版与依赖"
+          "notes": "需在已配置环境的工作空间根目录运行；构建前确保已 source 对应 ROS 2 发行版与依赖",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "list",
@@ -404,7 +498,11 @@
               "desc": "只显示包所在路径"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "test",
@@ -426,7 +524,11 @@
               "desc": "向 CTest 传递额外参数"
             }
           ],
-          "notes": "运行 colcon test 前需先执行 colcon build"
+          "notes": "运行 colcon test 前需先执行 colcon build",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "test-result",
@@ -444,7 +546,11 @@
               "desc": "显示详细输出"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "graph",
@@ -462,7 +568,11 @@
               "desc": "在图例中显示包类型图例信息"
             }
           ],
-          "notes": "可用 colcon graph --dot 生成 .dot 文件，再用 dot -Tpng dependencies.dot -o dependencies.png 渲染为图片"
+          "notes": "可用 colcon graph --dot 生成 .dot 文件，再用 dot -Tpng dependencies.dot -o dependencies.png 渲染为图片",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -476,7 +586,11 @@
           "desc": "查看话题命令的帮助信息",
           "example": "ros2 topic -h",
           "options": [],
-          "notes": "显示 ros2 topic 的所有子命令和用法说明，也可用于子命令，如 ros2 topic pub -h"
+          "notes": "显示 ros2 topic 的所有子命令和用法说明，也可用于子命令，如 ros2 topic pub -h",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "list",
@@ -494,7 +608,11 @@
               "desc": "显示详细信息（包括 QoS 配置、发布/订阅节点数等）"
             }
           ],
-          "notes": "可用 grep 过滤，如 ros2 topic list | grep chatter"
+          "notes": "可用 grep 过滤，如 ros2 topic list | grep chatter",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "echo",
@@ -503,7 +621,11 @@
           "desc": "实时打印话题发布的消息内容，按 Ctrl+C 停止显示",
           "example": "ros2 topic echo /chatter",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "info",
@@ -517,7 +639,11 @@
               "desc": "显示详细信息（包括 QoS 配置、发布/订阅节点数等）"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "pub",
@@ -543,7 +669,11 @@
               "desc": "从 YAML 文件读取消息内容（如 ros2 topic echo 的 STDOUT 输出）"
             }
           ],
-          "notes": "提示：输入话题名和消息类型后按 Tab 可自动补全 YAML 字段模板，直接修改数值后回车发布\n示例：\n  ros2 topic pub /turtle1/cmd_vel geometry_msgs/msg/Twist <TAB>"
+          "notes": "提示：输入话题名和消息类型后按 Tab 可自动补全 YAML 字段模板，直接修改数值后回车发布\n示例：\n  ros2 topic pub /turtle1/cmd_vel geometry_msgs/msg/Twist <TAB>",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "hz",
@@ -552,7 +682,11 @@
           "desc": "显示话题发布频率，用于检查话题是否按预期频率发布",
           "example": "ros2 topic hz /chatter",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "bw",
@@ -570,7 +704,11 @@
               "desc": "等待发现节点的秒数"
             }
           ],
-          "notes": "带宽反映订阅端的接收速率，可能受平台资源与 QoS 配置影响，未必与发布端带宽完全一致"
+          "notes": "带宽反映订阅端的接收速率，可能受平台资源与 QoS 配置影响，未必与发布端带宽完全一致",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "find",
@@ -584,7 +722,11 @@
               "desc": "只显示匹配到的话题数量"
             }
           ],
-          "notes": "按消息类型过滤并输出所有匹配的话题名"
+          "notes": "按消息类型过滤并输出所有匹配的话题名",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "type",
@@ -593,7 +735,11 @@
           "desc": "显示话题的消息类型",
           "example": "ros2 topic type /chatter",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "delay",
@@ -602,7 +748,11 @@
           "desc": "根据消息头中的时间戳显示话题的传输延迟",
           "example": "ros2 topic delay /chatter",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -616,7 +766,11 @@
           "desc": "查看节点命令的帮助信息",
           "example": "ros2 node -h",
           "options": [],
-          "notes": "显示 ros2 node 的所有子命令和用法说明，也可用于子命令，如 ros2 node list -h"
+          "notes": "显示 ros2 node 的所有子命令和用法说明，也可用于子命令，如 ros2 node list -h",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "list",
@@ -625,7 +779,11 @@
           "desc": "列出所有运行的节点",
           "example": "ros2 node list",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "info",
@@ -634,7 +792,11 @@
           "desc": "显示节点详细信息，包括发布/订阅的话题、服务和动作",
           "example": "ros2 node info /talker",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -648,7 +810,11 @@
           "desc": "列出容器节点中的所有组件",
           "example": "ros2 component list",
           "options": [],
-          "notes": "可显示指定容器节点中已加载的组件信息，不带容器名时列出所有"
+          "notes": "可显示指定容器节点中已加载的组件信息，不带容器名时列出所有",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "types",
@@ -657,7 +823,11 @@
           "desc": "列出可用的组件类型，",
           "example": "ros2 component types",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "load",
@@ -675,7 +845,11 @@
               "desc": "重映射话题/服务名"
             }
           ],
-          "notes": "组件类型可通过 ros2 component types 查看，加载后组件会在容器节点中运行"
+          "notes": "组件类型可通过 ros2 component types 查看，加载后组件会在容器节点中运行",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "unload",
@@ -684,7 +858,11 @@
           "desc": "从容器节点卸载组件",
           "example": "ros2 component unload /my_container 1",
           "options": [],
-          "notes": "组件 ID 可通过 ros2 component list 查看"
+          "notes": "组件 ID 可通过 ros2 component list 查看",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "standalone",
@@ -693,7 +871,11 @@
           "desc": "将组件作为独立节点运行",
           "example": "ros2 component standalone composition composition::Talker",
           "options": [],
-          "notes": "以独立进程运行，不放入容器"
+          "notes": "以独立进程运行，不放入容器",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -712,7 +894,11 @@
               "desc": "同时显示服务类型"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "info",
@@ -726,7 +912,11 @@
               "desc": "等待发现节点的秒数"
             }
           ],
-          "notes": "打印指定服务的信息，包括服务类型与 QoS 配置"
+          "notes": "打印指定服务的信息，包括服务类型与 QoS 配置",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "type",
@@ -735,7 +925,11 @@
           "desc": "显示服务的类型",
           "example": "ros2 service type /add_two_ints",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "find",
@@ -744,7 +938,11 @@
           "desc": "列出指定类型的可用服务",
           "example": "ros2 service find example_interfaces/srv/AddTwoInts",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "call",
@@ -753,7 +951,11 @@
           "desc": "调用服务并返回结果，使用 YAML 格式传递请求参数，按 Ctrl+C 停止等待响应",
           "example": "ros2 service call /add_two_ints example_interfaces/srv/AddTwoInts \"{a: 1, b: 2}\"",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "echo",
@@ -779,7 +981,11 @@
               "desc": "截断数组、字节与字符串的长度（默认 128）"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -798,7 +1004,11 @@
               "desc": "同时显示动作类型"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "info",
@@ -807,7 +1017,11 @@
           "desc": "显示指定动作的详细信息，包括动作类型、服务器和客户端节点名称等",
           "example": "ros2 action info /turtle1/rotate_absolute",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "type",
@@ -816,7 +1030,11 @@
           "desc": "显示动作的类型",
           "example": "ros2 action type /turtle1/rotate_absolute",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "send_goal",
@@ -830,7 +1048,11 @@
               "desc": "显示反馈信息"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -844,7 +1066,11 @@
           "desc": "删除节点上的指定参数",
           "example": "ros2 param delete /my_node my_param",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "describe",
@@ -853,7 +1079,11 @@
           "desc": "显示已声明参数的描述性信息，包括类型、范围和约束等",
           "example": "ros2 param describe /my_node my_param",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "list",
@@ -862,7 +1092,11 @@
           "desc": "列出指定节点的所有参数，包括参数名、类型和当前值",
           "example": "ros2 param list /my_node",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "set",
@@ -871,7 +1105,11 @@
           "desc": "设置参数值，支持 int、float、bool、string、list 等类型，按 Ctrl+C 停止等待响应",
           "example": "ros2 param set /my_node my_param 10",
           "options": [],
-          "notes": "设置参数值后，节点会收到参数更新事件，可在节点中处理"
+          "notes": "设置参数值后，节点会收到参数更新事件，可在节点中处理",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "get",
@@ -880,7 +1118,11 @@
           "desc": "获取参数值，显示参数的类型和当前值，按 Ctrl+C 停止等待响应",
           "example": "ros2 param get /my_node my_param",
           "options": [],
-          "notes": "获取指定节点的参数值，可用于调试和验证参数设置"
+          "notes": "获取指定节点的参数值，可用于调试和验证参数设置",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "dump",
@@ -894,7 +1136,11 @@
               "desc": "指定输出目录"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "load",
@@ -908,7 +1154,11 @@
               "desc": "指定节点类型"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -922,7 +1172,11 @@
           "desc": "查看 bag 命令的帮助信息",
           "example": "ros2 bag -h",
           "options": [],
-          "notes": "显示 ros2 bag 的所有子命令和用法说明，也可用于子命令，如 ros2 bag record -h"
+          "notes": "显示 ros2 bag 的所有子命令和用法说明，也可用于子命令，如 ros2 bag record -h",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "burst",
@@ -931,7 +1185,11 @@
           "desc": "突发（burst）回放 bag 中指定话题的数据，用于快速回放或测试",
           "example": "ros2 bag burst my_data.db3 /chatter",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "convert",
@@ -940,7 +1198,11 @@
           "desc": "将 bag 文件转换为指定存储/序列化格式的新 bag",
           "example": "ros2 bag convert -i input.bag -o output_dir --output-options 'storage: mcap'",
           "options": [],
-          "notes": "可转换存储/序列化格式，例如从 rosbag1（.bag）转为 sqlite3/mcap；可通过 --output-options 指定 storage、serialization 等输出选项"
+          "notes": "可转换存储/序列化格式，例如从 rosbag1（.bag）转为 sqlite3/mcap；可通过 --output-options 指定 storage、serialization 等输出选项",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "info",
@@ -949,7 +1211,11 @@
           "desc": "显示 bag 文件信息，包括时长、话题、消息类型等",
           "example": "ros2 bag info my_data.db3",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "list",
@@ -958,7 +1224,11 @@
           "desc": "显示可用的 bag 插件信息",
           "example": "ros2 bag list",
           "options": [],
-          "notes": "列出可用的存储（storage）和序列化（serialization）插件，如 sqlite3、mcap 等"
+          "notes": "列出可用的存储（storage）和序列化（serialization）插件，如 sqlite3、mcap 等",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "play",
@@ -984,7 +1254,11 @@
               "desc": "发布 /clock 话题以同步时间"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "record",
@@ -1006,7 +1280,11 @@
               "desc": "录制所有服务的服务事件"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "reindex",
@@ -1015,7 +1293,11 @@
           "desc": "重新索引 bag 文件的元数据，修复丢失或损坏的索引",
           "example": "ros2 bag reindex my_data.db3",
           "options": [],
-          "notes": "当元数据文件丢失或损坏时用于重建"
+          "notes": "当元数据文件丢失或损坏时用于重建",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -1029,7 +1311,11 @@
           "desc": "查看接口命令的帮助信息",
           "example": "ros2 interface -h",
           "options": [],
-          "notes": "显示 ros2 interface 的所有子命令和用法说明，也可用于子命令，如 ros2 interface show -h"
+          "notes": "显示 ros2 interface 的所有子命令和用法说明，也可用于子命令，如 ros2 interface show -h",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "list",
@@ -1038,7 +1324,11 @@
           "desc": "列出所有可用的接口类型（msg/srv/action）",
           "example": "ros2 interface list",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "show",
@@ -1052,7 +1342,11 @@
               "desc": "不显示注释"
             }
           ],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "package",
@@ -1061,7 +1355,11 @@
           "desc": "列出指定包中所有接口类型（msg/srv/action），包括消息、服务和动作的完整列表",
           "example": "ros2 interface package std_msgs",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "packages",
@@ -1070,7 +1368,11 @@
           "desc": "列出所有提供接口定义的包",
           "example": "ros2 interface packages",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "proto",
@@ -1079,7 +1381,11 @@
           "desc": "将 ROS 接口定义转换为 Protocol Buffers 格式（用于跨语言通信）",
           "example": "ros2 interface proto std_msgs/msg/String",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -1093,7 +1399,11 @@
           "desc": "清理控制器管理器中的控制器",
           "example": "ros2 control cleanup_controller /controller_manager joint_state_broadcaster",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "list_controller_types",
@@ -1102,7 +1412,11 @@
           "desc": "列出可用的控制器类型及其基类",
           "example": "ros2 control list_controller_types /controller_manager",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "list_controllers",
@@ -1111,7 +1425,11 @@
           "desc": "列出已加载的控制器、类型与状态",
           "example": "ros2 control list_controllers /controller_manager",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "list_hardware_components",
@@ -1120,7 +1438,11 @@
           "desc": "列出可用的硬件组件",
           "example": "ros2 control list_hardware_components /controller_manager",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "list_hardware_interfaces",
@@ -1129,7 +1451,11 @@
           "desc": "列出可用的命令接口与状态接口",
           "example": "ros2 control list_hardware_interfaces /controller_manager",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "load_controller",
@@ -1138,7 +1464,11 @@
           "desc": "在控制器管理器中加载一个控制器",
           "example": "ros2 control load_controller /controller_manager joint_state_broadcaster",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "reload_controller_libraries",
@@ -1147,7 +1477,11 @@
           "desc": "重新加载控制器库",
           "example": "ros2 control reload_controller_libraries /controller_manager",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "set_controller_state",
@@ -1156,7 +1490,11 @@
           "desc": "调整控制器的状态",
           "example": "ros2 control set_controller_state /controller_manager joint_state_broadcaster active",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "set_hardware_component_state",
@@ -1165,7 +1503,11 @@
           "desc": "调整硬件组件的状态",
           "example": "ros2 control set_hardware_component_state /controller_manager robot active",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "switch_controllers",
@@ -1174,7 +1516,11 @@
           "desc": "在控制器管理器中切换控制器",
           "example": "ros2 control switch_controllers /controller_manager --activate joint_state_broadcaster",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "unload_controller",
@@ -1183,7 +1529,11 @@
           "desc": "在控制器管理器中卸载一个控制器",
           "example": "ros2 control unload_controller /controller_manager joint_state_broadcaster",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "view_controller_chains",
@@ -1192,7 +1542,11 @@
           "desc": "生成已加载链式控制器的示意图（/tmp/controller_diagram.gv.pdf）",
           "example": "ros2 control view_controller_chains /controller_manager",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -1206,7 +1560,11 @@
           "desc": "在密钥库中创建安全域（enclave）",
           "example": "ros2 security create_enclave keystore enclaves/talker",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "create_key",
@@ -1215,7 +1573,11 @@
           "desc": "已弃用：创建安全域。请改用 create_enclave",
           "example": "ros2 security create_key keystore enclaves/talker",
           "options": [],
-          "notes": "已弃用，推荐使用 ros2 security create_enclave"
+          "notes": "已弃用，推荐使用 ros2 security create_enclave",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "create_keystore",
@@ -1224,7 +1586,11 @@
           "desc": "创建密钥库（keystore）",
           "example": "ros2 security create_keystore keystore",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "create_permission",
@@ -1233,7 +1599,11 @@
           "desc": "创建权限文件",
           "example": "ros2 security create_permission keystore enclaves/talker talker_permissions.xml",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "generate_artifacts",
@@ -1242,7 +1612,11 @@
           "desc": "根据身份和策略文件生成密钥与权限文件",
           "example": "ros2 security generate_artifacts keystore policies.xml",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "generate_policy",
@@ -1251,7 +1625,11 @@
           "desc": "从 ROS 图数据生成 XML 策略文件",
           "example": "ros2 security generate_policy policies.xml",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "list_enclaves",
@@ -1260,7 +1638,11 @@
           "desc": "列出密钥库中的安全域",
           "example": "ros2 security list_enclaves keystore",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "list_keys",
@@ -1269,7 +1651,11 @@
           "desc": "已弃用：列出密钥库中的安全域。请改用 list_enclaves",
           "example": "ros2 security list_keys keystore",
           "options": [],
-          "notes": "已弃用，推荐使用 ros2 security list_enclaves"
+          "notes": "已弃用，推荐使用 ros2 security list_enclaves",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -1283,7 +1669,11 @@
           "desc": "获取一个或多个节点的生命周期状态",
           "example": "ros2 lifecycle get /my_node",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "list",
@@ -1292,7 +1682,11 @@
           "desc": "列出可用的生命周期转换",
           "example": "ros2 lifecycle list /my_node",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "nodes",
@@ -1301,7 +1695,11 @@
           "desc": "列出具有生命周期管理的节点",
           "example": "ros2 lifecycle nodes",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "set",
@@ -1310,7 +1708,11 @@
           "desc": "触发生命周期状态转换",
           "example": "ros2 lifecycle set /my_node activate",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -1324,7 +1726,11 @@
           "desc": "启动守护进程（如果尚未运行）",
           "example": "ros2 daemon start",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "status",
@@ -1333,7 +1739,11 @@
           "desc": "显示守护进程的状态",
           "example": "ros2 daemon status",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "stop",
@@ -1342,7 +1752,11 @@
           "desc": "停止守护进程（如果正在运行）",
           "example": "ros2 daemon stop",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -1356,7 +1770,11 @@
           "desc": "接收单个 UDP 组播包",
           "example": "ros2 multicast receive",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         },
         {
           "display": "send",
@@ -1365,7 +1783,11 @@
           "desc": "发送单个 UDP 组播包",
           "example": "ros2 multicast send",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -1379,7 +1801,11 @@
           "desc": "列出可用的插件",
           "example": "ros2 plugin list",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
         }
       ]
     },
@@ -1393,7 +1819,10 @@
           "desc": "检查多台主机之间的网络连通性",
           "example": "ros2 wtf hello",
           "options": [],
-          "notes": ""
+          "notes": "",
+          "distros": [
+            "jazzy"
+          ]
         }
       ]
     }

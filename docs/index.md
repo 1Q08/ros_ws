@@ -25,6 +25,6 @@ post_limit: 3
   </a>
   <a class="entry-card" href="https://github.com/1Q08/ros_ws" target="_blank" rel="noopener noreferrer">
     <span class="entry-card__title">GitHub 仓库</span>
-    <span class="entry-card__desc">源码与协作</span>
+    <span class="entry-card__desc">项目仓库</span>
   </a>
 </div>

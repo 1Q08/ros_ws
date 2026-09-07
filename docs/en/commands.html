@@ -66,6 +66,13 @@ custom_js: /assets/js/commands.js
         </select>
       </div>
 
+      <div class="filter-item" id="distroRow" style="display:none;">
+        <label for="distro">Distribution:</label>
+        <select id="distro" onchange="onDistroChange()">
+          <option value="">-- Select --</option>
+        </select>
+      </div>
+
       <div class="filter-item" id="categoryRow" style="display:none;">
         <label for="category">Category:</label>
         <select id="category" onchange="onCategoryChange()">
@@ -87,7 +94,10 @@ custom_js: /assets/js/commands.js
        3. Command detail
        ========================================================== -->
   <div id="commandDetail" class="command-detail" style="display:none;">
-    <h3 id="detailTitle"></h3>
+    <div class="detail-title-wrap">
+      <h3 id="detailTitle"></h3>
+      <div id="detailVersionMeta" class="detail-version-meta"></div>
+    </div>
     <div class="detail-content">
       <p><strong>Command:</strong></p>
       <pre class="highlight-code"><code id="detailCmd"></code></pre>
@@ -118,6 +128,7 @@ custom_js: /assets/js/commands.js
       <span class="summary-sort-icon" aria-hidden="true"></span>
       <span class="summary-toggle-text">Command Reference Table</span>
       <span class="summary-count" id="summaryCount"></span>
+      <span class="summary-filter-badge" id="summaryFilterBadge" hidden></span>
       <span class="summary-chevron-icon" aria-hidden="true"></span>
     </button>
 

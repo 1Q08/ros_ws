@@ -21,6 +21,6 @@ A lightweight ROS 1 / ROS 2 command-line reference for robotics developers.
   </a>
   <a class="entry-card" href="https://github.com/1Q08/ros_ws" target="_blank" rel="noopener noreferrer">
     <span class="entry-card__title">GitHub Repository</span>
-    <span class="entry-card__desc">Source code and collaboration</span>
+    <span class="entry-card__desc">Project repository</span>
   </a>
 </div>

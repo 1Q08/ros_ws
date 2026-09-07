@@ -22,8 +22,14 @@ DOCS = Path(__file__).resolve().parent.parent
 DATA = DOCS / "_data"
 ASSETS_DATA = DOCS / "assets" / "data"
 
-REQUIRED_FIELDS = ["display", "title", "cmd", "desc", "example", "options", "notes"]
+REQUIRED_FIELDS = ["display", "title", "cmd", "desc", "example", "options", "notes", "distros"]
 VERSIONS = ["ros1", "ros2"]
+
+# 各 ROS 大版本允许的发行版键（与 assets/js/commands.js 中 DISTROS 常量一致）
+DISTROS_BY_VERSION = {
+    "ros1": {"melodic", "noetic"},
+    "ros2": {"humble", "iron", "jazzy"},
+}
 
 errors = []
 
@@ -78,6 +84,26 @@ def main():
         errors.extend(missing)
     else:
         print(f"字段齐全: 每条命令均含 {len(REQUIRED_FIELDS)} 字段")
+
+    # 3.5 发行版校验：distros 非空、属于该版本允许集合、且中英文一致
+    for label, data in (("zh", zh), ("en", en)):
+        for version in VERSIONS:
+            allowed = DISTROS_BY_VERSION[version]
+            for key, cat in data.get(version, {}).items():
+                for idx, cmd in enumerate(cat.get("commands", [])):
+                    distros = cmd.get("distros")
+                    if not isinstance(distros, list) or not distros:
+                        errors.append(
+                            f"{label}:{version}:{key}[{idx}] distros 缺失或为空"
+                        )
+                        continue
+                    invalid = [d for d in distros if d not in allowed]
+                    if invalid:
+                        errors.append(
+                            f"{label}:{version}:{key}[{idx}] 非法发行版 {invalid}"
+                        )
+    if not any("distros" in e or "发行版" in e for e in errors):
+        print("发行版一致: 所有命令 distros 字段合法且中英文对应")
 
     # 统计计数
     stats = {

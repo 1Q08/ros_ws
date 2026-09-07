@@ -3,7 +3,7 @@
 // ============================================================
 // 功能：
 //   1. 从 commands.json 加载命令数据库
-//   2. 三级联动下拉框（版本 → 分类 → 命令）
+//   2. 四级联动下拉框（版本 → 发行版 → 分类 → 命令）
 //   3. 实时搜索命令
 //   4. 命令详情展示 + 关键字高亮
 // ============================================================
@@ -27,12 +27,13 @@ const I18N = {
     copied: '✓ 已复制',
     copyFailed: '复制失败',
     version: '版本',
+    distro: '发行版',
     description: '说明',
     example: '示例',
-    notes: '注意事项',
     options: '常用选项',
     optionFlag: '选项',
-    optionDesc: '说明'
+    optionDesc: '说明',
+    emptyDistro: '该发行版暂无命令数据'
   },
   en: {
     selectPlaceholder: '-- Select --',
@@ -43,25 +44,54 @@ const I18N = {
     copied: '✓ Copied',
     copyFailed: 'Copy failed',
     version: 'Version',
+    distro: 'Distribution',
     description: 'Description',
     example: 'Example',
-    notes: 'Notes',
     options: 'Common options',
     optionFlag: 'Option',
-    optionDesc: 'Description'
+    optionDesc: 'Description',
+    emptyDistro: 'No command data for this distribution'
   }
 };
 
 const T = I18N[PAGE_LANG];
 
+// ROS 版本显示名（仅在 ros1/ros2 两档之间切换）
+const VERSION_NAMES = { ros1: 'ROS 1', ros2: 'ROS 2' };
+
+// 发行版列表（预留未来扩展；当前仅 jazzy / noetic 有数据）
+// 结构: { ros1: [{key, name}, ...], ros2: [{key, name}, ...] }
+const DISTROS = {
+  ros1: [
+    { key: 'melodic', name: 'Melodic' },
+    { key: 'noetic', name: 'Noetic' }
+  ],
+  ros2: [
+    { key: 'humble', name: 'Humble' },
+    { key: 'iron', name: 'Iron' },
+    { key: 'jazzy', name: 'Jazzy' }
+  ]
+};
+
+// 发行版显示名映射（key -> 名称，由 DISTROS 自动生成）
+const DISTRO_NAMES = {};
+Object.keys(DISTROS).forEach(function (v) {
+  (DISTROS[v] || []).forEach(function (d) { DISTRO_NAMES[d.key] = d.name; });
+});
+
 // 全局数据存储
 // 结构: { ros1: { core: {...}, topic: {...}, ... }, ros2: {...} }
+// 每条命令含 distros 字段：该命令适用的发行版列表（如 ["jazzy"]）
 let commandsData = null;
 
 // 扁平化搜索索引（数据加载后构建一次，避免每次按键全量遍历 + 重复归一化）
 // 元素: { versionKey, versionName, category, rawCmd, normCmd, rawDisplay,
 //         normDisplay, rawDesc, normDesc, rawCat, normCat, cmd }
 let searchIndex = [];
+
+// 当前发行版筛选结果缓存：categoryKey -> { name, commandIndices: [原始索引...] }
+// 由 onDistroChange 写入，onCategoryChange 读取（模块级变量，避免挂在 window 上）
+let filteredCategories = {};
 
 // ============================================================
 // 初始化：页面加载完成后挂载全部交互（B3：合并为单一入口）
@@ -83,48 +113,133 @@ function initApp() {
 document.addEventListener('DOMContentLoaded', initApp);
 
 // ============================================================
-// 三级联动下拉框 - 第一级：版本选择
+// 四级联动下拉框 - 第一级：ROS 版本选择
 // ============================================================
 // 当用户选择 ROS 版本时触发
-// 功能：重置下级选择 → 填充分类选项 → 显示分类下拉框
+// 功能：重置下级选择 → 填充发行版选项 → 显示发行版下拉框
 // ============================================================
 function onVersionChange() {
   const version = document.getElementById('rosVersion').value;
+  const distroRow = document.getElementById('distroRow');
   const categoryRow = document.getElementById('categoryRow');
   const commandRow = document.getElementById('commandRow');
   const detailDiv = document.getElementById('commandDetail');
 
-  // 重置第二级和第三级下拉框
-  document.getElementById('category').innerHTML = '<option value="">' + T.selectPlaceholder + '</option>';
-  document.getElementById('command').innerHTML = '<option value="">' + T.selectPlaceholder + '</option>';
+  // 重置第二、三、四下级下拉框
+  resetSelect('distro');
+  resetSelect('category');
+  resetSelect('command');
+  categoryRow.style.display = 'none';
   commandRow.style.display = 'none';
   detailDiv.style.display = 'none';
+  filteredCategories = {};
 
-  // 如果未选择版本，隐藏分类下拉框
+  // 如果未选择版本，隐藏发行版下拉框，速查表回到全部
   if (!version) {
-    categoryRow.style.display = 'none';
+    distroRow.style.display = 'none';
+    renderSummaryTable();
     return;
   }
 
-  // 根据选中版本，动态填充分类选项
-  const categories = commandsData[version];
-  const categorySelect = document.getElementById('category');
-
-  for (const key in categories) {
+  // 根据选中版本，动态填充发行版选项
+  const distroSelect = document.getElementById('distro');
+  (DISTROS[version] || []).forEach(function (d) {
     const option = document.createElement('option');
-    option.value = key;
-    option.textContent = categories[key].name;  // 显示中文分类名
-    categorySelect.appendChild(option);
-  }
+    option.value = d.key;
+    option.textContent = d.name;
+    distroSelect.appendChild(option);
+  });
 
-  categoryRow.style.display = 'block';
+  distroRow.style.display = 'block';
+  renderSummaryTable();
+}
+
+// 将下拉框重置为仅含「请选择」占位项
+function resetSelect(id) {
+  document.getElementById(id).innerHTML = '<option value="">' + T.selectPlaceholder + '</option>';
 }
 
 // ============================================================
-// 三级联动下拉框 - 第二级：分类选择
+// 四级联动下拉框 - 第二级：发行版选择
+// ============================================================
+// 当用户选择 ROS 发行版时触发
+// 功能：重置下级选择 → 筛选出适用该发行版的分类与命令
+// ============================================================
+function onDistroChange() {
+  const version = document.getElementById('rosVersion').value;
+  const distro = document.getElementById('distro').value;
+  const categoryRow = document.getElementById('categoryRow');
+  const commandRow = document.getElementById('commandRow');
+  const detailDiv = document.getElementById('commandDetail');
+
+  // 重置第三、四下级下拉框
+  resetSelect('category');
+  resetSelect('command');
+  commandRow.style.display = 'none';
+  detailDiv.style.display = 'none';
+  filteredCategories = {};
+
+  // 未选择发行版：隐藏分类下拉框，速查表显示该版本全部
+  if (!distro) {
+    categoryRow.style.display = 'none';
+    renderSummaryTable();
+    return;
+  }
+
+  // 只保留含该发行版命令的分类（数据遍历后缓存在模块变量，供 onCategoryChange 使用）
+  const categorySelect = document.getElementById('category');
+  const categories = commandsData[version];
+  const filtered = {};  // categoryKey -> { name, commandIndices: [原始索引...] }
+
+  for (const key in categories) {
+    const cat = categories[key];
+    const indices = [];
+    cat.commands.forEach(function (cmd, i) {
+      if (cmd.distros && cmd.distros.indexOf(distro) !== -1) indices.push(i);
+    });
+    if (indices.length > 0) {
+      filtered[key] = { name: cat.name, commandIndices: indices };
+    }
+  }
+
+  filteredCategories = filtered;
+
+  for (const key in filtered) {
+    const option = document.createElement('option');
+    option.value = key;
+    option.textContent = filtered[key].name;
+    categorySelect.appendChild(option);
+  }
+
+  // 有可用分类则显示；否则显示空发行版提示（如 Melodic/Iron 暂无数据）
+  const hasCategories = Object.keys(filtered).length > 0;
+  categoryRow.style.display = hasCategories ? 'block' : 'none';
+  renderEmptyDistroNotice(detailDiv, distro, hasCategories);
+  renderSummaryTable();
+}
+
+// 选择无数据的发行版时，在详情区显示一条提示；有数据则清除
+function renderEmptyDistroNotice(detailDiv, distro, hasCategories) {
+  let notice = document.getElementById('emptyDistroNotice');
+  if (hasCategories) {
+    if (notice) notice.remove();
+    return;
+  }
+  if (!notice) {
+    notice = document.createElement('p');
+    notice.id = 'emptyDistroNotice';
+    notice.className = 'empty-distro-notice';
+    detailDiv.parentNode.insertBefore(notice, detailDiv.nextSibling);
+  }
+  notice.textContent = T.emptyDistro + '（' + (DISTRO_NAMES[distro] || distro) + '）';
+  notice.style.display = 'block';
+}
+
+// ============================================================
+// 四级联动下拉框 - 第三级：分类选择
 // ============================================================
 // 当用户选择命令分类时触发
-// 功能：重置命令选择 → 填充命令选项 → 显示命令下拉框
+// 功能：重置命令选择 → 填充该发行版+分类下的命令 → 显示命令下拉框
 // ============================================================
 function onCategoryChange() {
   const version = document.getElementById('rosVersion').value;
@@ -132,8 +247,8 @@ function onCategoryChange() {
   const commandRow = document.getElementById('commandRow');
   const detailDiv = document.getElementById('commandDetail');
 
-  // 重置第三级下拉框和详情区域
-  document.getElementById('command').innerHTML = '<option value="">' + T.selectPlaceholder + '</option>';
+  // 重置命令下拉框和详情区域
+  resetSelect('command');
   detailDiv.style.display = 'none';
 
   // 如果未选择分类，隐藏命令下拉框
@@ -142,14 +257,23 @@ function onCategoryChange() {
     return;
   }
 
-  // 根据选中分类，动态填充命令选项
-  const commands = commandsData[version][category].commands;
+  // 防御：分类数据不存在时安全退出（如数据异常）
+  const categoryData = commandsData[version] && commandsData[version][category];
+  if (!categoryData) {
+    commandRow.style.display = 'none';
+    return;
+  }
+
+  // 从发行版筛选结果中取该分类的命令原始索引（用原始索引保证命令对象完整）
+  const indices = filteredCategories[category] ? filteredCategories[category].commandIndices : [];
+  const commands = categoryData.commands;
   const commandSelect = document.getElementById('command');
 
-  commands.forEach((cmd, index) => {
+  indices.forEach(function (i) {
+    const cmd = commands[i];
     const option = document.createElement('option');
-    option.value = index;  // 使用索引而非命令名，便于后续获取完整对象
-    option.textContent = cmd.display || cmd.cmd;  // 优先使用 display 短名称
+    option.value = i;  // 原始索引，保证后续获取完整对象
+    option.textContent = cmd.display || cmd.cmd;
     commandSelect.appendChild(option);
   });
 
@@ -157,7 +281,7 @@ function onCategoryChange() {
 }
 
 // ============================================================
-// 三级联动下拉框 - 第三级：命令选择
+// 四级联动下拉框 - 第四级：命令选择
 // ============================================================
 // 当用户选择具体命令时触发
 // 功能：获取选中命令的完整数据并显示详情
@@ -179,6 +303,10 @@ function onCommandChange() {
 
   // 填充详情区域各个字段
   document.getElementById('detailTitle').textContent = cmd.title || cmd.display || cmd.cmd;
+  document.getElementById('detailVersionMeta').innerHTML = (cmd.distros || []).map(function (d) {
+    return '<span class="distro-badge distro-badge--' + d + '">' +
+           escapeHtml(DISTRO_NAMES[d] || d) + '</span>';
+  }).join('');
   document.getElementById('detailCmd').innerHTML = highlightCode(cmd.cmd);
   document.getElementById('detailDesc').textContent = cmd.desc;
   document.getElementById('detailExample').innerHTML = highlightCode(cmd.example);
@@ -204,37 +332,72 @@ function onCommandChange() {
 // ============================================================
 
 // 渲染速查表 + 更新命令总数徽标
+// 跟随「分类浏览」区的 ROS 版本 / 发行版选择实时过滤：
+//   版本未选 → 全部；选版本未选发行版 → 该版本全部；两者都选 → 仅该发行版命令
 function renderSummaryTable() {
   const tbody = document.getElementById('summaryTableBody');
   const count = document.getElementById('summaryCount');
   if (!tbody || !commandsData) return;
 
-  const versionNames = { ros1: 'ROS 1', ros2: 'ROS 2' };
+  const selVersion = document.getElementById('rosVersion').value;
+  const selDistro = document.getElementById('distro').value;
+  const versions = selVersion ? [selVersion] : ['ros1', 'ros2'];
+
   let rows = '';
   let total = 0;
 
-  for (const version of ['ros1', 'ros2']) {
+  versions.forEach(function (version) {
     const categories = commandsData[version];
-    if (!categories) continue;
+    if (!categories) return;
 
     for (const key in categories) {
       const cat = categories[key];
       cat.commands.forEach(cmd => {
+        // 已选发行版时，跳过不含该发行版的命令
+        if (selDistro && (!cmd.distros || cmd.distros.indexOf(selDistro) === -1)) return;
         total++;
+        // 版本徽章 + 发行版徽章：
+        //   已选发行版 → 仅显示该发行版徽章；未选 → 显示命令支持的全部发行版
+        let distroList = cmd.distros || [];
+        if (selDistro) distroList = distroList.filter(d => d === selDistro);
+        const distroBadges = distroList.map(function (d) {
+          return '<span class="distro-badge distro-badge--' + d + '">' +
+                 escapeHtml(DISTRO_NAMES[d] || d) + '</span>';
+        }).join('');
         rows += `
           <tr>
-            <td><span class="summary-version summary-version--${version}">${versionNames[version]}</span></td>
-            <td>${cat.name}</td>
+            <td><span class="summary-version summary-version--${version}">${VERSION_NAMES[version]}</span>${distroBadges}</td>
+            <td>${escapeHtml(cat.name)}</td>
             <td><code>${highlightCode(cmd.cmd)}</code></td>
             <td>${escapeHtml(cmd.desc)}</td>
           </tr>
         `;
       });
     }
-  }
+  });
 
   tbody.innerHTML = rows;
   if (count) count.textContent = total ? T.totalCount.replace('{n}', total) : '';
+
+  updateSummaryFilterBadge(selVersion, selDistro);
+}
+
+// 更新速查表标题旁的筛选条件徽章
+// version 为空 → 隐藏徽章；仅版本 → 显示「ROS 1」；版本+发行版 → 「ROS 2 · Jazzy」
+function updateSummaryFilterBadge(version, distro) {
+  const badge = document.getElementById('summaryFilterBadge');
+  if (!badge) return;
+
+  if (!version) {
+    badge.hidden = true;
+    badge.textContent = '';
+    return;
+  }
+
+  let label = VERSION_NAMES[version] || version;
+  if (distro) label += ' · ' + (DISTRO_NAMES[distro] || distro);
+  badge.textContent = label;
+  badge.hidden = false;
 }
 
 // 切换折叠面板展开/折叠状态
@@ -266,14 +429,12 @@ function escapeHtml(text) {
     .replace(/'/g, '&#39;');
 }
 
-// 防抖（C6）：搜索输入触发频率降低，避免每次按键都全量遍历
+// 防抖：搜索输入触发频瓕降低，避免每次按键都全量遍历
 function debounce(fn, delay) {
   let timer = null;
-  return function () {
-    const args = arguments;
-    const ctx = this;
+  return function (...args) {
     clearTimeout(timer);
-    timer = setTimeout(function () { fn.apply(ctx, args); }, delay);
+    timer = setTimeout(() => fn.apply(this, args), delay);
   };
 }
 
@@ -282,34 +443,28 @@ function normalizeSearch(s) {
   return String(s || '').toLowerCase().replace(/[\s_\-/<>:=[]{}.,'\"()|;]/g, '');
 }
 
-// 判断 needle 是否为 haystack 的子序列（字符按顺序出现即可）
-function isSubsequence(needle, haystack) {
-  let i = 0;
-  for (let j = 0; j < haystack.length && i < needle.length; j++) {
-    if (haystack[j] === needle[i]) i++;
-  }
-  return i === needle.length;
-}
-
 // 构建扁平化搜索索引（数据加载后调用一次）
 // 预计算各字段的小写原文与归一化文本，后续搜索无需重复处理
 function buildSearchIndex() {
-  const versionNames = { ros1: 'ROS 1', ros2: 'ROS 2' };
   const idx = [];
 
   for (const version in commandsData) {
     if (version !== 'ros1' && version !== 'ros2') continue;
     for (const category in commandsData[version]) {
       const catName = commandsData[version][category].name;
-      commandsData[version][category].commands.forEach(function (cmd) {
+      commandsData[version][category].commands.forEach(function (cmd, cmdIndex) {
         idx.push({
           versionKey: version,
-          versionName: versionNames[version],
+          versionName: VERSION_NAMES[version],
+          categoryKey: category,
           category: catName,
+          commandIndex: cmdIndex,
           rawCmd: String(cmd.cmd || '').toLowerCase(),
           normCmd: normalizeSearch(cmd.cmd),
           rawDisplay: String(cmd.display || '').toLowerCase(),
           normDisplay: normalizeSearch(cmd.display),
+          rawTitle: String(cmd.title || '').toLowerCase(),
+          normTitle: normalizeSearch(cmd.title),
           rawDesc: String(cmd.desc || '').toLowerCase(),
           normDesc: normalizeSearch(cmd.desc),
           rawCat: catName.toLowerCase(),
@@ -323,13 +478,13 @@ function buildSearchIndex() {
   searchIndex = idx;
 }
 
-// 基于预计算字段评分：精确包含 > 归一化包含 > 子序列，未命中返回 0
+// 基于预计算字段评分：精确包含 > 归一化连续包含，未命中返回 0
+// 注意：不做子序列模糊匹配，避免 run→roslaunch 等跳跃式假阳性
 function scoreField(kwRaw, kwNorm, rawText, normText) {
   if (!rawText) return 0;
   if (rawText.includes(kwRaw)) return 100;
   if (!kwNorm || !normText) return 0;
   if (normText.includes(kwNorm)) return 80;
-  if (isSubsequence(kwNorm, normText)) return 60 - Math.min(kwNorm.length, 20);
   return 0;
 }
 
@@ -353,7 +508,25 @@ function setupSearch() {
   const searchInput = document.getElementById('searchInput');
   if (!searchInput) return;
 
+  // 中文输入法（IME）组合输入期间不触发搜索，避免拼音中间态闪烁
+  let composing = false;
+  searchInput.addEventListener('compositionstart', function () { composing = true; });
+  searchInput.addEventListener('compositionend', function () {
+    composing = false;
+    // 组合确认后手动触发一次 input，确保最终文本执行搜索
+    searchInput.dispatchEvent(new Event('input'));
+  });
+
+  // Esc 清空搜索，提升键盘用户体验
+  searchInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      clearSearch();
+    }
+  });
+
   searchInput.addEventListener('input', debounce(function(e) {
+    if (composing) return;  // 拼音组合中间态，跳过搜索
     const keyword = e.target.value.toLowerCase().trim();
     const resultsDiv = document.getElementById('searchResults');
 
@@ -372,6 +545,7 @@ function setupSearch() {
       const score = Math.max(
         scoreField(keyword, kwNorm, entry.rawCmd, entry.normCmd),
         scoreField(keyword, kwNorm, entry.rawDisplay, entry.normDisplay),
+        scoreField(keyword, kwNorm, entry.rawTitle, entry.normTitle),
         scoreField(keyword, kwNorm, entry.rawDesc, entry.normDesc),
         scoreField(keyword, kwNorm, entry.rawCat, entry.normCat)
       );
@@ -379,7 +553,9 @@ function setupSearch() {
         results.push({
           versionKey: entry.versionKey,
           versionName: entry.versionName,
+          categoryKey: entry.categoryKey,
           category: entry.category,
+          commandIndex: entry.commandIndex,
           score: score,
           ...entry.cmd  // 展开命令对象（cmd, desc, example, notes）
         });
@@ -396,13 +572,22 @@ function setupSearch() {
     }
 
     // 渲染搜索结果列表（版本胶囊按 ros1/ros2 使用不同颜色）
-    let html = '<div class="results-list">';
+    // 顶部显示命中条数；结果项支持键盘（Tab 聚焦 + Enter/Space 触发）
+    let html = '<p class="results-count">' + escapeHtml(T.totalCount.replace('{n}', results.length)) + '</p>';
+    html += '<div class="results-list">';
     results.forEach((cmd, index) => {
+      const resultDistroBadges = (cmd.distros || []).map(function (d) {
+        return '<span class="distro-badge distro-badge--' + d + '">' +
+               escapeHtml(DISTRO_NAMES[d] || d) + '</span>';
+      }).join('');
       html += `
-        <div class="result-item" onclick="showSearchResult(${index})">
+        <div class="result-item" role="button" tabindex="0"
+             onclick="showSearchResult(${index})"
+             onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showSearchResult(${index})}">
           <span class="result-version result-version--${cmd.versionKey}">${escapeHtml(cmd.versionName)}</span>
+          ${resultDistroBadges}
           <span class="result-category">${escapeHtml(cmd.category)}</span>
-          <code class="result-cmd">${highlightText(cmd.cmd, keyword)}</code>
+          <code class="result-cmd">${highlightText(cmd.title, keyword)}</code>
           <span class="result-desc">${highlightText(cmd.desc, keyword)}</span>
         </div>
       `;
@@ -433,37 +618,34 @@ function showSearchResult(index) {
     detailDiv = document.createElement('div');
     detailDiv.id = 'searchDetail';
     detailDiv.className = 'search-detail';
-    resultsDiv.appendChild(detailDiv);
   }
 
-  // 填充详情内容（HTML 模板字符串）
-  const opts = cmd.options || [];
-  const notesBlock = (cmd.notes && cmd.notes.trim())
-    ? '<p><strong>' + T.notes + ':</strong></p><pre>' + escapeHtml(cmd.notes) + '</pre>'
-    : '';
-  const optionsBlock = opts.length
-    ? '<p><strong>' + T.options + ':</strong></p>' +
-      '<table class="options-table">' +
-      '<thead><tr><th>' + T.optionFlag + '</th><th>' + T.optionDesc + '</th></tr></thead>' +
-      '<tbody>' +
-      opts.map(function (o) {
-        return '<tr><td class="opt-flag"><code>' + highlightCode(o.flag) + '</code></td>' +
-               '<td class="opt-desc">' + escapeHtml(o.desc) + '</td></tr>';
-      }).join('') +
-      '</tbody></table>'
-    : '';
+  // 将详情卡片插入到被点击结果项的正下方
+  const clickedItem = resultsDiv.querySelectorAll('.result-item')[index];
+  if (clickedItem && clickedItem.nextElementSibling !== detailDiv) {
+    clickedItem.after(detailDiv);
+  }
 
+  // 填充详情内容（仅保留：版本、说明、示例三项，标题使用 title 字段）
+  // 标题为链接，点击后联动四级下拉框并跳转到分类浏览详情卡片
+  const jumpDistro = (cmd.distros && cmd.distros.length) ? cmd.distros[0] : '';
+  const detailDistroBadges = (cmd.distros || []).map(function (d) {
+    return '<span class="distro-badge distro-badge--' + d + '">' +
+           escapeHtml(DISTRO_NAMES[d] || d) + '</span>';
+  }).join('');
+  // 版本行采用「ROS / 发行版 / 分类」斜杠串联格式：ROS 2 / [Jazzy][Humble] / 核心命令
+  const distroSegment = (cmd.distros && cmd.distros.length)
+    ? ' / ' + detailDistroBadges
+    : '';
   detailDiv.innerHTML = `
     <div class="search-detail-header">
-      <h3>${escapeHtml(cmd.cmd)}</h3>
+      <h3><a href="#" class="detail-jump" onclick="jumpToBrowse('${cmd.versionKey}','${jumpDistro}','${cmd.categoryKey}',${cmd.commandIndex});return false;">${escapeHtml(cmd.title)}</a></h3>
       <button class="close-detail" onclick="closeSearchDetail()">×</button>
     </div>
-    <p><strong>${T.version}:</strong> ${escapeHtml(cmd.versionName)} / ${escapeHtml(cmd.category)}</p>
+    <p><strong>${T.version}:</strong> ${escapeHtml(cmd.versionName)}${distroSegment} / ${escapeHtml(cmd.category)}</p>
     <p><strong>${T.description}:</strong> ${highlightText(cmd.desc, window.currentSearchKeyword || '')}</p>
     <p><strong>${T.example}:</strong></p>
     <pre class="highlight-code"><code>${highlightCode(cmd.example)}</code></pre>
-    ${notesBlock}
-    ${optionsBlock}
   `;
 
   initCopyButtons(detailDiv);
@@ -483,6 +665,53 @@ function closeSearchDetail() {
 }
 
 // ============================================================
+// 跳转到分类浏览详情卡片（搜索详情标题链接触发）
+// ============================================================
+// 功能：联动填充四级下拉框 → 展开分类浏览详情卡片 → 滚动到位 → 高亮闪烁
+// 参数：versionKey='ros1'|'ros2'；distroKey=发行版键名；categoryKey=分类键名；commandIndex=命令索引
+// ============================================================
+function jumpToBrowse(versionKey, distroKey, categoryKey, commandIndex) {
+  const versionSelect = document.getElementById('rosVersion');
+  const distroSelect = document.getElementById('distro');
+  const categorySelect = document.getElementById('category');
+  const commandSelect = document.getElementById('command');
+
+  // 联动第一级：版本（变更时 onVersionChange 会自动清空下级）
+  if (versionSelect.value !== versionKey) {
+    versionSelect.value = versionKey;
+    onVersionChange();
+  }
+
+  // 联动第二级：发行版（变更时 onDistroChange 会重建分类与命令筛选）
+  if (distroSelect.value !== distroKey) {
+    distroSelect.value = distroKey;
+    onDistroChange();
+  }
+
+  // 联动第三级：分类
+  if (categorySelect.value !== categoryKey) {
+    categorySelect.value = categoryKey;
+    onCategoryChange();
+  }
+
+  // 联动第四级：命令（索引为原始命令索引，由搜索结果携带）
+  commandSelect.value = String(commandIndex);
+  onCommandChange();
+
+  // 展开分类浏览详情卡片（onCommandChange 已将其置为可见）
+  const detailDiv = document.getElementById('commandDetail');
+  if (detailDiv) {
+    detailDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // 高亮闪烁提示，帮助用户定位目标卡片
+    detailDiv.classList.remove('jump-flash');
+    // 强制回流以重新触发 CSS 动画
+    void detailDiv.offsetWidth;
+    detailDiv.classList.add('jump-flash');
+  }
+}
+
+// ============================================================
 // 清除搜索（点击"清除"按钮时触发）
 // ============================================================
 // 功能：清空搜索框 + 清空结果列表 + 移除详情卡片
@@ -494,6 +723,8 @@ function clearSearch() {
   if (detailDiv) {
     detailDiv.remove();
   }
+  window.currentSearchResults = [];
+  window.currentSearchKeyword = '';
 }
 
 // ============================================================
@@ -614,7 +845,7 @@ function fallbackCopy(text) {
   let ok = false;
   try {
     ok = document.execCommand('copy');
-  } catch (e) {
+  } catch {
     ok = false;
   }
   document.body.removeChild(textarea);

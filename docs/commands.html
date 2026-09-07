@@ -89,7 +89,15 @@ custom_js: /assets/js/commands.js
         </select>
       </div>
 
-      <!-- 第二级：命令分类选择（选中版本后显示） -->
+      <!-- 第二级：ROS 发行版选择（选中版本后显示） -->
+      <div class="filter-item" id="distroRow" style="display:none;">
+        <label for="distro">发行版本:</label>
+        <select id="distro" onchange="onDistroChange()">
+          <option value="">-- 请选择 --</option>
+        </select>
+      </div>
+
+      <!-- 第三级：命令分类选择（选中发行版后显示） -->
       <div class="filter-item" id="categoryRow" style="display:none;">
         <label for="category">命令分类:</label>
         <select id="category" onchange="onCategoryChange()">
@@ -97,7 +105,7 @@ custom_js: /assets/js/commands.js
         </select>
       </div>
 
-      <!-- 第三级：具体命令选择（选中分类后显示） -->
+      <!-- 第四级：具体命令选择（选中分类后显示） -->
       <div class="filter-item" id="commandRow" style="display:none;">
         <label for="command">具体命令:</label>
         <select id="command" onchange="onCommandChange()">
@@ -113,7 +121,10 @@ custom_js: /assets/js/commands.js
        功能：显示选中命令的完整信息
        ========================================================== -->
   <div id="commandDetail" class="command-detail" style="display:none;">
-    <h3 id="detailTitle"></h3>
+    <div class="detail-title-wrap">
+      <h3 id="detailTitle"></h3>
+      <div id="detailVersionMeta" class="detail-version-meta"></div>
+    </div>
     <div class="detail-content">
       <p><strong>命令:</strong></p>
       <pre class="highlight-code"><code id="detailCmd"></code></pre>
@@ -147,6 +158,7 @@ custom_js: /assets/js/commands.js
       <span class="summary-sort-icon" aria-hidden="true"></span>
       <span class="summary-toggle-text">命令速查表</span>
       <span class="summary-count" id="summaryCount"></span>
+      <span class="summary-filter-badge" id="summaryFilterBadge" hidden></span>
       <span class="summary-chevron-icon" aria-hidden="true"></span>
     </button>
 
