@@ -366,7 +366,7 @@ function renderSummaryTable() {
         }).join('');
         rows += `
           <tr>
-            <td><span class="summary-version summary-version--${version}">${VERSION_NAMES[version]}</span>${distroBadges}</td>
+            <td><span class="summary-version-wrap"><span class="summary-version summary-version--${version}">${VERSION_NAMES[version]}</span><span class="summary-distros">${distroBadges}</span></span></td>
             <td>${escapeHtml(cat.name)}</td>
             <td><code>${highlightCode(cmd.cmd)}</code></td>
             <td>${escapeHtml(cmd.desc)}</td>
@@ -584,8 +584,10 @@ function setupSearch() {
         <div class="result-item" role="button" tabindex="0"
              onclick="showSearchResult(${index})"
              onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showSearchResult(${index})}">
-          <span class="result-version result-version--${cmd.versionKey}">${escapeHtml(cmd.versionName)}</span>
-          ${resultDistroBadges}
+          <span class="result-version-wrap">
+            <span class="result-version result-version--${cmd.versionKey}">${escapeHtml(cmd.versionName)}</span>
+            <span class="result-distros">${resultDistroBadges}</span>
+          </span>
           <span class="result-category">${escapeHtml(cmd.category)}</span>
           <code class="result-cmd">${highlightText(cmd.title, keyword)}</code>
           <span class="result-desc">${highlightText(cmd.desc, keyword)}</span>

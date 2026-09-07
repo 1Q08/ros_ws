@@ -102,7 +102,7 @@ docs/                              # Jekyll 站点根目录
     │   ├── favicon.js            # ├─ favicon 动态切换（跟随主题）
     │   ├── giscus.js             # ├─ giscus 评论区懒加载（按钮 + 重试 + 主题同步）
     │   ├── bg-particles.js       # ├─ 背景粒子动画（Canvas，大小分层 + 发光）
-    │   └── commands.js           # └─ 命令速查页脚本（搜索防抖 + 三级联动 + 转义 + 文案 i18n）
+    │   └── commands.js           # └─ 命令速查页脚本（搜索防抖 + 四级联动 + 转义 + 文案 i18n）
     └── css/
         ├── commands.scss         # ├─ 命令速查页专属样式（含斑马条纹表格）
         ├── about.scss            # ├─ 关于页专属样式
@@ -137,7 +137,7 @@ _site/                             # Jekyll 编译输出（自动生成，不手
 | 区域       | 功能                                                               |
 | ---------- | ------------------------------------------------------------------ |
 | 搜索区域   | 实时搜索 + 结果列表 + 点击弹出详情卡片                             |
-| 分类浏览   | 三级联动下拉框：ROS 版本 → 命令分类 → 具体命令                   |
+| 分类浏览   | 四级联动下拉框：ROS 版本 → 发行版 → 命令分类 → 具体命令             |
 | 命令速查表 | 折叠面板，一键展开查看全部命令概览（版本/分类/命令/说明）          |
 | 命令详情   | 显示命令名称、代码块（含 `<param>` 占位符）、说明、示例、注意事项 |
 
@@ -176,6 +176,7 @@ _site/                             # Jekyll 编译输出（自动生成，不手
 | `example` | 示例代码               | `"ros2 topic echo /chatter"`     |
 | `options` | 常用选项（可选）       | `[{ "flag": "--csv", "desc": "..." }]` |
 | `notes`   | 注意事项               | `"按 Ctrl+C 停止显示"`           |
+| `distros` | 适用发行版列表         | `["jazzy", "humble"]`          |
 
 **命令统计**：
 
@@ -226,7 +227,8 @@ bundle exec jekyll serve --baseurl=""
   "cmd": "ros2 xxx xxx <param>",
   "desc": "命令说明",
   "example": "ros2 xxx xxx /example",
-  "notes": "注意事项\n\n常用选项：\n  --option    说明"
+  "notes": "注意事项\n\n常用选项：\n  --option    说明",
+  "distros": ["jazzy"]
 }
 ```
 

@@ -102,7 +102,7 @@ docs/                              # Jekyll site root
     │   ├── favicon.js            # ├─ Dynamic favicon switching (follows theme)
     │   ├── giscus.js             # ├─ Lazy-loaded giscus comments (button + retry + theme sync)
     │   ├── bg-particles.js       # ├─ Background particle animation (Canvas, layered + glow)
-    │   └── commands.js           # └─ Command reference (search + debounce + cascading selects + escaping + i18n)
+    │   └── commands.js           # └─ Command reference (search + debounce + four-level cascading selects + escaping + i18n)
     └── css/
         ├── commands.scss         # ├─ Command reference page styles (zebra-striped table)
         ├── about.scss            # ├─ About page styles
@@ -137,7 +137,7 @@ The site defaults to Chinese, with an English version mounted at `/en/` that sha
 | Area           | Function                                                                |
 | -------------- | ----------------------------------------------------------------------- |
 | Search         | Real-time search + result list + detail card on click                   |
-| Browse         | Cascading dropdowns: ROS version → category → command                   |
+| Browse         | Cascading dropdowns: ROS version → distribution → category → command    |
 | Command table  | Collapsible panel listing all commands (version/category/command/desc)  |
 | Command detail | Name, code block (with `<param>` placeholders), description, example, notes |
 
@@ -176,6 +176,7 @@ Command fields:
 | `example` | Example                          | `"ros2 topic echo /chatter"`         |
 | `options` | Common options (optional)        | `[{ "flag": "--csv", "desc": "..." }]` |
 | `notes`   | Notes                            | `"Press Ctrl+C to stop"`             |
+| `distros` | Applicable distributions        | `["jazzy", "humble"]`             |
 
 **Command counts**:
 
@@ -226,7 +227,8 @@ Edit `assets/data/commands.json` and add the command to the `commands` array und
   "cmd": "ros2 xxx xxx <param>",
   "desc": "Description",
   "example": "ros2 xxx xxx /example",
-  "notes": "Notes\n\nCommon options:\n  --option    description"
+  "notes": "Notes\n\nCommon options:\n  --option    description",
+  "distros": ["jazzy"]
 }
 ```
 

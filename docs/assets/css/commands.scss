@@ -150,16 +150,33 @@
   background: #0366d6;  /* ROS 2 蓝色（品牌色） */
 }
 
-/* 搜索结果内的发行版徽章：容器为 flex（gap 已控制间距），
-   覆盖通用 .distro-badge 的 margin-left，避免叠加出过宽间距 */
-.result-item .distro-badge {
+/* 版本胶囊 + 发行版徽章的包裹容器：徽章贴在胶囊右侧，底边与胶囊底边对齐 */
+.result-version-wrap {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;  /* 徽章底部与胶囊底部对齐 */
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+/* 发行版徽章行：横排，向右展开 */
+.result-distros {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+/* 搜索结果内的发行版徽章：由包裹容器控制间距，覆盖通用 margin-left */
+.result-distros .distro-badge {
   margin-left: 0;
   flex-shrink: 0;
 }
 
-/* 相邻徽章间距比容器 gap 收窄约 5px，视觉更紧凑 */
-.result-item .distro-badge + .distro-badge {
-  margin-left: -5px;
+/* 相邻徽章间距（横排）由 .result-distros 的 gap 控制，此处无需负外边距 */
+.result-distros .distro-badge + .distro-badge {
+  margin-left: 0;
 }
 
 /* 分类名 */
@@ -274,11 +291,13 @@
   color: var(--text-primary);
 }
 
-/* 版本行内联徽章上移，与文本底部对齐（inline-block 才能应用 transform）；
-   收紧与两侧斜杠的间距 */
+/* 版本行内联徽章：baseline 对齐保证跨浏览器一致，再整体上移 2px 抵消
+   小字号（9px）相对周围文字（16px）的视觉偏低 */
 .search-detail p .distro-badge {
   display: inline-block;
-  transform: translateY(-3px);
+  vertical-align: baseline;
+  position: relative;
+  top: -3px;
   margin-left: 0;
   margin-right: 0;
 }
@@ -507,6 +526,25 @@
   background: #0366d6;  /* ROS 2 蓝色（品牌色） */
 }
 
+/* 版本标签 + 发行版徽章：水平排列，徽章底边与版本标签底边对齐、左端紧靠 */
+.summary-version-wrap {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  white-space: nowrap;
+}
+
+.summary-distros {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+}
+
+/* 速查表版本列内的徽章：由包裹容器控制间距 */
+.summary-distros .distro-badge {
+  margin-left: 0;
+}
+
 /* 发行版徽章（通用：速查表 / 搜索结果 / 详情共用） */
 .distro-badge {
   font-size: 9px;
@@ -515,11 +553,6 @@
   border-radius: 4px;
   white-space: nowrap;
   color: #fff;
-  margin-left: 6px;
-}
-
-/* 速查表版本列内的徽章需要无外边距，由容器间距控制 */
-.summary-table .distro-badge:first-of-type {
   margin-left: 6px;
 }
 

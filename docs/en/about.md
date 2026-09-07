@@ -105,6 +105,7 @@ custom_css: /assets/css/about.css
     </div>
     <div class="card-body changelog-body">
       <ul class="changelog-list">
+        <li><span class="cl-date">2026-09-07</span> Added distribution metadata (Jazzy/Humble/Noetic), version+distribution filtering in the cheatsheet, a four-level browse filter, and refined version/distribution badges across the site</li>
         <li><span class="cl-date">2026-09-04</span> Added fuzzy search, hit highlighting, and search performance optimization; completed command data</li>
         <li><span class="cl-date">2026-09-02</span> Refactored command data, fixed giscus comments occasionally rendering incompletely, and optimized the codebase</li>
         <li><span class="cl-date">2026-08-28</span> Added the English site (`/en/`), improved the command cheatsheet experience, and beautified the home &amp; about pages</li>
