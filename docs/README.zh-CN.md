@@ -11,6 +11,10 @@
   <a href="https://github.com/1Q08/ros_ws/stargazers"><img src="https://img.shields.io/github/stars/1Q08/ros_ws.svg?style=flat-square" alt="Stargazers"></a>
   <a href="https://github.com/1Q08/ros_ws/issues"><img src="https://img.shields.io/github/issues/1Q08/ros_ws.svg?style=flat-square" alt="Issues"></a>
   <a href="https://github.com/1Q08/ros_ws/blob/main/LICENSE"><img src="https://img.shields.io/github/license/1Q08/ros_ws.svg?style=flat-square" alt="Apache 2.0 License"></a>
+  <a href="https://github.com/1Q08/ros_ws/watchers"><img src="https://img.shields.io/github/watchers/1Q08/ros_ws.svg?style=flat-square" alt="Watchers"></a>
+  <a href="https://github.com/1Q08/ros_ws"><img src="https://img.shields.io/github/repo-size/1Q08/ros_ws.svg?style=flat-square" alt="Repo Size"></a>
+  <a href="https://github.com/1Q08/ros_ws/commits/main"><img src="https://img.shields.io/github/commit-activity/m/1Q08/ros_ws.svg?style=flat-square" alt="Commit Activity"></a>
+  <a href="https://1q08.github.io/ros_ws/"><img src="https://img.shields.io/website?url=https%3A%2F%2F1q08.github.io%2Fros_ws%2F&style=flat-square" alt="Website"></a>
 </p>
 
 <p align="center">

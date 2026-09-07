@@ -1,62 +1,66 @@
+<p align="center">
+  <a href="./README.md">English</a> | <a href="./README.zh-CN.md">简体中文</a>
+</p>
+
 # README
 
-一个同时保存 **ROS1** 与 **ROS2** 开发成果的工作空间仓库，包含：
+A workspace repository that stores **ROS1** and **ROS2** development artifacts, including:
 
-- 📚 **ROS 命令速查文档站**（GitHub Pages）
-- 🌏 **ROS2 官方文档汉化站**（独立站点）
-- 🛠️ **Jetson 平台常用工具脚本**
-- 🤖 **ROS1 / ROS2 项目源码**（分布在多个分支）
+- 📚 **ROS Command Reference docs site** (GitHub Pages)
+- 🌏 **ROS2 official documentation Chinese translation site** (standalone site)
+- 🛠️ **Jetson platform utility scripts**
+- 🤖 **ROS1 / ROS2 project source code** (across multiple branches)
 
 ---
 
-## 📚 文档站（`docs/`）
+## 📚 Docs site (`docs/`)
 
-一个开源的 **ROS1 / ROS2 命令行参考工具**，基于 Jekyll + GitHub Pages 构建，提供交互式命令浏览器。
+An open-source **ROS1 / ROS2 command-line reference tool** built with Jekyll + GitHub Pages, featuring an interactive command browser.
 
-### 本地开发
+### Local development
 
 ```bash
-# 1. 进入文档站目录
+# 1. Enter the docs site directory
 cd docs
 
-# 2. 安装依赖
+# 2. Install dependencies
 bundle install
 
-# 3. 启动开发服务器（监听文件变化自动重建）
+# 3. Start the dev server (auto-rebuilds on file changes)
 bundle exec jekyll serve --baseurl=""
 
-# 4. 浏览器访问
+# 4. Open in browser
 # http://127.0.0.1:4000
 ```
 
-更多详情见 [`docs/README.md`](docs/README.md)。
+See [`docs/README.md`](docs/README.md) for more details.
 
 ---
 
-## 🛠️ 工具脚本（`tools/`）
+## 🛠️ Utility scripts (`tools/`)
 
-面向 **NVIDIA Jetson** 平台的常用脚本：
+Common scripts for **NVIDIA Jetson**:
 
-| 脚本                   | 功能                                                       |
-| ---------------------- | ---------------------------------------------------------- |
-| `sysinfo.sh`         | 显示系统信息，并提供常用软件安装选项、系统更新与清理       |
-| `set_fan_profile.sh` | 切换风扇散热模式（`cool` 散热优先 / `quiet` 静音优先） |
+| Script                | Purpose                                                                                    |
+| --------------------- | ------------------------------------------------------------------------------------------ |
+| `sysinfo.sh`         | Shows system info, with software installation options, system update and cleanup           |
+| `set_fan_profile.sh` | Switches the fan cooling mode (`cool` for performance / `quiet` for silence) |
 
-**使用方式**：
+**Usage**:
 
 ```bash
-# 系统信息查询 + 软件安装助手
+# System info + software install assistant
 ./tools/sysinfo.sh
 
-# 切换风扇配置（带参数直接切换，不带参数进入交互式选择）
+# Switch the fan profile (pass an argument to switch directly; no argument enters interactive mode)
 ./tools/set_fan_profile.sh cool
 ./tools/set_fan_profile.sh
 ```
 
-更多详情见 [`tools/README.md`](tools/README.md)。
+See [`tools/README.md`](tools/README.md) for more details.
 
 ---
 
-## 📄 许可
+## 📄 License
 
-本项目基于 MIT 许可开源，详见 [LICENSE](LICENSE)。
+Licensed under MIT. See [LICENSE](LICENSE).
