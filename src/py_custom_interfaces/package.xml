@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>custom_interfaces</name>
+  <version>0.0.0</version>
+  <description>同时定义 msg 与 srv 自定义接口,并用 Python 节点收发的最小示例包</description>
+  <maintainer email="19872205914@163.com">nvidia</maintainer>
+  <license>Apache-2.0</license>
+
+  <!-- 构建工具依赖:ament_cmake(接口生成必需) -->
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <!-- 构建工具依赖:rosidl 接口代码生成器 -->
+  <buildtool_depend>rosidl_default_generators</buildtool_depend>
+
+  <!-- 运行期依赖:rosidl 生成的接口运行时 -->
+  <exec_depend>rosidl_default_runtime</exec_depend>
+  <!-- 运行期依赖:rclpy(Python 节点) -->
+  <exec_depend>rclpy</exec_depend>
+
+  <!-- 本包属于接口包分组,供其他包发现/使用 -->
+  <member_of_group>rosidl_interface_packages</member_of_group>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
