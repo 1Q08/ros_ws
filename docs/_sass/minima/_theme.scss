@@ -120,6 +120,22 @@ body {
 }
 
 /**
+ * 页脚压缩（覆盖 minima 默认间距，减少垂直留白）
+ */
+.site-footer {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.footer-col {
+  margin-bottom: 6px;
+}
+
+.footer-social {
+  margin-top: 8px;
+}
+
+/**
  * 页脚访问量计数
  */
 .site-visits__badge {

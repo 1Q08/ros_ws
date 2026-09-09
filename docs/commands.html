@@ -179,6 +179,15 @@ custom_js: /assets/js/commands.js
 
 </div>
 
+<section class="giscus-wrapper">
+  <button type="button" class="giscus-load-btn" id="giscus-load-btn">
+    <span class="giscus-load-icon" aria-hidden="true"></span>
+    <span class="giscus-load-text">查看评论</span>
+  </button>
+  <div class="giscus"></div>
+  <script src="{{ "/assets/js/giscus.js" | relative_url }}" defer></script>
+</section>
+
 <script>
 // 命令速查页脚本已抽取为独立文件（assets/js/commands.js，经 front matter custom_js 加载）
 // 此处仅注入页面专属配置：命令数据地址（经 relative_url 处理，兼容 GitHub Pages baseurl）

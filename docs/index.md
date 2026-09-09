@@ -15,7 +15,7 @@ post_limit: 3
     <span class="entry-card__title">命令速查</span>
     <span class="entry-card__desc">搜索与分类浏览高频命令</span>
   </a>
-  <a class="entry-card" href="https://1q08.github.io/ROS2_documentation/jazzy/index.html" target="_blank" rel="noopener noreferrer">
+  <a class="entry-card" href="https://1q08.github.io/ROS2_documentation" target="_blank" rel="noopener noreferrer">
     <span class="entry-card__title">ROS 2 文档汉化站</span>
     <span class="entry-card__desc">官方文档完整中文翻译</span>
   </a>

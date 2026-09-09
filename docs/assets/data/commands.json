@@ -312,41 +312,6 @@
             "jazzy",
             "humble"
           ]
-        },
-        {
-          "display": "ros2 doctor",
-          "title": "ros2 doctor",
-          "cmd": "ros2 doctor",
-          "desc": "检查 ROS 2 环境配置是否正常，环境变量、网络、系统等设置，报告潜在问题",
-          "example": "ros2 doctor",
-          "options": [
-            {
-              "flag": "--report",
-              "desc": "生成完整的诊断报告"
-            },
-            {
-              "flag": "--fail-on-error",
-              "desc": "存在错误时以非零状态退出"
-            }
-          ],
-          "notes": "",
-          "distros": [
-            "jazzy",
-            "humble"
-          ]
-        },
-        {
-          "display": "doctor hello",
-          "title": "ros2 doctor hello",
-          "cmd": "ros2 doctor hello",
-          "desc": "检查多台主机之间的网络连通性",
-          "example": "ros2 doctor hello",
-          "options": [],
-          "notes": "与 ros2 wtf hello 功能相同",
-          "distros": [
-            "jazzy",
-            "humble"
-          ]
         }
       ]
     },
@@ -665,8 +630,8 @@
               "desc": "等待匹配的订阅者数量达到 N 后再开始发布"
             },
             {
-              "flag": "--yaml-file FILE",
-              "desc": "从 YAML 文件读取消息内容（如 ros2 topic echo 的 STDOUT 输出）"
+              "flag": "--stdin",
+              "desc": "从标准输入 stdin 读取消息内容（如 ros2 topic echo 的 STDOUT 输出），适合管道传递"
             }
           ],
           "notes": "提示：输入话题名和消息类型后按 Tab 可自动补全 YAML 字段模板，直接修改数值后回车发布\n示例：\n  ros2 topic pub /turtle1/cmd_vel geometry_msgs/msg/Twist <TAB>",
@@ -979,6 +944,14 @@
             {
               "flag": "-l N, --truncate-length N",
               "desc": "截断数组、字节与字符串的长度（默认 128）"
+            },
+            {
+              "flag": "--no-arr",
+              "desc": "不打印消息中的数组字段"
+            },
+            {
+              "flag": "--no-str",
+              "desc": "不打印消息中的字符串字段"
             }
           ],
           "notes": "",
@@ -1102,7 +1075,7 @@
           "display": "set",
           "title": "ros2 param set",
           "cmd": "ros2 param set <node_name> <parameter_name> <value>",
-          "desc": "设置参数值，支持 int、float、bool、string、list 等类型，按 Ctrl+C 停止等待响应",
+          "desc": "设置参数值，支持 int、float、bool、string、list 等类型",
           "example": "ros2 param set /my_node my_param 10",
           "options": [],
           "notes": "设置参数值后，节点会收到参数更新事件，可在节点中处理",
@@ -1115,7 +1088,7 @@
           "display": "get",
           "title": "ros2 param get",
           "cmd": "ros2 param get <node_name> <parameter_name>",
-          "desc": "获取参数值，显示参数的类型和当前值，按 Ctrl+C 停止等待响应",
+          "desc": "获取参数值，显示参数的类型和当前值",
           "example": "ros2 param get /my_node my_param",
           "options": [],
           "notes": "获取指定节点的参数值，可用于调试和验证参数设置",
@@ -1130,12 +1103,7 @@
           "cmd": "ros2 param dump <node_name>",
           "desc": "将指定节点的所有参数及其值保存到 YAML 文件（需要手动创建文件或使用 > 操作符），便于备份和迁移配置",
           "example": "ros2 param dump /turtlesim > ~/Desktop/turtlesim.yaml  # 将当前配置保存到桌面",
-          "options": [
-            {
-              "flag": "--output-dir",
-              "desc": "指定输出目录"
-            }
-          ],
+          "options": [],
           "notes": "",
           "distros": [
             "jazzy",
@@ -1146,12 +1114,16 @@
           "display": "load",
           "title": "ros2 param load",
           "cmd": "ros2 param load <node_name> <parameter_file>",
-          "desc": "从 YAML 文件加载参数值到指定节点，支持 int、float、bool、string、list 等类型，按 Ctrl+C 停止等待响应",
+          "desc": "从 YAML 文件加载参数值到指定节点，支持 int、float、bool、string、list 等类型",
           "example": "ros2 param load /my_node params.yaml",
           "options": [
             {
-              "flag": "--node-type",
-              "desc": "指定节点类型"
+              "flag": "--no-use-wildcard",
+              "desc": "不加载 '/**' 命名空间下的参数到节点中，避免通配符匹配的全部参数被注入"
+            },
+            {
+              "flag": "--timeout N",
+              "desc": "等待节点可用的秒数（默认 1 秒）"
             }
           ],
           "notes": "",
@@ -1272,12 +1244,16 @@
               "desc": "指定输出目录/文件前缀"
             },
             {
-              "flag": "--services <name>...",
+              "flag": "--services <service> [<service> ...]",
               "desc": "只录制指定服务的服务事件"
             },
             {
-              "flag": "-a, --all-services",
-              "desc": "录制所有服务的服务事件"
+              "flag": "-a, --all",
+              "desc": "录制所有话题与服务（不含隐藏话题）"
+            },
+            {
+              "flag": "--all-services",
+              "desc": "只录制所有服务的服务事件"
             }
           ],
           "notes": "",
@@ -1809,9 +1785,52 @@
         }
       ]
     },
-    "wtf": {
+    "diagnostic": {
       "name": "诊断命令",
       "commands": [
+        {
+          "display": "ros2 doctor",
+          "title": "ros2 doctor",
+          "cmd": "ros2 doctor",
+          "desc": "检查 ROS 2 环境配置是否正常，环境变量、网络、系统等设置，报告潜在问题",
+          "example": "ros2 doctor",
+          "options": [
+            {
+              "flag": "--report",
+              "desc": "生成完整的诊断报告"
+            },
+            {
+              "flag": "-rf, --report-failed",
+              "desc": "只输出检查失败的条目（不打印通过项）"
+            },
+            {
+              "flag": "-ep, --exclude-packages",
+              "desc": "检查时排除指定的软件包（逗号分隔）"
+            },
+            {
+              "flag": "-iw, --include-warnings",
+              "desc": "将警告纳入失败检查：存在警告也计入失败（需与 --report-failed 配合）"
+            }
+          ],
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
+        },
+        {
+          "display": "doctor hello",
+          "title": "ros2 doctor hello",
+          "cmd": "ros2 doctor hello",
+          "desc": "检查多台主机之间的网络连通性",
+          "example": "ros2 doctor hello",
+          "options": [],
+          "notes": "与 ros2 wtf hello 功能相同",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
+        },
         {
           "display": "hello",
           "title": "ros2 wtf hello",

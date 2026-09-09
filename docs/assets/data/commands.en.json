@@ -312,41 +312,6 @@
             "jazzy",
             "humble"
           ]
-        },
-        {
-          "display": "ros2 doctor",
-          "title": "ros2 doctor",
-          "cmd": "ros2 doctor",
-          "desc": "Check whether the ROS 2 environment is configured correctly, and report potential issues with environment variables, network, system settings, etc.",
-          "example": "ros2 doctor",
-          "options": [
-            {
-              "flag": "--report",
-              "desc": "Generate a full diagnostic report"
-            },
-            {
-              "flag": "--fail-on-error",
-              "desc": "Exit with a non-zero status when an error is found"
-            }
-          ],
-          "notes": "",
-          "distros": [
-            "jazzy",
-            "humble"
-          ]
-        },
-        {
-          "display": "doctor hello",
-          "title": "ros2 doctor hello",
-          "cmd": "ros2 doctor hello",
-          "desc": "Check network connectivity between multiple hosts",
-          "example": "ros2 doctor hello",
-          "options": [],
-          "notes": "Same functionality as ros2 wtf hello",
-          "distros": [
-            "jazzy",
-            "humble"
-          ]
         }
       ]
     },
@@ -665,8 +630,8 @@
               "desc": "Wait until N matching subscribers are found before publishing"
             },
             {
-              "flag": "--yaml-file FILE",
-              "desc": "Read message contents from a YAML file (e.g. the STDOUT of ros2 topic echo)"
+              "flag": "--stdin",
+              "desc": "Read values from standard input (e.g. the STDOUT of ros2 topic echo)"
             }
           ],
           "notes": "Tip: after entering the topic name and message type, press Tab to auto-complete the YAML field template, edit the values, and press Enter to publish\nExample:\n  ros2 topic pub /turtle1/cmd_vel geometry_msgs/msg/Twist <TAB>",
@@ -979,6 +944,14 @@
             {
               "flag": "-l N, --truncate-length N",
               "desc": "Truncate arrays, bytes, and strings to the given length (default 128)"
+            },
+            {
+              "flag": "--no-arr",
+              "desc": "Don't print array fields of messages"
+            },
+            {
+              "flag": "--no-str",
+              "desc": "Don't print string fields of messages"
             }
           ],
           "notes": "",
@@ -1102,7 +1075,7 @@
           "display": "set",
           "title": "ros2 param set",
           "cmd": "ros2 param set <node_name> <parameter_name> <value>",
-          "desc": "Set a parameter value, supporting int, float, bool, string, list, and other types; press Ctrl+C to stop waiting for a response",
+          "desc": "Set a parameter value, supporting int, float, bool, string, list, and other types",
           "example": "ros2 param set /my_node my_param 10",
           "options": [],
           "notes": "After setting a parameter, the node receives a parameter update event that can be handled inside the node",
@@ -1115,7 +1088,7 @@
           "display": "get",
           "title": "ros2 param get",
           "cmd": "ros2 param get <node_name> <parameter_name>",
-          "desc": "Get a parameter value, showing its type and current value; press Ctrl+C to stop waiting for a response",
+          "desc": "Get a parameter value, showing its type and current value",
           "example": "ros2 param get /my_node my_param",
           "options": [],
           "notes": "Gets a parameter value from the specified node, useful for debugging and verifying parameter settings",
@@ -1130,12 +1103,7 @@
           "cmd": "ros2 param dump <node_name>",
           "desc": "Save all parameters of the specified node and their values to a YAML file (you need to create the file manually or use the > operator), useful for backup and migration",
           "example": "ros2 param dump /turtlesim > ~/Desktop/turtlesim.yaml  # Save current config to the desktop",
-          "options": [
-            {
-              "flag": "--output-dir",
-              "desc": "Specify the output directory"
-            }
-          ],
+          "options": [],
           "notes": "",
           "distros": [
             "jazzy",
@@ -1146,12 +1114,16 @@
           "display": "load",
           "title": "ros2 param load",
           "cmd": "ros2 param load <node_name> <parameter_file>",
-          "desc": "Load parameter values from a YAML file into the specified node, supporting int, float, bool, string, list, and other types; press Ctrl+C to stop waiting for a response",
+          "desc": "Load parameter values from a YAML file into the specified node, supporting int, float, bool, string, list, and other types",
           "example": "ros2 param load /my_node params.yaml",
           "options": [
             {
-              "flag": "--node-type",
-              "desc": "Specify the node type"
+              "flag": "--no-use-wildcard",
+              "desc": "Do not load parameters in the '/**' namespace into the node"
+            },
+            {
+              "flag": "--timeout N",
+              "desc": "Wait for N seconds until node becomes available (default 1 sec)"
             }
           ],
           "notes": "",
@@ -1272,12 +1244,16 @@
               "desc": "Specify the output directory / file prefix"
             },
             {
-              "flag": "--services <name>...",
+              "flag": "--services <service> [<service> ...]",
               "desc": "Record service events for the specified services only"
             },
             {
-              "flag": "-a, --all-services",
-              "desc": "Record service events for all services"
+              "flag": "-a, --all",
+              "desc": "Record all topics and services (exclude hidden topics)"
+            },
+            {
+              "flag": "--all-services",
+              "desc": "Record all services via service event topics"
             }
           ],
           "notes": "",
@@ -1809,9 +1785,52 @@
         }
       ]
     },
-    "wtf": {
+    "diagnostic": {
       "name": "Diagnostic Commands",
       "commands": [
+        {
+          "display": "ros2 doctor",
+          "title": "ros2 doctor",
+          "cmd": "ros2 doctor",
+          "desc": "Check whether the ROS 2 environment is configured correctly, and report potential issues with environment variables, network, system settings, etc.",
+          "example": "ros2 doctor",
+          "options": [
+            {
+              "flag": "--report",
+              "desc": "Print all reports"
+            },
+            {
+              "flag": "-rf, --report-failed",
+              "desc": "Print reports of failed checks only"
+            },
+            {
+              "flag": "-ep, --exclude-packages",
+              "desc": "Exclude package checks or report"
+            },
+            {
+              "flag": "-iw, --include-warnings",
+              "desc": "Include warnings as failed checks"
+            }
+          ],
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
+        },
+        {
+          "display": "doctor hello",
+          "title": "ros2 doctor hello",
+          "cmd": "ros2 doctor hello",
+          "desc": "Check network connectivity between multiple hosts",
+          "example": "ros2 doctor hello",
+          "options": [],
+          "notes": "Same functionality as ros2 wtf hello",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
+        },
         {
           "display": "hello",
           "title": "ros2 wtf hello",
