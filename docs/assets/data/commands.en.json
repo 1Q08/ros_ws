@@ -264,6 +264,159 @@
           ]
         }
       ]
+    },
+    "rosdep": {
+      "name": "Dependency Management",
+      "commands": [
+        {
+          "display": "init",
+          "title": "rosdep init",
+          "cmd": "rosdep init",
+          "desc": "Initialize the rosdep sources in /etc/ros/rosdep/sources.list.d, creating the source list required for working (may require sudo)",
+          "example": "sudo rosdep init",
+          "options": [],
+          "notes": "Usually run once before first use of rosdep; subsequent updates are done via rosdep update",
+          "distros": [
+            "noetic"
+          ]
+        },
+        {
+          "display": "update",
+          "title": "rosdep update",
+          "cmd": "rosdep update",
+          "desc": "Update the local rosdep database based on the rosdep sources",
+          "example": "rosdep update",
+          "options": [
+            {
+              "flag": "--rosdistro <distro>",
+              "desc": "Update only the specified distro's rosdep data"
+            },
+            {
+              "flag": "--include-eol-distros",
+              "desc": "Also fetch rosdep data for end-of-life (EOL) distros"
+            }
+          ],
+          "notes": "Recommended before installing dependencies so the local database stays in sync with the sources",
+          "distros": [
+            "noetic"
+          ]
+        },
+        {
+          "display": "check",
+          "title": "rosdep check",
+          "cmd": "rosdep check <stacks-and-packages>...",
+          "desc": "Check whether the dependencies of the given package(s) (package dirs or package.xml) have been met",
+          "example": "rosdep check --from-paths src --ignore-src",
+          "options": [
+            {
+              "flag": "--from-paths <path>",
+              "desc": "Treat the arguments as paths to scan, visiting all packages found there"
+            },
+            {
+              "flag": "--ignore-src",
+              "desc": "Ignore packages in source directories (packages already built in the workspace)"
+            },
+            {
+              "flag": "-t <types>, --dependency-types <types>",
+              "desc": "Specify the dependency types to check (build / exec / test, etc.), defaults to all"
+            }
+          ],
+          "notes": "Combined with --from-paths to check all packages in the workspace in one go",
+          "distros": [
+            "noetic"
+          ]
+        },
+        {
+          "display": "install",
+          "title": "rosdep install",
+          "cmd": "rosdep install <stacks-and-packages>...",
+          "desc": "Download and install the unmet dependencies of the given package(s)",
+          "example": "rosdep install --from-paths src --ignore-src -r -y",
+          "options": [
+            {
+              "flag": "--from-paths <path>",
+              "desc": "Treat the arguments as paths to scan, visiting all packages found there"
+            },
+            {
+              "flag": "--ignore-src",
+              "desc": "Ignore packages in source directories and only install their dependencies"
+            },
+            {
+              "flag": "-r, --resolve",
+              "desc": "Resolve dependencies during installation (e.g., use the cache when offline)"
+            },
+            {
+              "flag": "-y, --default-yes",
+              "desc": "Automatically answer yes to all package manager prompts (e.g., apt)"
+            },
+            {
+              "flag": "-t <types>, --dependency-types <types>",
+              "desc": "Specify the dependency types to install (build / exec / test, etc.), defaults to all except doc"
+            }
+          ],
+          "notes": "",
+          "distros": [
+            "noetic"
+          ]
+        },
+        {
+          "display": "keys",
+          "title": "rosdep keys",
+          "cmd": "rosdep keys <stacks-and-packages>...",
+          "desc": "List the rosdep keys that the package(s) depend on",
+          "example": "rosdep keys --from-paths src --ignore-src",
+          "options": [
+            {
+              "flag": "--from-paths <path>",
+              "desc": "Treat the arguments as paths to scan, visiting all packages found there"
+            },
+            {
+              "flag": "--ignore-src",
+              "desc": "Ignore packages in source directories"
+            }
+          ],
+          "notes": "Combine with rosdep resolve to see the concrete system dependency for a key",
+          "distros": [
+            "noetic"
+          ]
+        },
+        {
+          "display": "resolve",
+          "title": "rosdep resolve",
+          "cmd": "rosdep resolve <rosdeps>",
+          "desc": "Resolve the given rosdep keys to system dependencies",
+          "example": "rosdep resolve opencv",
+          "options": [],
+          "notes": "Useful to see which apt/pip packages a rosdep key resolves to on the current platform",
+          "distros": [
+            "noetic"
+          ]
+        },
+        {
+          "display": "search",
+          "title": "rosdep search",
+          "cmd": "rosdep search <searchstrings>...",
+          "desc": "Search for a key in the rosdep database. Searches rosdep keys and system or ROS package names, case-insensitively",
+          "example": "rosdep search pcl dev",
+          "options": [],
+          "notes": "Supports fuzzy search (if the regex module is installed); use --os to override the OS name",
+          "distros": [
+            "noetic"
+          ]
+        },
+        {
+          "display": "what-needs",
+          "title": "rosdep what-needs",
+          "cmd": "rosdep what-needs <rosdeps>...",
+          "desc": "Print a list of packages that declare a rosdep on (at least one of) the given rosdeps",
+          "example": "rosdep what-needs opencv",
+          "options": [],
+          "notes": "",
+          "distros": [
+            "noetic"
+          ]
+        }
+      ]
     }
   },
   "ros2": {
@@ -837,6 +990,19 @@
           "example": "ros2 component standalone composition composition::Talker",
           "options": [],
           "notes": "Runs in its own process, outside a container",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
+        },
+        {
+          "display": "plugin list",
+          "title": "ros2 plugin list",
+          "cmd": "ros2 plugin list",
+          "desc": "List available plugins",
+          "example": "ros2 plugin list",
+          "options": [],
+          "notes": "",
           "distros": [
             "jazzy",
             "humble"
@@ -1767,24 +1933,6 @@
         }
       ]
     },
-    "plugin": {
-      "name": "Plugin Commands",
-      "commands": [
-        {
-          "display": "list",
-          "title": "ros2 plugin list",
-          "cmd": "ros2 plugin list",
-          "desc": "List available plugins",
-          "example": "ros2 plugin list",
-          "options": [],
-          "notes": "",
-          "distros": [
-            "jazzy",
-            "humble"
-          ]
-        }
-      ]
-    },
     "diagnostic": {
       "name": "Diagnostic Commands",
       "commands": [
@@ -1841,6 +1989,167 @@
           "notes": "",
           "distros": [
             "jazzy"
+          ]
+        }
+      ]
+    },
+    "rosdep": {
+      "name": "Dependency Management",
+      "commands": [
+        {
+          "display": "init",
+          "title": "rosdep init",
+          "cmd": "rosdep init",
+          "desc": "Initialize the rosdep sources in /etc/ros/rosdep/sources.list.d, creating the source list required for working (may require sudo)",
+          "example": "sudo rosdep init",
+          "options": [],
+          "notes": "Usually run once before first use of rosdep; subsequent updates are done via rosdep update",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
+        },
+        {
+          "display": "update",
+          "title": "rosdep update",
+          "cmd": "rosdep update",
+          "desc": "Update the local rosdep database based on the rosdep sources",
+          "example": "rosdep update",
+          "options": [
+            {
+              "flag": "--rosdistro <distro>",
+              "desc": "Update only the specified distro's rosdep data"
+            },
+            {
+              "flag": "--include-eol-distros",
+              "desc": "Also fetch rosdep data for end-of-life (EOL) distros"
+            }
+          ],
+          "notes": "Recommended before installing dependencies so the local database stays in sync with the sources",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
+        },
+        {
+          "display": "check",
+          "title": "rosdep check",
+          "cmd": "rosdep check <stacks-and-packages>...",
+          "desc": "Check whether the dependencies of the given package(s) (package dirs or package.xml) have been met",
+          "example": "rosdep check --from-paths src --ignore-src",
+          "options": [
+            {
+              "flag": "--from-paths <path>",
+              "desc": "Treat the arguments as paths to scan, visiting all packages found there"
+            },
+            {
+              "flag": "--ignore-src",
+              "desc": "Ignore packages in source directories (packages already built in the workspace)"
+            },
+            {
+              "flag": "-t <types>, --dependency-types <types>",
+              "desc": "Specify the dependency types to check (build / exec / test, etc.), defaults to all"
+            }
+          ],
+          "notes": "Combined with --from-paths to check all packages in the workspace in one go",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
+        },
+        {
+          "display": "install",
+          "title": "rosdep install",
+          "cmd": "rosdep install <stacks-and-packages>...",
+          "desc": "Download and install the unmet dependencies of the given package(s)",
+          "example": "rosdep install --from-paths src --ignore-src -r -y",
+          "options": [
+            {
+              "flag": "--from-paths <path>",
+              "desc": "Treat the arguments as paths to scan, visiting all packages found there"
+            },
+            {
+              "flag": "--ignore-src",
+              "desc": "Ignore packages in source directories and only install their dependencies"
+            },
+            {
+              "flag": "-r, --resolve",
+              "desc": "Resolve dependencies during installation (e.g., use the cache when offline)"
+            },
+            {
+              "flag": "-y, --default-yes",
+              "desc": "Automatically answer yes to all package manager prompts (e.g., apt)"
+            },
+            {
+              "flag": "-t <types>, --dependency-types <types>",
+              "desc": "Specify the dependency types to install (build / exec / test, etc.), defaults to all except doc"
+            }
+          ],
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
+        },
+        {
+          "display": "keys",
+          "title": "rosdep keys",
+          "cmd": "rosdep keys <stacks-and-packages>...",
+          "desc": "List the rosdep keys that the package(s) depend on",
+          "example": "rosdep keys --from-paths src --ignore-src",
+          "options": [
+            {
+              "flag": "--from-paths <path>",
+              "desc": "Treat the arguments as paths to scan, visiting all packages found there"
+            },
+            {
+              "flag": "--ignore-src",
+              "desc": "Ignore packages in source directories"
+            }
+          ],
+          "notes": "Combine with rosdep resolve to see the concrete system dependency for a key",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
+        },
+        {
+          "display": "resolve",
+          "title": "rosdep resolve",
+          "cmd": "rosdep resolve <rosdeps>",
+          "desc": "Resolve the given rosdep keys to system dependencies",
+          "example": "rosdep resolve opencv",
+          "options": [],
+          "notes": "Useful to see which apt/pip packages a rosdep key resolves to on the current platform",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
+        },
+        {
+          "display": "search",
+          "title": "rosdep search",
+          "cmd": "rosdep search <searchstrings>...",
+          "desc": "Search for a key in the rosdep database. Searches rosdep keys and system or ROS package names, case-insensitively",
+          "example": "rosdep search pcl dev",
+          "options": [],
+          "notes": "Supports fuzzy search (if the regex module is installed); use --os to override the OS name",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
+        },
+        {
+          "display": "what-needs",
+          "title": "rosdep what-needs",
+          "cmd": "rosdep what-needs <rosdeps>...",
+          "desc": "Print a list of packages that declare a rosdep on (at least one of) the given rosdeps",
+          "example": "rosdep what-needs opencv",
+          "options": [],
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
           ]
         }
       ]

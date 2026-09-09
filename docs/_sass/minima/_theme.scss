@@ -254,8 +254,7 @@ body {
  */
 @media (max-width: 768px) {
   .theme-toggle-btn {
-    margin-left: 0;
-    margin-top: 10px;
+    margin: 0 0 0 auto;
     display: flex;
     width: fit-content;
   }
@@ -381,7 +380,13 @@ html[lang^="en"] .entry-grid {
 }
 
 // 粒子层固定于底层，页眉/内容/页脚需提升层级以免被粒子浮在文字之上
-.site-header,
+// 页眉层级需高于正文：移动端下拉菜单会溢出到正文区域，
+// 若二者 z-index 相同，后绘制的 main 会盖住菜单，导致链接无法点击。
+.site-header {
+  position: relative;
+  z-index: 10;
+}
+
 .page-content,
 .site-footer {
   position: relative;
@@ -451,8 +456,8 @@ html[lang^="en"] .entry-card__title {
  */
 @media (max-width: 768px) {
   .lang-switch-btn {
-    margin-left: 0;
-    margin-top: 10px;
+    display: flex;
+    margin: 0 0 0 auto;
     width: fit-content;
   }
 }

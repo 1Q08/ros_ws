@@ -50,8 +50,8 @@
     position: absolute;
     top: 9px;
     right: $spacing-unit * 0.5;
-    background-color: $background-color;
-    border: 1px solid $grey-color-light;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
     border-radius: 5px;
     text-align: right;
 
@@ -74,7 +74,7 @@
       text-align: center;
 
       > svg {
-        fill: $grey-color-dark;
+        fill: var(--text-primary);
       }
     }
 
@@ -162,12 +162,32 @@
   }
 }
 
-// 手机尺寸：所有列占满宽
+// 手机尺寸：左列（作者+邮箱）与右列（描述）并排，保持与桌面端一致的左右结构
 @include media-query($on-palm) {
+  .footer-col-wrapper {
+    margin-left: 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
   .footer-col {
     float: none;
-    width: -webkit-calc(100% - (#{$spacing-unit} / 2));
-    width:         calc(100% - (#{$spacing-unit} / 2));
+    width: auto;
+    margin-bottom: 0;
+    padding-left: 0;
+  }
+
+  // 左列：作者 + 邮箱，按内容宽度自适应，不换行
+  .footer-col-1 {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  // 右列：站点描述，占满剩余宽度、右对齐（与桌面端一致）
+  .footer-col-2 {
+    flex: 1 1 auto;
+    text-align: right;
   }
 }
 

@@ -264,6 +264,159 @@
           ]
         }
       ]
+    },
+    "rosdep": {
+      "name": "依赖管理",
+      "commands": [
+        {
+          "display": "init",
+          "title": "rosdep init",
+          "cmd": "rosdep init",
+          "desc": "初始化 rosdep 数据源，在 /etc/ros/rosdep/sources.list.d 中创建工作所需的源列表（可能需要 sudo）",
+          "example": "sudo rosdep init",
+          "options": [],
+          "notes": "通常首次使用 rosdep 时需要运行，之后即可用 rosdep update 更新数据源",
+          "distros": [
+            "noetic"
+          ]
+        },
+        {
+          "display": "update",
+          "title": "rosdep update",
+          "cmd": "rosdep update",
+          "desc": "根据 rosdep 数据源更新本地 rosdep 数据库",
+          "example": "rosdep update",
+          "options": [
+            {
+              "flag": "--rosdistro <distro>",
+              "desc": "只更新指定发行版的 rosdep 数据"
+            },
+            {
+              "flag": "--include-eol-distros",
+              "desc": "同时获取已停止维护（EOL）发行版的 rosdep 数据"
+            }
+          ],
+          "notes": "安装依赖前建议先运行此命令，确保本地数据库与数据源同步",
+          "distros": [
+            "noetic"
+          ]
+        },
+        {
+          "display": "check",
+          "title": "rosdep check",
+          "cmd": "rosdep check <stacks-and-packages>...",
+          "desc": "检查给定包（包目录或 package.xml）的依赖是否已满足",
+          "example": "rosdep check --from-paths src --ignore-src",
+          "options": [
+            {
+              "flag": "--from-paths <path>",
+              "desc": "将参数视为要扫描的路径，处理该路径下的所有包"
+            },
+            {
+              "flag": "--ignore-src",
+              "desc": "忽略源码目录中的包（已在 workspace 中构建的包）"
+            },
+            {
+              "flag": "-t <types>, --dependency-types <types>",
+              "desc": "指定要检查的依赖类型（build / exec / test 等），默认全部"
+            }
+          ],
+          "notes": "与 --from-paths 搭配可一次检查整个工作空间所有包的依赖",
+          "distros": [
+            "noetic"
+          ]
+        },
+        {
+          "display": "install",
+          "title": "rosdep install",
+          "cmd": "rosdep install <stacks-and-packages>...",
+          "desc": "下载并安装给定包的所有未满足依赖",
+          "example": "rosdep install --from-paths src --ignore-src -r -y",
+          "options": [
+            {
+              "flag": "--from-paths <path>",
+              "desc": "将参数视为要扫描的路径，处理该路径下所有包"
+            },
+            {
+              "flag": "--ignore-src",
+              "desc": "忽略源码目录中的包，只安装其中的依赖"
+            },
+            {
+              "flag": "-r, --resolve",
+              "desc": "安装依赖时解析为更精确的操作（如在离线时使用缓存）"
+            },
+            {
+              "flag": "-y, --default-yes",
+              "desc": "对包管理器（如 apt）的所有提示自动回答 yes"
+            },
+            {
+              "flag": "-t <types>, --dependency-types <types>",
+              "desc": "指定要安装的依赖类型（build / exec / test 等），默认除 doc 外全部"
+            }
+          ],
+          "notes": "",
+          "distros": [
+            "noetic"
+          ]
+        },
+        {
+          "display": "keys",
+          "title": "rosdep keys",
+          "cmd": "rosdep keys <stacks-and-packages>...",
+          "desc": "列出指定包所依赖的 rosdep 键（key）",
+          "example": "rosdep keys --from-paths src --ignore-src",
+          "options": [
+            {
+              "flag": "--from-paths <path>",
+              "desc": "将参数视为要扫描的路径，处理该路径下所有包"
+            },
+            {
+              "flag": "--ignore-src",
+              "desc": "忽略源码目录中的包"
+            }
+          ],
+          "notes": "可配合 rosdep resolve 查看某个键对应的具体系统依赖",
+          "distros": [
+            "noetic"
+          ]
+        },
+        {
+          "display": "resolve",
+          "title": "rosdep resolve",
+          "cmd": "rosdep resolve <rosdeps>",
+          "desc": "将指定的 rosdep 键解析为对应的系统依赖包",
+          "example": "rosdep resolve opencv",
+          "options": [],
+          "notes": "常用于查看某个 rosdep 键在当前系统平台上会解析为哪些 apt/pip 包",
+          "distros": [
+            "noetic"
+          ]
+        },
+        {
+          "display": "search",
+          "title": "rosdep search",
+          "cmd": "rosdep search <searchstrings>...",
+          "desc": "在 rosdep 数据库中搜索指定的键或系统/ROS 包名，搜索不区分大小写",
+          "example": "rosdep search pcl dev",
+          "options": [],
+          "notes": "支持模糊搜索（若安装了 regex 模块）；可用 --os 覆盖当前系统 OS 名称",
+          "distros": [
+            "noetic"
+          ]
+        },
+        {
+          "display": "what-needs",
+          "title": "rosdep what-needs",
+          "cmd": "rosdep what-needs <rosdeps>...",
+          "desc": "打印声明依赖于（至少一个）给定 rosdep 键的包列表",
+          "example": "rosdep what-needs opencv",
+          "options": [],
+          "notes": "",
+          "distros": [
+            "noetic"
+          ]
+        }
+      ]
     }
   },
   "ros2": {
@@ -837,6 +990,19 @@
           "example": "ros2 component standalone composition composition::Talker",
           "options": [],
           "notes": "以独立进程运行，不放入容器",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
+        },
+        {
+          "display": "plugin list",
+          "title": "ros2 plugin list",
+          "cmd": "ros2 plugin list",
+          "desc": "列出可用的插件",
+          "example": "ros2 plugin list",
+          "options": [],
+          "notes": "",
           "distros": [
             "jazzy",
             "humble"
@@ -1767,24 +1933,6 @@
         }
       ]
     },
-    "plugin": {
-      "name": "插件命令",
-      "commands": [
-        {
-          "display": "list",
-          "title": "ros2 plugin list",
-          "cmd": "ros2 plugin list",
-          "desc": "列出可用的插件",
-          "example": "ros2 plugin list",
-          "options": [],
-          "notes": "",
-          "distros": [
-            "jazzy",
-            "humble"
-          ]
-        }
-      ]
-    },
     "diagnostic": {
       "name": "诊断命令",
       "commands": [
@@ -1841,6 +1989,167 @@
           "notes": "",
           "distros": [
             "jazzy"
+          ]
+        }
+      ]
+    },
+    "rosdep": {
+      "name": "依赖管理",
+      "commands": [
+        {
+          "display": "init",
+          "title": "rosdep init",
+          "cmd": "rosdep init",
+          "desc": "初始化 rosdep 数据源，在 /etc/ros/rosdep/sources.list.d 中创建工作所需的源列表（可能需要 sudo）",
+          "example": "sudo rosdep init",
+          "options": [],
+          "notes": "通常首次使用 rosdep 时需要运行，之后即可用 rosdep update 更新数据源",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
+        },
+        {
+          "display": "update",
+          "title": "rosdep update",
+          "cmd": "rosdep update",
+          "desc": "根据 rosdep 数据源更新本地 rosdep 数据库",
+          "example": "rosdep update",
+          "options": [
+            {
+              "flag": "--rosdistro <distro>",
+              "desc": "只更新指定发行版的 rosdep 数据"
+            },
+            {
+              "flag": "--include-eol-distros",
+              "desc": "同时获取已停止维护（EOL）发行版的 rosdep 数据"
+            }
+          ],
+          "notes": "安装依赖前建议先运行此命令，确保本地数据库与数据源同步",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
+        },
+        {
+          "display": "check",
+          "title": "rosdep check",
+          "cmd": "rosdep check <stacks-and-packages>...",
+          "desc": "检查给定包（包目录或 package.xml）的依赖是否已满足",
+          "example": "rosdep check --from-paths src --ignore-src",
+          "options": [
+            {
+              "flag": "--from-paths <path>",
+              "desc": "将参数视为要扫描的路径，处理该路径下的所有包"
+            },
+            {
+              "flag": "--ignore-src",
+              "desc": "忽略源码目录中的包（已在 workspace 中构建的包）"
+            },
+            {
+              "flag": "-t <types>, --dependency-types <types>",
+              "desc": "指定要检查的依赖类型（build / exec / test 等），默认全部"
+            }
+          ],
+          "notes": "与 --from-paths 搭配可一次检查整个工作空间所有包的依赖",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
+        },
+        {
+          "display": "install",
+          "title": "rosdep install",
+          "cmd": "rosdep install <stacks-and-packages>...",
+          "desc": "下载并安装给定包的所有未满足依赖",
+          "example": "rosdep install --from-paths src --ignore-src -r -y",
+          "options": [
+            {
+              "flag": "--from-paths <path>",
+              "desc": "将参数视为要扫描的路径，处理该路径下所有包"
+            },
+            {
+              "flag": "--ignore-src",
+              "desc": "忽略源码目录中的包，只安装其中的依赖"
+            },
+            {
+              "flag": "-r, --resolve",
+              "desc": "安装依赖时解析为更精确的操作（如在离线时使用缓存）"
+            },
+            {
+              "flag": "-y, --default-yes",
+              "desc": "对包管理器（如 apt）的所有提示自动回答 yes"
+            },
+            {
+              "flag": "-t <types>, --dependency-types <types>",
+              "desc": "指定要安装的依赖类型（build / exec / test 等），默认除 doc 外全部"
+            }
+          ],
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
+        },
+        {
+          "display": "keys",
+          "title": "rosdep keys",
+          "cmd": "rosdep keys <stacks-and-packages>...",
+          "desc": "列出指定包所依赖的 rosdep 键（key）",
+          "example": "rosdep keys --from-paths src --ignore-src",
+          "options": [
+            {
+              "flag": "--from-paths <path>",
+              "desc": "将参数视为要扫描的路径，处理该路径下所有包"
+            },
+            {
+              "flag": "--ignore-src",
+              "desc": "忽略源码目录中的包"
+            }
+          ],
+          "notes": "可配合 rosdep resolve 查看某个键对应的具体系统依赖",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
+        },
+        {
+          "display": "resolve",
+          "title": "rosdep resolve",
+          "cmd": "rosdep resolve <rosdeps>",
+          "desc": "将指定的 rosdep 键解析为对应的系统依赖包",
+          "example": "rosdep resolve opencv",
+          "options": [],
+          "notes": "常用于查看某个 rosdep 键在当前系统平台上会解析为哪些 apt/pip 包",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
+        },
+        {
+          "display": "search",
+          "title": "rosdep search",
+          "cmd": "rosdep search <searchstrings>...",
+          "desc": "在 rosdep 数据库中搜索指定的键或系统/ROS 包名，搜索不区分大小写",
+          "example": "rosdep search pcl dev",
+          "options": [],
+          "notes": "支持模糊搜索（若安装了 regex 模块）；可用 --os 覆盖当前系统 OS 名称",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
+        },
+        {
+          "display": "what-needs",
+          "title": "rosdep what-needs",
+          "cmd": "rosdep what-needs <rosdeps>...",
+          "desc": "打印声明依赖于（至少一个）给定 rosdep 键的包列表",
+          "example": "rosdep what-needs opencv",
+          "options": [],
+          "notes": "",
+          "distros": [
+            "jazzy",
+            "humble"
           ]
         }
       ]

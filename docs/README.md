@@ -186,9 +186,9 @@ Command fields:
 
 | Version   | Categories | Commands |
 | --------- | ---------- | -------- |
-| ROS 1     | 6          | 18       |
-| ROS 2     | 18         | 94       |
-| **Total** | **24**     | **112**  |
+| ROS 1     | 7          | 26       |
+| ROS 2     | 18         | 102      |
+| **Total** | **25**     | **128**  |
 
 ---
 
