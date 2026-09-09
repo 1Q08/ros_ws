@@ -519,7 +519,7 @@
           "options": [
             {
               "flag": "--build-type <type>",
-              "desc": "指定构建类型（ament_python / ament_cmake / ament_cmake_python）"
+              "desc": "指定构建类型（ament_cmake / ament_python 等）"
             },
             {
               "flag": "--dependencies <deps>",
@@ -546,7 +546,7 @@
               "desc": "设置维护者姓名"
             }
           ],
-          "notes": "",
+          "notes": "ament_cmake_python 不是构建类型（--build-type 的可选项只有 ament_cmake / ament_python / cmake / ament_cargo），而是 ament_cmake 的扩展包，提供 ament_python_install_package() 等 CMake 函数",
           "distros": [
             "jazzy",
             "humble"

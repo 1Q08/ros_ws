@@ -519,7 +519,7 @@
           "options": [
             {
               "flag": "--build-type <type>",
-              "desc": "Specify the build type (ament_python / ament_cmake / ament_cmake_python)"
+              "desc": "Specify the build type (ament_cmake / ament_python, etc.)"
             },
             {
               "flag": "--dependencies <deps>",
@@ -546,7 +546,7 @@
               "desc": "Set the maintainer's name"
             }
           ],
-          "notes": "",
+          "notes": "ament_cmake_python is not a build type (the only --build-type options are ament_cmake / ament_python / cmake / ament_cargo), but an extension of ament_cmake providing CMake functions like ament_python_install_package()",
           "distros": [
             "jazzy",
             "humble"
