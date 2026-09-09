@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<!-- ============ polygon_plugins 包清单 ============ -->
+<!-- format="3" 表示采用 ROS 包格式 3 -->
+<package format="3">
+  <!-- 包名：必须与目录名、CMakeLists.txt 里的 project() 保持一致 -->
+  <name>polygon_plugins</name>
+  <version>1.0.0</version>
+  <description>插件包</description>
+  <maintainer email="example@163.com">nvidia</maintainer>
+  <license>Apache-2.0</license>
+
+  <!-- 构建工具依赖：ament_cmake_ros 额外提供 ROS 相关的构建宏 -->
+  <buildtool_depend>ament_cmake_ros</buildtool_depend>
+
+  <!-- 编译/运行依赖：插件要实现 polygon_base 里的基类 -->
+  <depend>polygon_base</depend>
+  <!-- 编译/运行依赖：提供 PLUGINLIB_EXPORT_CLASS 等插件导出宏 -->
+  <depend>pluginlib</depend>
+
+  <!-- 测试依赖：ament 自带的静态检查工具 -->
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <!-- 声明本包使用 ament_cmake 构建类型 -->
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

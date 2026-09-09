@@ -1,0 +1,12 @@
+<!-- 插件描述文件：向 pluginlib 声明本库中可供加载的插件 -->
+<!-- path 属性：存放编译产物动态库的文件名（不含前缀 lib 与扩展名） -->
+<library path="polygon_plugins">
+  <!-- 声明一个正方形插件：type 为完整类名，base_class_type 为基类 -->
+  <class type="polygon_plugins::Square" base_class_type="polygon_base::RegularPolygon">
+    <description>This is a square plugin.</description>   <!-- 插件说明 -->
+  </class>
+  <!-- 三角形插件：name 属性给它起个别名 awesome_triangle，方便在代码中引用 -->
+  <class type="polygon_plugins::Triangle" base_class_type="polygon_base::RegularPolygon" name="awesome_triangle">
+    <description>This is a triangle plugin.</description>
+  </class>
+</library>
