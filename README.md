@@ -1,2 +1,2 @@
 # ROS_WS
-保存ROS1和ROS2的工作(测试)
+保存ROS1和ROS2的工作
