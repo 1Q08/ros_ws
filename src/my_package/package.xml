@@ -1,3 +1,5 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <!--
   文件作用：package.xml 是 ROS 2 功能包（Package）的清单（Manifest）文件，
   用于声明包的基本信息（名称、版本、维护者、许可证）以及构建/运行/测试时
@@ -6,8 +8,6 @@
   - colcon 根据本文件判断包名、构建类型与依赖
   - ros2 pkg xml <包名> 可直接输出本文件内容
 -->
-<?xml version="1.0"?>
-<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <!-- 包名：必须与 src 下的目录名一致，且全小写、下划线分隔 -->
   <name>my_package</name>
