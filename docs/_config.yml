@@ -11,6 +11,8 @@ url: "https://1q08.github.io"
 # 社交链接
 github_username: 1Q08
 rss: rss
+# 飞书群邀请链接（留空则页脚不显示飞书图标）
+feishu_url: "https://applink.feishu.cn/client/chat/chatter/add_by_link?link_token=7aej86f8-102d-4ed8-89b6-c80a4dcd2bff"
 
 # 文章摘要显示
 show_excerpts: true

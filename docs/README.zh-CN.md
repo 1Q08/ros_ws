@@ -79,7 +79,7 @@ docs/                              # Jekyll 站点根目录
 │   ├── header.html               # ├─ 导航栏：标题（中英自适应）+ 链接 + 语言/主题切换按钮
 │   ├── footer.html               # ├─ 页脚：作者 + 邮箱 + 描述（中英自适应）+ 社交链接
 │   ├── lang-switcher.html        # ├─ 语言切换按钮（中英互跳 /en/ ↔ /）
-│   └── social.html               # └─ 社交图标：GitHub + RSS
+│   └── social.html               # └─ 社交图标：GitHub + RSS + 飞书
 │
 ├── _sass/                        # SCSS 样式源
 │   ├── minima.scss               # ├─ 主入口：变量定义 + 导入 partials
@@ -98,6 +98,7 @@ docs/                              # Jekyll 站点根目录
     │   ├── favicon.svg                # ├─ 浅色 favicon（随主题动态切换）
     │   ├── favicon-dark.svg           # ├─ 深色 favicon
     │   ├── minima-social-icons.svg    # ├─ GitHub/RSS 图标
+    │   ├── feishu.svg                 # ├─ 飞书图标（官方彩色 Logo）
     │   ├── icon-search.svg            # ├─ 搜索图标
     │   ├── icon-eye.svg               # ├─ 浏览图标
     │   └── icon-sort.svg              # └─ 排序图标（速查表按钮）

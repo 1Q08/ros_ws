@@ -79,7 +79,7 @@ docs/                              # Jekyll site root
 │   ├── header.html               # ├─ Navbar: title (zh/en adaptive) + links + language/theme toggles
 │   ├── footer.html               # ├─ Footer: author + email + description (zh/en) + social links
 │   ├── lang-switcher.html        # ├─ Language switcher button (/en/ ↔ /)
-│   └── social.html               # └─ Social icons: GitHub + RSS
+│   └── social.html               # └─ Social icons: GitHub + RSS + Feishu
 │
 ├── _sass/                        # SCSS style source
 │   ├── minima.scss               # ├─ Main entry: variable definitions + partial imports
@@ -98,6 +98,7 @@ docs/                              # Jekyll site root
     │   ├── favicon.svg                # ├─ Light favicon (switches with theme)
     │   ├── favicon-dark.svg           # ├─ Dark favicon
     │   ├── minima-social-icons.svg    # ├─ GitHub/RSS icons
+    │   ├── feishu.svg                 # ├─ Feishu icon (official colored logo)
     │   ├── icon-search.svg            # ├─ Search icon
     │   ├── icon-eye.svg               # ├─ Browse icon
     │   └── icon-sort.svg              # └─ Sort icon (reference table button)

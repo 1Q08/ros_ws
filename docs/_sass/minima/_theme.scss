@@ -120,6 +120,18 @@ body {
 }
 
 /**
+ * 飞书图标尺寸校正
+ * 官方 Logo 宽高比约 1.26（偏宽），而 .svg-icon 会把 <img> 的宽高
+ * 同时钉死为 16×16，导致图形被横向拉伸变形。这里固定「高度 = 16px」
+ * 让飞书墨迹与 GitHub / RSS 严格等高，宽度交给 Logo 原始比例自动
+ * 推算（≈20.12px），因此不会有畸变，墨迹间距也保持 25px 均匀。
+ */
+.footer-social .social-media-list .feishu-icon {
+  height: 16px;
+  width: auto;
+}
+
+/**
  * 页脚压缩（覆盖 minima 默认间距，减少垂直留白）
  */
 .site-footer {
