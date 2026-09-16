@@ -110,12 +110,17 @@ a {
     color: darken($brand-color, 15%);
   }
 
+  // 悬停仅变色，不加下划线；颜色改用主题变量，深浅模式自动适配
   &:hover {
-    color: $text-color;
+    color: var(--text-primary, #{$text-color});
+  }
+
+  // 键盘 Tab 聚焦时保留下划线（无障碍）：鼠标悬停不会触发 :focus-visible
+  &:focus-visible {
     text-decoration: underline;
   }
 
-  // 社交链接悬停时不加下划线
+  // 社交链接悬停时不加下划线（全局已取消下划线，此处保留作为兜底）
   .social-media-list &:hover {
     text-decoration: none;
   }

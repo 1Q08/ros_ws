@@ -61,6 +61,11 @@ body {
   font-weight: 600;
 }
 
+// 站名悬停变色（下划线已取消，改由变色提示可点击）
+.site-title:hover {
+  color: var(--accent-color) !important;
+}
+
 .page-link {
   color: var(--text-primary) !important;
   font-weight: 600;
@@ -85,6 +90,11 @@ body {
 // 邮箱链接颜色配置
 .footer-col-wrapper a.u-email {
   color: var(--accent-hover) !important;
+}
+
+// 邮箱悬停变色（下划线已取消，改由变色提示可点击）
+.footer-col-wrapper a.u-email:hover {
+  color: var(--text-primary) !important;
 }
 
 /**
@@ -361,7 +371,6 @@ html[lang^="en"] .entry-grid {
 
     &:hover {
       color: var(--accent-hover);
-      text-decoration: underline;
     }
   }
 }
