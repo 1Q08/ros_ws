@@ -1,6 +1,3 @@
----
-sitemap: false
----
 <p align="center">
   <a href="https://github.com/1Q08/ros_ws">
     <img src="assets/icons/favicon.svg" alt="Logo" width="80" height="80">

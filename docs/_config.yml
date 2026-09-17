@@ -36,3 +36,21 @@ plugins:
   - jekyll-feed
   - jekyll-seo-tag
   - jekyll-sitemap
+
+# 排除：以下文件不参与构建，也不会被复制到站点里
+# ⚠️ 注意：Jekyll 的 exclude 是「整体替换」而不是「追加」。
+#    默认值写死在 lib/jekyll/configuration.rb 的 DEFAULTS 里，
+#    只要在这里写了 exclude，默认值就被顶掉，
+#    所以下面 7 个默认项必须原样保留，否则 Gemfile / Gemfile.lock 会被发布到网站上。
+exclude:
+  # --- Jekyll 3.10 默认项（不要删） ---
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  # --- 本站自定义项 ---
+  # 文档站的中文手册，只供在 GitHub 上阅读，不作为网站页面发布
+  - README.zh-CN.md
