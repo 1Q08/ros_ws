@@ -37,6 +37,16 @@ plugins:
   - jekyll-seo-tag
   - jekyll-sitemap
 
+# 站长身份验证
+# Google Search Console 用「网址前缀」形式验证 https://1q08.github.io/ros_ws/
+# 由 jekyll-seo-tag 的 {% seo %} 自动输出：
+#   <meta name="google-site-verification" content="...">
+# 以后加 Bing 可改用：
+#   webmaster_verifications:
+#     google: <同一串 token>
+#     bing:   <Bing 的 token>
+google_site_verification: ZVKDGNbaMpndfSaALqR26tb8mpH8ZqSwnRENo4k52Xs
+
 # 排除：以下文件不参与构建，也不会被复制到站点里
 # ⚠️ 注意：Jekyll 的 exclude 是「整体替换」而不是「追加」。
 #    默认值写死在 lib/jekyll/configuration.rb 的 DEFAULTS 里，
