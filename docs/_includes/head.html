@@ -31,6 +31,14 @@
   {%- else -%}
     {%- seo -%}
   {%- endif -%}
+  {%- comment -%}
+    不收录开关：front matter 写 sitemap: false 的页面（en/404.html、README.zh-CN.md）已从
+    sitemap 移除，这里再补 noindex。理由：sitemap 只管“发现”，不管“收录”；且 jekyll-seo-tag
+    会给这些 200 页面输出自指 canonical，等于主动请求被索引。follow 保留链接权重传递。
+  {%- endcomment -%}
+  {%- if page.sitemap == false -%}
+  <meta name="robots" content="noindex, follow">
+  {%- endif -%}
   <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}">
   {%- feed_meta -%}
   {%- if jekyll.environment == 'production' and site.google_analytics -%}
