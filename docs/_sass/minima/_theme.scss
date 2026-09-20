@@ -607,22 +607,6 @@ html[lang^="en"] .entry-grid {
 }
 
 /**
- * 首页「查看全部文章」链接
- */
-.view-all {
-  margin-top: 8px;
-
-  a {
-    color: var(--accent-color);
-    text-decoration: none;
-
-    &:hover {
-      color: var(--accent-hover);
-    }
-  }
-}
-
-/**
  * 归档页说明文字
  */
 .post-list-intro {
