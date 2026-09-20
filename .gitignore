@@ -123,3 +123,6 @@ vendor/bundle/
 
 # Node（如果后续使用）
 node_modules/
+
+# 例外：docs 子站的前端脚本库目录（上面 ROS1 的 lib/ 规则会误伤）
+!docs/assets/js/lib/
