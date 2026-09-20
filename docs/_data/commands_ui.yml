@@ -1,0 +1,72 @@
+# ============================================================
+# 命令速查页共享 UI 文案（commands.html / en/commands.html）
+# ============================================================
+# 供 _includes/command-reference.html 使用，键名与模板里的 t.xxx 一一对应。
+# 结构：顶层键 = 语言代码（与页面 front matter 的 lang 一致，经 include 参数传入）。
+# 新增语言时在此追加一个顶层键（如 ja:），页面里写 lang="ja" 即可。
+# 注意：只放「可见文案」；HTML 结构在 _includes，页面配置（数据文件地址）在页面里。
+# ============================================================
+
+zh:
+  # --- 区域 1：搜索 ---
+  search_icon_alt: "搜索"
+  search_heading: "搜索命令"
+  search_placeholder: "输入命令名或关键词"
+  search_aria: "搜索命令"
+  clear_button: "清除"
+  search_hint: "搜索范围：ROS 1 / ROS 2 的命令名、说明与关键词，支持模糊匹配（如输入 pkg 可匹配 ros2 pkg list）"
+
+  # --- 区域 2：分类浏览（三级联动下拉） ---
+  browse_icon_alt: "浏览"
+  browse_heading: "分类浏览"
+  select_placeholder: "-- 请选择 --"
+  label_ros_version: "ROS 版本:"
+  label_distro: "发行版本:"
+  label_category: "命令分类:"
+  label_command: "具体命令:"
+
+  # --- 区域 3：命令详情 ---
+  detail_command: "命令:"
+  detail_description: "说明:"
+  detail_example: "示例:"
+  detail_options: "常用选项:"
+  detail_notes: "注意事项:"
+
+  # --- 区域 4：速查表（折叠面板） ---
+  summary_title: "命令速查表"
+  th_version: "版本"
+  th_category: "分类"
+  th_command: "命令"
+  th_description: "说明"
+
+en:
+  # --- Section 1: search ---
+  search_icon_alt: "Search"
+  search_heading: "Search Commands"
+  search_placeholder: "Type a command or keyword"
+  search_aria: "Search commands"
+  clear_button: "Clear"
+  search_hint: "Search across ROS 1 / ROS 2 command names, descriptions, and keywords. Fuzzy matching supported (e.g. pkg matches ros2 pkg list)."
+
+  # --- Section 2: browse by category (cascading dropdowns) ---
+  browse_icon_alt: "Browse"
+  browse_heading: "Browse by Category"
+  select_placeholder: "-- Select --"
+  label_ros_version: "ROS version:"
+  label_distro: "Distribution:"
+  label_category: "Category:"
+  label_command: "Command:"
+
+  # --- Section 3: command detail ---
+  detail_command: "Command:"
+  detail_description: "Description:"
+  detail_example: "Example:"
+  detail_options: "Common options:"
+  detail_notes: "Notes:"
+
+  # --- Section 4: summary table (collapsible) ---
+  summary_title: "Command Reference Table"
+  th_version: "Version"
+  th_category: "Category"
+  th_command: "Command"
+  th_description: "Description"

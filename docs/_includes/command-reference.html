@@ -1,0 +1,136 @@
+{%- comment -%}
+============================================================
+  命令速查主容器（中英共用）  command-reference
+------------------------------------------------------------
+  用法：
+      {% include command-reference.html lang="zh" %}
+      {% include command-reference.html lang="en" %}
+
+  lang  对应 _data/commands_ui.yml 的顶层键（zh / en），缺省为 zh。
+
+  结构（自上而下）：
+    1. search-section   搜索框 + 清除按钮 + 搜索范围提示 + 结果容器
+    2. filter-section   三级联动下拉（ROS 版本 → 发行版本 → 命令分类 → 具体命令）
+    3. command-detail   选中命令的完整信息（默认隐藏）
+    4. summary-section  命令速查表折叠面板（默认折叠）
+
+  注意：
+    - 所有 id / class / onclick / aria-* 与重构前逐字一致，脚本 commands.js 依赖这些钩子。
+    - 本模板只负责「结构 + 文案」，文案来自 _data/commands_ui.yml；
+      页面专属配置（window.COMMANDS_DATA_URL）仍写在各自页面里。
+    - 评论区（giscus）不在本模板内：目前仅中文页启用，见 commands.html。
+============================================================
+{%- endcomment -%}
+{%- assign ui_lang = include.lang | default: "zh" -%}
+{%- assign t = site.data.commands_ui[ui_lang] -%}
+<div class="command-reference">
+
+  {%- comment -%} 区域 1：搜索命令 {%- endcomment -%}
+  <div class="search-section">
+    <h2><img src="{{ "/assets/icons/icon-search.svg" | relative_url }}" alt="{{ t.search_icon_alt }}" class="section-icon"> {{ t.search_heading }}</h2>
+
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="{{ t.search_placeholder }}" autocomplete="off" aria-label="{{ t.search_aria }}">
+      <button onclick="clearSearch()">{{ t.clear_button }}</button>
+    </div>
+
+    <p class="search-hint">{{ t.search_hint }}</p>
+
+    <div id="searchResults" class="search-results"></div>
+  </div>
+
+  <hr>
+
+  {%- comment -%} 区域 2：分类浏览（三级联动下拉框） {%- endcomment -%}
+  <div class="filter-section">
+    <h2><img src="{{ "/assets/icons/icon-eye.svg" | relative_url }}" alt="{{ t.browse_icon_alt }}" class="section-icon"> {{ t.browse_heading }}</h2>
+
+    <div class="filter-row-inline">
+
+      <div class="filter-item">
+        <label for="rosVersion">{{ t.label_ros_version }}</label>
+        <select id="rosVersion" onchange="onVersionChange()">
+          <option value="">{{ t.select_placeholder }}</option>
+          <option value="ros1">ROS 1</option>
+          <option value="ros2">ROS 2</option>
+        </select>
+      </div>
+
+      <div class="filter-item" id="distroRow" style="display:none;">
+        <label for="distro">{{ t.label_distro }}</label>
+        <select id="distro" onchange="onDistroChange()">
+          <option value="">{{ t.select_placeholder }}</option>
+        </select>
+      </div>
+
+      <div class="filter-item" id="categoryRow" style="display:none;">
+        <label for="category">{{ t.label_category }}</label>
+        <select id="category" onchange="onCategoryChange()">
+          <option value="">{{ t.select_placeholder }}</option>
+        </select>
+      </div>
+
+      <div class="filter-item" id="commandRow" style="display:none;">
+        <label for="command">{{ t.label_command }}</label>
+        <select id="command" onchange="onCommandChange()">
+          <option value="">{{ t.select_placeholder }}</option>
+        </select>
+      </div>
+
+    </div>
+  </div>
+
+  {%- comment -%} 区域 2.5：命令详情（分类浏览选中后显示） {%- endcomment -%}
+  <div id="commandDetail" class="command-detail" style="display:none;">
+    <div class="detail-title-wrap">
+      <h3 id="detailTitle"></h3>
+      <div id="detailVersionMeta" class="detail-version-meta"></div>
+    </div>
+    <div class="detail-content">
+      <p><strong>{{ t.detail_command }}</strong></p>
+      <pre class="highlight-code"><code id="detailCmd"></code></pre>
+      <p><strong>{{ t.detail_description }}</strong> <span id="detailDesc"></span></p>
+      <p><strong>{{ t.detail_example }}</strong></p>
+      <pre class="highlight-code"><code id="detailExample"></code></pre>
+      <div id="detailOptions" class="detail-options" style="display:none;">
+        <strong id="detailOptionsTitle" class="options-title">{{ t.detail_options }}</strong>
+        <table class="options-table">
+          <thead id="detailOptionsHead"></thead>
+          <tbody id="detailOptionsBody"></tbody>
+        </table>
+      </div>
+      <div id="detailNotes">
+        <strong>{{ t.detail_notes }}</strong>
+        <pre id="detailNotesContent"></pre>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  {%- comment -%} 区域 3：命令速查表（折叠面板，默认折叠） {%- endcomment -%}
+  <div class="summary-section">
+    <button type="button" class="summary-toggle" id="summaryToggle" onclick="toggleSummary()" aria-expanded="false">
+      <span class="summary-sort-icon" aria-hidden="true"></span>
+      <span class="summary-toggle-text">{{ t.summary_title }}</span>
+      <span class="summary-count" id="summaryCount"></span>
+      <span class="summary-filter-badge" id="summaryFilterBadge" hidden></span>
+      <span class="summary-chevron-icon" aria-hidden="true"></span>
+    </button>
+
+    <div class="summary-body" id="summaryBody" hidden>
+      <table class="summary-table">
+        <thead>
+          <tr>
+            <th>{{ t.th_version }}</th>
+            <th>{{ t.th_category }}</th>
+            <th>{{ t.th_command }}</th>
+            <th>{{ t.th_description }}</th>
+          </tr>
+        </thead>
+        <tbody id="summaryTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
