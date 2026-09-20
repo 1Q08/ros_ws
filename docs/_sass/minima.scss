@@ -28,7 +28,11 @@ $table-text-align: left !default;
 // 100% 表示内容区完全填充可用宽度（左右仅保留 $spacing-unit 内边距）
 $content-width:    100% !default;
 
-$on-palm:          600px !default;
+// 移动端断点。页眉采用 float 布局（.site-title 左浮、.site-nav 右浮），
+// 浮动元素不会收缩，空间不足时会整块掉到下一行导致标题与导航错位。
+// 经实测，中文站 660px、英文站 661px 起可稳定并排一行，故断点定在 660px；
+// 661px 以上由 _theme.scss 的窄屏压缩档兜底，660px 及以下使用汉堡菜单。
+$on-palm:          660px !default;
 $on-laptop:        800px !default;
 
 // 响应式媒体查询混入（使用方式见下）：

@@ -90,6 +90,7 @@ custom_css: /assets/css/about.css
     <div class="card-body">
       <ul>
         <li>GitHub: <a href="https://github.com/1q08">1Q08</a></li>
+        <li>Email: <a href="mailto:tristanzhang350924@gmail.com">tristanzhang350924@gmail.com</a></li>
       </ul>
     </div>
   </div>
@@ -105,6 +106,8 @@ custom_css: /assets/css/about.css
     </div>
     <div class="card-body changelog-body">
       <ul class="changelog-list">
+        <li><span class="cl-date">2026-09-20</span> Added previous/next switching buttons and links at the end of articles, added a right-side table of contents, and turned it into a floating button on mobile</li>
+        <li><span class="cl-date">2026-09-19</span> Optimized the home page presentation &amp; structure, migrated the comments section, added a stable contact email address, and improved the header layout when the page is zoomed in</li>
         <li><span class="cl-date">2026-09-09</span> Added `rosdep` dependency-management commands, optimized command categories (merged a tiny standalone category), and improved mobile display: fixed header menu clicks &amp; dark/light switching, rearranged buttons, and refined the footer layout</li>
         <li><span class="cl-date">2026-09-07</span> Added distribution metadata (Jazzy/Humble/Noetic), version+distribution filtering in the cheatsheet, a four-level browse filter, and refined version/distribution badges across the site</li>
         <li><span class="cl-date">2026-09-04</span> Added fuzzy search, hit highlighting, and search performance optimization; completed command data</li>

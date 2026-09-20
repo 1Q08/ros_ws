@@ -7,7 +7,11 @@ layout: default
     <h1 class="post-title p-name" itemprop="name headline">{{ page.title | escape }}</h1>
     <p class="post-meta">
       <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
-        {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+        {%- if page.lang == "en" -%}
+          {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+        {%- else -%}
+          {%- assign date_format = site.minima.date_format_cn | default: "%Y-%m-%d" -%}
+        {%- endif -%}
         {{ page.date | date: date_format }}
       </time>
       {%- if page.author -%}
@@ -15,9 +19,44 @@ layout: default
       {%- endif -%}</p>
   </header>
 
-  <div class="post-content e-content" itemprop="articleBody">
-    {{ content }}
+  <div class="post-body">
+    <div class="post-content e-content" itemprop="articleBody">
+      {{ content }}
+    </div>
+
+    {%- comment -%}
+      右侧目录。id 与标题 id 由 kramdown auto_ids 生成，
+      hidden 状态由 assets/js/toc.js 在生成成功后移除。
+    {%- endcomment -%}
+    <aside class="post-toc" id="post-toc" aria-label="文章目录" hidden>
+      <p class="post-toc__title">目录</p>
+      <nav class="post-toc__nav" id="post-toc-nav"></nav>
+    </aside>
   </div>
+
+  <button type="button" class="post-toc-toggle" id="post-toc-toggle" aria-controls="post-toc" aria-expanded="false" hidden>目录</button>
+
+  <nav class="post-nav" aria-label="文章导航">
+    <a class="post-nav__back" href="{{ '/archive/' | relative_url }}">← 返回全部文章</a>
+    <div class="post-nav__links">
+      {%- if page.previous -%}
+        <a class="post-nav__item post-nav__item--prev" href="{{ page.previous.url | relative_url }}">
+          <span class="post-nav__label">上一篇</span>
+          <span class="post-nav__title">{{ page.previous.title | escape }}</span>
+        </a>
+      {%- else -%}
+        <span class="post-nav__item post-nav__item--empty" aria-hidden="true"></span>
+      {%- endif -%}
+      {%- if page.next -%}
+        <a class="post-nav__item post-nav__item--next" href="{{ page.next.url | relative_url }}">
+          <span class="post-nav__label">下一篇</span>
+          <span class="post-nav__title">{{ page.next.title | escape }}</span>
+        </a>
+      {%- else -%}
+        <span class="post-nav__item post-nav__item--empty" aria-hidden="true"></span>
+      {%- endif -%}
+    </div>
+  </nav>
 
   {%- if site.disqus.shortname -%}
     {%- include disqus_comments.html -%}
@@ -25,3 +64,5 @@ layout: default
 
   <a class="u-url" href="{{ page.url | relative_url }}" hidden></a>
 </article>
+
+<script src="{{ '/assets/js/toc.js' | relative_url }}" defer></script>

@@ -2,49 +2,49 @@
 layout: default
 ---
 
+{%- comment -%}
+首页「字内镂空」弹幕 v2（硬编码命令池，避免异步加载 JSON 造成闪空）
+- 命令取自 commands.json / commands.en.json 的 title 字段（完整命令名，不含 <占位符>）
+- 标题纯黑 + 弹幕层 mix-blend-mode: screen ⇒ 命令只在笔画内以本色透出，笔画外被漂白
+- 每条命令独占一条「泳道」（.dk-lane），位置 / 字号 / 深浅 / 速度 / 起始相位 各不相同（完全打散）
+- 泳道宽 100vw（与标题文字宽度解耦，保证中英文两版速度一致），位移 translateX(-280%) 相对泳道宽度，起点与终点都在底板外 ⇒ 循环处无跳变
+- 所有派生量都由「下标 × 质数 + 偏移 再取模」得到，肉眼呈随机分布，无需运行时随机数
+- 泳道数 40 → 24（ROS 1 取 12 条 + ROS 2 取 12 条）：只有 .dk-lane 带 animation，
+  .dk-cmd 是静态子元素，因此同时运行的动画元素由 40 个降到 24 个（减少 40%），
+  滚动与合成的帧压力明显下降，视觉密度仍然充足（24 条泳道纵向落点互不重合）
+{%- endcomment -%}
+{%- assign dk_r1  = "roscore|rosrun|roslaunch|rostopic list|rostopic echo|rostopic pub|rosnode list|rosnode info|rosnode kill|rosservice list|rosservice call|rosparam list" | split: "|" -%}
+{%- assign dk_r2  = "ros2 run|ros2 launch|ros2 pkg list|ros2 pkg create|ros2 topic list|ros2 topic echo|ros2 topic pub|ros2 topic hz|ros2 node list|ros2 node info|ros2 service list|ros2 service call" | split: "|" -%}
+{%- assign dk_fs  = "0.46|0.20|0.34|0.17|0.28|0.40|0.24|0.15|0.31|0.38|0.22|0.19" | split: "|" -%}
+{%- assign dk_dur = "90|105|120|132|98|112|126|138|94|108|122|130" | split: "|" -%}
+{%- assign dk_jy  = "-0.12|0|0.12" | split: "|" -%}
+
 <div class="home">
   {%- if page.title -%}
-    <h1 class="page-heading">{{ page.title }}</h1>
+    <h1 class="page-heading">{{ page.title }}<span class="page-heading__dk" aria-hidden="true">
+      {%- for c in dk_r1 -%}
+        {%- assign v  = forloop.index0 -%}
+        {%- assign vt = v | times: 53 | plus: 7 | modulo: 71 | plus: 12 -%}
+        {%- assign vy = v | times: 5 | plus: 2 | modulo: 3 -%}
+        {%- assign vf = v | times: 5 | plus: 1 | modulo: 12 -%}
+        {%- assign vd = v | times: 7 | plus: 3 | modulo: 12 -%}
+        {%- assign vs = v | times: 2 | plus: 1 | modulo: 3 -%}
+        {%- assign vp = v | times: 137 | plus: 41 | modulo: 1000 -%}
+        <span class="dk-lane" style="top:calc({{ vt }}% - 0.8em + {{ dk_jy[vy] }}em);font-size:{{ dk_fs[vf] }}em;--dur:{{ dk_dur[vd] }}s;--ph:{{ vp }}"><span class="dk-cmd dk-cmd--r1-d{{ v | modulo: 3 }} dk-s{{ vs }}">{{ c }}</span></span>
+      {%- endfor -%}
+      {%- for c in dk_r2 -%}
+        {%- assign v  = forloop.index0 | plus: 12 -%}
+        {%- assign vt = v | times: 53 | plus: 7 | modulo: 71 | plus: 12 -%}
+        {%- assign vy = v | times: 5 | plus: 2 | modulo: 3 -%}
+        {%- assign vf = v | times: 5 | plus: 1 | modulo: 12 -%}
+        {%- assign vd = v | times: 7 | plus: 3 | modulo: 12 -%}
+        {%- assign vs = v | times: 2 | plus: 1 | modulo: 3 -%}
+        {%- assign vp = v | times: 137 | plus: 41 | modulo: 1000 -%}
+        <span class="dk-lane" style="top:calc({{ vt }}% - 0.8em + {{ dk_jy[vy] }}em);font-size:{{ dk_fs[vf] }}em;--dur:{{ dk_dur[vd] }}s;--ph:{{ vp }}"><span class="dk-cmd dk-cmd--r2-d{{ v | modulo: 3 }} dk-s{{ vs }}">{{ c }}</span></span>
+      {%- endfor -%}
+    </span></h1>
   {%- endif -%}
 
   {{ content }}
-
-  {%- if site.posts.size > 0 and page.lang != 'en' -%}
-    <h2 class="post-list-heading" id="latest-posts">{{ page.list_title | default: "最新文章" }}</h2>
-    <ul class="post-list">
-      {%- assign post_limit = page.post_limit | default: site.posts.size -%}
-      {%- for post in site.posts limit: post_limit -%}
-      <li>
-        {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
-        <span class="post-meta">{{ post.date | date: date_format }}</span>
-        <h3>
-          <a class="post-link" href="{{ post.url | relative_url }}">
-            {{ post.title | escape }}
-          </a>
-        </h3>
-        {%- if site.show_excerpts -%}
-          <div class="post-excerpt">
-            {{ post.excerpt }}
-          </div>
-        {%- endif -%}
-      </li>
-      {%- endfor -%}
-    </ul>
-    <p class="view-all">
-      <a href="{{ '/archive/' | relative_url }}">查看全部 {{ site.posts.size }} 篇文章 →</a>
-    </p>
-
-  {%- endif -%}
-
-  {%- unless page.lang == 'en' -%}
-  <section class="giscus-wrapper">
-    <button type="button" class="giscus-load-btn" id="giscus-load-btn">
-      <span class="giscus-load-icon" aria-hidden="true"></span>
-      <span class="giscus-load-text">查看评论</span>
-    </button>
-    <div class="giscus"></div>
-    <script src="{{ "/assets/js/giscus.js" | relative_url }}" defer></script>
-  </section>
-  {%- endunless -%}
 
 </div>

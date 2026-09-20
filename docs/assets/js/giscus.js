@@ -5,7 +5,9 @@
 //   1. 点击「查看评论」按钮后才加载 giscus，避免首屏被 widget 请求拖慢
 //   2. 加载失败可重试；15 秒超时保护；bfcache 防重复渲染
 //   3. 跟随站点主题切换（themechange 事件）更新 giscus 主题
-// 依赖：页面内 .giscus 容器与 #giscus-load-btn 按钮（仅中文首页渲染）
+// 使用页面：/commands/、/archive/ —— 页面内需有 .giscus 容器与 #giscus-load-btn 按钮；
+//   若找不到按钮，脚本会兜底立即加载。
+// 映射规则：data-mapping="pathname"，评论线程与页面路径绑定 —— 换路径即新线程。
 // ============================================================
 (function () {
   'use strict';

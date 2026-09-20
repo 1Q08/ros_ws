@@ -3,7 +3,9 @@
  */
 .site-header {
   border-top: 5px solid $grey-color-dark;
-  border-bottom: 1px solid $grey-color-light;
+  // 跟随主题变量：浅色 #e1e4e8 / 深色 #30363d
+  // （原先固定 $grey-color-light #e8e8e8，深色模式下是一条刺眼的白线）
+  border-bottom: 1px solid var(--border-color, #{$grey-color-light});
   min-height: $spacing-unit * 1.865;
 
   // 作为移动端导航图标的定位参照
@@ -106,7 +108,8 @@
  * 站点页脚
  */
 .site-footer {
-  border-top: 1px solid $grey-color-light;
+  // 同页眉：跟随主题变量，避免深色模式下出现浅色分割线
+  border-top: 1px solid var(--border-color, #{$grey-color-light});
   padding: $spacing-unit 0;
 }
 

@@ -35,7 +35,7 @@
             <a class="page-link" href="{{ '/en/' | relative_url }}">Home</a>
             <a class="page-link" href="{{ '/en/commands/' | relative_url }}">Commands</a>
             <a class="page-link" href="{{ '/en/about/' | relative_url }}">About</a>
-            <a class="page-link" href="https://docs.ros.org/en/jazzy/" target="_blank" rel="noopener noreferrer">ROS 2 Docs</a>
+            <a class="page-link" href="https://docs.ros.org/en/jazzy/" target="_blank" rel="noopener noreferrer">ROS Docs</a>
           {%- else -%}
             {%- for path in page_paths -%}
               {%- assign my_page = site.pages | where: "path", path | first -%}

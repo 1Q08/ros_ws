@@ -56,38 +56,57 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
-  function initParticles() {
-    var count = Math.min(Math.floor((W * H) * DENSITY), MAX_COUNT);
-    particles = [];
-    for (var i = 0; i < count; i++) {
-      // 大小分层：85% 小粒子、12% 中粒子、3% 大光点
-      var roll = Math.random();
-      var radius, alpha, glow;
-      if (roll < 0.85) {
-        radius = Math.random() * 1.6 + 0.7;      // 小粒子 0.7 ~ 2.3 px
-        alpha = Math.random() * 0.3 + 0.25;       // 透明度 0.25 ~ 0.55
-        glow = 0;
-      } else if (roll < 0.97) {
-        radius = Math.random() * 2.4 + 2.4;       // 中粒子 2.4 ~ 4.8 px
-        alpha = Math.random() * 0.35 + 0.35;      // 透明度 0.35 ~ 0.7
-        glow = radius * 2;                        // 带轻微光晕
-      } else {
-        radius = Math.random() * 3 + 4;           // 大光点 4 ~ 7 px
-        alpha = Math.random() * 0.3 + 0.55;       // 透明度 0.55 ~ 0.85
-        glow = radius * 3.5;                      // 明显光晕
-      }
-
-      particles.push({
-        x: Math.random() * W,
-        y: Math.random() * H,
-        r: radius,
-        vx: (Math.random() - 0.5) * 0.22,
-        vy: (Math.random() - 0.5) * 0.22,
-        a: alpha,
-        glow: glow,
-        tw: Math.random() * Math.PI * 2
-      });
+  // 创建单个粒子（大小分层：85% 小粒子、12% 中粒子、3% 大光点）
+  function makeParticle() {
+    var roll = Math.random();
+    var radius, alpha, glow;
+    if (roll < 0.85) {
+      radius = Math.random() * 1.6 + 0.7;      // 小粒子 0.7 ~ 2.3 px
+      alpha = Math.random() * 0.3 + 0.25;       // 透明度 0.25 ~ 0.55
+      glow = 0;
+    } else if (roll < 0.97) {
+      radius = Math.random() * 2.4 + 2.4;       // 中粒子 2.4 ~ 4.8 px
+      alpha = Math.random() * 0.35 + 0.35;      // 透明度 0.35 ~ 0.7
+      glow = radius * 2;                        // 带轻微光晕
+    } else {
+      radius = Math.random() * 3 + 4;           // 大光点 4 ~ 7 px
+      alpha = Math.random() * 0.3 + 0.55;       // 透明度 0.55 ~ 0.85
+      glow = radius * 3.5;                      // 明显光晕
     }
+
+    return {
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: radius,
+      vx: (Math.random() - 0.5) * 0.22,
+      vy: (Math.random() - 0.5) * 0.22,
+      a: alpha,
+      glow: glow,
+      tw: Math.random() * Math.PI * 2
+    };
+  }
+
+  // 按当前画布面积算出目标粒子数（密度上限）
+  function particleTargetCount() {
+    return Math.min(Math.floor((W * H) * DENSITY), MAX_COUNT);
+  }
+
+  function initParticles() {
+    var count = particleTargetCount();
+    particles = [];
+    for (var i = 0; i < count; i++) particles.push(makeParticle());
+  }
+
+  // 窗口尺寸变化：只重建边界，保留已有粒子的位置（不再整体重新随机分布），
+  // 仅按新面积微调数量——多余的直接截断，不足的补在随机位置。
+  // 这样缩放窗口时不会出现粒子「瞬移」重排的跳变。
+  function syncParticlesToViewport() {
+    var count = particleTargetCount();
+    if (particles.length > count) {
+      particles.length = count;
+      return;
+    }
+    while (particles.length < count) particles.push(makeParticle());
   }
 
   function draw() {
@@ -190,8 +209,8 @@
   });
 
   window.addEventListener('resize', function () {
-    resize();
-    initParticles();
+    resize();                  // 只重建画布边界，不重新随机分布
+    syncParticlesToViewport(); // 保留已有粒子的位置，仅按新面积微调数量
     if (reduceMotion) draw();
   });
 

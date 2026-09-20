@@ -6,7 +6,7 @@ description: An open-source ROS 1 / ROS 2 command reference tool.
 permalink: /en/
 ---
 
-A lightweight ROS 1 / ROS 2 command-line reference for robotics developers.
+A lightweight ROS 1 / ROS 2 command-line reference for robotics developers
 
 ## Quick Links
 

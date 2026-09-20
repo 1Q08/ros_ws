@@ -88,6 +88,7 @@ custom_css: /assets/css/about.css
     <div class="card-body">
       <ul>
         <li>GitHub: <a href="https://github.com/1q08">1Q08</a></li>
+        <li>邮箱: <a href="mailto:tristanzhang350924@gmail.com">tristanzhang350924@gmail.com</a></li>
       </ul>
     </div>
   </div>
@@ -103,6 +104,8 @@ custom_css: /assets/css/about.css
     </div>
     <div class="card-body changelog-body">
       <ul class="changelog-list">
+        <li><span class="cl-date">2026-09-20</span> 文章末尾增加切换按钮和链接、增加右侧目录并且移动端优化为悬浮按钮</li>
+        <li><span class="cl-date">2026-09-19</span> 优化首页展示以及结构、评论区迁移、增加可联系的稳定邮箱地址、优化页面放大时页眉效果</li>
         <li><span class="cl-date">2026-09-09</span> 新增 `rosdep` 依赖管理命令，优化命令分类（并入独立小分类），优化移动端显示：修复页眉菜单点击、深浅模式切换、按钮摆放，优化页脚布局</li>
         <li><span class="cl-date">2026-09-07</span> 命令数据新增发行版标注（Jazzy/Humble/Noetic），速查表支持版本+发行版双条件筛选，分类浏览升级为四级联动，全面优化各板块版本/发行版徽章显示</li>
         <li><span class="cl-date">2026-09-04</span> 搜索板块支持模糊搜索、命中高亮并优化搜索性能，完善命令数据</li>

@@ -273,13 +273,254 @@ body {
 
 /**
  * 响应式调整
+ * 断点统一使用 $on-palm（660px），与移动端汉堡菜单保持一致
  */
-@media (max-width: 768px) {
+@include media-query($on-palm) {
   .theme-toggle-btn {
     margin: 0 0 0 auto;
     display: flex;
     width: fit-content;
   }
+}
+
+/**
+ * 首页（layout: home）标题强调与文案居中
+ * ------------------------------------------------------------
+ * 作用页面：/（index.md）与 /en/（en/index.md），二者共用 home 布局。
+ * .page-heading 仅由 _layouts/home.html 使用，故此处不会波及其他页面。
+ * 卡片网格 .entry-grid 保持满宽布局，不受此处影响。
+ */
+.home .page-heading {
+  // 88px（基准 16px × 5.5）。标题必须明显宽于下方简介段落：
+  // 56px 时标题文字宽 361px < 简介 422px；88px 时约 567px，比简介宽约 145px。
+  @include relative-font-size(5.5);
+  font-weight: 700;
+  color: #000000;                      // 纯黑：screen 混合下命令以本色透出，镂空对比最强
+  text-align: center;
+  position: relative;
+  isolation: isolate;                  // 把混合范围锁在标题内部，不外溢到页面其它元素
+  background-color: var(--bg-primary); // 弹幕混合所需的实体底板
+  overflow: hidden;                    // 裁掉弹幕溢出（标题高度 = 行高，不会切到字形）
+
+  /* ↓ 把不透明底板收紧到「仅文本区域」：被遮住的背景粒子面积降到约一半 */
+  width: fit-content;                  // 宽度紧贴文字：中文版 865.6px → 567.2px
+  max-width: 100%;                     // 兜底：标题过长时（如英文版）退回容器宽度并换行，防横向溢出
+  margin-left: auto;                   // 配合 width:fit-content 让底板保持水平居中
+  margin-right: auto;
+  /* 高度 132px → 100.3px。文字区（字体 ascent+descent）实测 98.4px，
+     上下各留 0.8px：既不切字形，也没有多余空白。 */
+  line-height: 1.14;
+}
+
+/* 深色模式反转：标题转为浅色，配合 darken 混合形成暗色镂空 */
+[data-theme="dark"] .home .page-heading {
+  color: var(--text-primary);
+}
+
+.home > p,
+.home > h2 {
+  text-align: center;
+}
+
+/* 简介 → 「快速入口」净间距目标 60px。
+   相邻兄弟的 margin-bottom(15px) 与 margin-top 会折叠取较大值，
+   因此这里直接写 60px，实测净间距即为 60px。 */
+.home > h2 {
+  margin-top: 60px;
+  /* 字重 400 → 600：minima 的 h1~h6 统一 font-weight:400（_base.scss:75），
+     标题与正文同级，层级感缺失；加粗到 600 后与卡片标题（600）呼应，
+     字号保持 24px 不变。 */
+  font-weight: 600;
+}
+
+/**
+ * 首页标题弹幕 v2（字内镂空，完全打散）
+ * ------------------------------------------------------------
+ * 原理：
+ *   1. 标题自身为纯黑（浅色模式），并铺一层不透明底板（--bg-primary）作为混合基准；
+ *   2. 弹幕层叠在标题之上，用 mix-blend-mode 与底板混合：
+ *        浅色模式 screen  → 在白色底板上混成白（隐形），在黑色笔画上以本色透出（显形）
+ *        深色模式 darken  → 逐通道取 min；深色模式下 6 档命令色每个通道都大于底板
+ *                           ⇒ 笔画之外 min(底板, 命令) = 底板，逐像素完全一致（真隐形）；
+ *                              笔画之内 min(浅色笔画, 命令) = 命令本色（显形）
+ *        ⚠ 深色模式不可用 multiply：深色底板上 multiply 的结果恒比底板更暗，
+ *          会让命令在笔画之外显影，从而把标题矩形的边界暴露成一个「方形框」。
+ *   3. 结果：命令只在笔画内部可见，形成「字内流动」的观感；
+ *      笔画外与底板逐像素一致，因此命令不必完整显示也不会「跑出」标题。
+ * 布局：
+ *   每条命令独占一条「泳道」（.dk-lane），绝对定位于标题矩形内；
+ *   位置 / 字号 / 深浅 / 速度 / 起始相位 由内联样式逐条给出，互不相同。
+ *   泳道宽度取 100vw（视口宽），与标题文字宽度解耦 ⇒ 中英文两版行程一致；
+ *   超出底板的部分由 overflow:hidden 裁掉，命令在文字左右边缘进入/消失。
+ * 约束：标题自身不得设置 z-index / transform，否则会改变混合基准。
+ * 代价：底板矩形会遮住该区域的背景粒子，故底板已收紧到「仅文本区域」。
+ *
+ * 边缘接缝（Firefox 黑边）修复：
+ *   硬裁剪（overflow:hidden）× mix-blend-mode 的组合，在部分合成器（Firefox/Gecko）
+ *   里会以「透明黑」采样裁剪边缘的 backdrop，深色模式 darken = min(黑, 命令) = 黑，
+ *   于是在标题方框边缘闪现一条黑边（只在特定缩放比例、且命令正好压边时出现）。
+ *   Chromium 复现不出来 —— 属合成器实现差异，与配色/几何/CSS 逻辑无关。
+ *   对策见下方 mask-image（软遮罩）+ will-change（独立合成层）。
+ */
+.page-heading__dk {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  mix-blend-mode: screen; // 浅色模式
+  /* 软遮罩：在硬裁剪之前先把左右边缘的 alpha 淡到 0。
+     边缘处「混合结果 = 底板本身」⇒ 不再有可被错误采样的接缝。
+     视觉上命令在左右各约 6%（≈34px）内淡入淡出，比硬切更柔和。
+     ⚠ 上下仍需 overflow:hidden 兜住（大字号泳道可能超出底板），故保留它。 */
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+  /* 强制本层独立合成，避免「混合图层被硬裁剪」时 backdrop 采样错位。
+     若发现反而更糟，删掉这一行即可回到只有软遮罩的状态。 */
+  will-change: transform;
+}
+
+[data-theme="dark"] .page-heading__dk {
+  mix-blend-mode: darken; // 深色模式：min(底板, 命令)。勿改回 multiply，会造成矩形色块
+}
+
+/* 每条「泳道」= 一个命令，横向贯穿整个视口。
+   宽度用 100vw 而非 100%：底板已收紧到文字宽度（约 567px），
+   泳道若跟着变窄，位移距离会同比缩短、命令明显变快，且中英文两版速度不一致。
+   取视口宽度后，两版行程都 ≈ 2.8 × 100vw ≈ 2625px（原实现 3 × 865.6 = 2597px，差 1.1%），
+   时长数组因此无需改动。margin-left 的 -50vw + 50% 把泳道中心对齐到底板中心
+   （50% 相对底板宽度）。位移百分比相对泳道自身宽度，响应式下自动适配；
+   起点与终点都落在底板之外 ⇒ 循环处没有任何跳变。 */
+.dk-lane {
+  position: absolute;
+  left: 0;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  height: 1.6em;
+  pointer-events: none;
+  animation-name: dk-cross;
+  animation-duration: var(--dur, 110s);   // 速度：由内联 --dur 逐条给出
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  /* 负延迟 = 起始相位；--ph 为 0~999 的整数，除以 1000 得到 0~1 的比例 */
+  animation-delay: calc(-1 * var(--dur, 110s) * var(--ph, 0) / 1000);
+}
+
+/* 命令贴在泳道右端之外（left: 100%），随泳道左移进入视野；
+   top:50% + translateY(-50%) 让命令的垂直中心正好落在泳道中线上 */
+.dk-cmd {
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  display: block;
+  white-space: nowrap;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* 每个命令自带一档字号（相对所属泳道字号，形成大小差异） */
+.dk-s0 { font-size: 1em; }
+.dk-s1 { font-size: 0.82em; }
+.dk-s2 { font-size: 1.18em; }
+
+/* ------------------------------------------------------------
+ * 深浅：ROS 1 / ROS 2 各 3 档，共 6 档灰阶（浅色模式）
+ * 全部落在「白底上被 screen 漂白不可见、黑字上清晰可辨」的区间内
+ * ---------------------------------------------------------- */
+.dk-cmd--r1-d0 { color: #6b7885; }
+.dk-cmd--r1-d1 { color: #4f5b66; }
+.dk-cmd--r1-d2 { color: #8b98a5; }
+.dk-cmd--r2-d0 { color: #a3b2c1; }
+.dk-cmd--r2-d1 { color: #7d8d9c; }
+.dk-cmd--r2-d2 { color: #c6d2de; }
+
+/* 深色模式反转：命令转为深色调，配合 multiply 在浅色笔画上形成暗色镂空 */
+[data-theme="dark"] .dk-cmd--r1-d0 { color: #57646f; }
+[data-theme="dark"] .dk-cmd--r1-d1 { color: #3b4653; }
+[data-theme="dark"] .dk-cmd--r1-d2 { color: #7d8b98; }
+[data-theme="dark"] .dk-cmd--r2-d0 { color: #66737f; }
+[data-theme="dark"] .dk-cmd--r2-d1 { color: #4a5666; }
+[data-theme="dark"] .dk-cmd--r2-d2 { color: #93a1ae; }
+
+/* 从右往左匀速掠过。
+   行程 = 2.8 × 泳道宽度（= 2.8 × 100vw ≈ 2625px），与原实现（3 × 865.6px = 2597px）
+   仅差 1.1% ⇒ 时长数组无需改动，观感速度与之前一致。
+   起点（0%）与终点（-280%）都落在底板之外 ⇒ 循环处没有任何跳变。 */
+@keyframes dk-cross {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-280%); }
+}
+
+/* 无障碍：系统开启「减弱动态效果」时停止弹幕 */
+@media (prefers-reduced-motion: reduce) {
+  .dk-lane {
+    animation: none;
+  }
+}
+
+/* 移动端：关闭弹幕，并把标题字号回落到不会溢出的水平 */
+@media (max-width: 600px) {
+  .home .page-heading {
+    @include relative-font-size(2.25); // 36px
+    /* 移动端弹幕已隐藏，底板大小不可见 ⇒ 恢复默认排版，不做收紧 */
+    width: auto;
+    line-height: normal;
+  }
+
+  html[lang^="en"] .home .page-heading {
+    @include relative-font-size(2); // 32px
+  }
+
+  .page-heading__dk {
+    display: none;
+  }
+}
+
+/**
+ * 首页纵向居中（上下居中）
+ * ------------------------------------------------------------
+ * body 本身就是「min-height:100vh 的纵向 flex 列」（_base.scss:26-28），
+ * .page-content 带 flex:1（_layout.scss:199-201），
+ * 所以它的高度 = 视口 − 页头 − 页脚，天然就是可用的居中基准，无需改 HTML。
+ * 把它改成纵向 flex 容器 + justify-content:center，.wrapper 即上下居中。
+ *
+ * 作用范围：:has(.home) 只在包含 .home 的页面（/ 与 /en/）命中，
+ * 文章页 / 关于 / 命令速查 / 全部文章 / 404 均不受影响。
+ *
+ * > .wrapper { width:100% } 是必需的：flex 子项若 width:auto 会退化为
+ *   「收缩适应」宽度，卡片网格会跟着缩窄；显式满宽后，
+ *   .wrapper 原有 max-width + margin:0 auto 的横向居中逻辑完全不变。
+ *
+ * 内容高于视口时，.page-content 会被内容撑高（flex 项默认 min-height:auto），
+ * 不会出现顶部被裁掉的情况。
+ */
+.page-content:has(.home) {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+/* 上下各放一个可伸缩垫片（各自最多 90px）：
+   上留白 = min(30px 内边距 + 自由空间 / 2, 120px)，超出部分全部沉到内容下方。
+   视口高度不足（如移动端）时垫片自动收缩为 0，留白回到原来的 30px，
+   不会挤压内容、也不会出现顶部被裁掉的情况。 */
+.page-content:has(.home)::before,
+.page-content:has(.home)::after {
+  content: "";
+  flex: 1 1 0;
+  min-height: 0;
+  max-height: 90px;
+}
+
+.page-content:has(.home) > .wrapper {
+  width: 100%;
+}
+
+/* 首页最后一个板块自带的下边距（.entry-grid margin-bottom:24px）在居中后会
+   把整块内容顶高 12px，这里交由 .page-content 的 padding 提供留白。 */
+.page-content:has(.home) .home > :last-child {
+  margin-bottom: 0;
 }
 
 /**
@@ -319,7 +560,13 @@ html[lang^="en"] .entry-grid {
   align-items: center;
   text-align: center;
   gap: 6px;
-  padding: 20px 16px;
+  /* 内边距 20/16 → 24/20，并给整卡设 120px 最小高度：
+     原先实测高度仅 96px（内容 54px + 上下内边距 40px + 边框 2px），
+     卡片偏扁、可点击面积小；抬高到 120px 后与 88px 大标题视觉更匹配。 */
+  box-sizing: border-box;
+  min-height: 120px;
+  justify-content: center;
+  padding: 24px 20px;
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: 10px;
@@ -474,11 +721,451 @@ html[lang^="en"] .entry-card__title {
 
 /**
  * 响应式调整：移动端语言切换按钮与主题按钮对齐
+ * 断点统一使用 $on-palm（660px）
  */
-@media (max-width: 768px) {
+@include media-query($on-palm) {
   .lang-switch-btn {
     display: flex;
     margin: 0 0 0 auto;
     width: fit-content;
   }
+}
+
+/**
+ * 页眉窄桌面窗口压缩（661–820px）
+ * ------------------------------------------------------------
+ * 页眉为 float 布局（.site-title 左浮、.site-nav 右浮），浮动元素不会收缩，
+ * 空间不足时会整块掉到下一行，造成标题与导航错位。该区间内压缩各元素尺寸，
+ * 使标题与导航始终并排一行。
+ * 下限 661px 与 $on-palm(660px) 衔接，避免与移动端汉堡菜单样式重叠；
+ * 上限 820px 覆盖实测的错位区间，超出后空间充裕，无需压缩。
+ * 注意：本段必须位于 .theme-toggle-btn / .lang-switch-btn 基础规则之后，
+ * 否则同特异性下会被基础规则覆盖。
+ */
+@media (min-width: 661px) and (max-width: 820px) {
+  .site-nav .page-link:not(:last-child) {
+    margin-right: 6px;
+  }
+
+  .lang-switch-btn,
+  .theme-toggle-btn {
+    padding: 6px 8px;
+    margin-left: 8px;
+  }
+
+  // 主题按钮仅保留图标，为窄屏省出「深色模式」四字宽度
+  #themeText {
+    display: none;
+  }
+
+  .site-title {
+    font-size: 22px;
+  }
+
+  // 英文站标题文案更长（ROS Command Reference），需进一步压缩标题字号
+  html[lang^="en"] .site-title {
+    font-size: 18px;
+  }
+
+  // 英文站导航项更宽（Home / Commands / About / ROS Docs），
+  // 胶囊再收紧一档，保证 661px 起即可并排一行（实测余量约 16px）
+  html[lang^="en"] .lang-switch-btn,
+  html[lang^="en"] .theme-toggle-btn {
+    padding: 6px 6px;
+    margin-left: 6px;
+  }
+}
+
+/**
+ * 页眉宽桌面窗口压缩（821–970px，仅英文站）
+ * ------------------------------------------------------------
+ * 英文站标题「ROS Command Reference」在 26px 时宽约 340px，导航约 561px，
+ * 两者相加需约 902px，加上 .wrapper 左右各 30px 内边距，需约 962px 才够并排一行，
+ * 故 821–969px 区间英文站仍会错位（实测 960px 错位、970px 正常）。
+ * 中文站标题较短（约 197px），同区间内可正常并排，因此本段仅作用于英文站。
+ * 该区间空间较充裕，采用中度压缩（标题 22px、胶囊保留 6/8 内边距），
+ * 与 661–820px 档位形成 18px → 22px → 26px 的平滑过渡。
+ */
+@media (min-width: 821px) and (max-width: 970px) {
+  html[lang^="en"] .site-nav .page-link:not(:last-child) {
+    margin-right: 8px;
+  }
+
+  html[lang^="en"] .lang-switch-btn,
+  html[lang^="en"] .theme-toggle-btn {
+    padding: 6px 8px;
+    margin-left: 8px;
+  }
+
+  html[lang^="en"] #themeText {
+    display: none;
+  }
+
+  html[lang^="en"] .site-title {
+    font-size: 22px;
+  }
+}
+
+/* ------------------------------------------------------------
+ * 文章详情页：右侧目录（TOC）
+ * ------------------------------------------------------------
+ * 结构（见 _layouts/post.html）：
+ *   .post-body
+ *     .post-content   正文
+ *     .post-toc       右侧目录（初始 hidden，由 assets/js/toc.js 填充后显示）
+ *   .post-toc-toggle  窄屏悬浮按钮（同上，仅窄屏可见）
+ *
+ * 宽屏：目录以 sticky 侧栏形式贴在正文右侧，正文自适应剩余宽度。
+ * 窄屏（≤800px）：目录改为右侧抽屉，由悬浮按钮开合。
+ * 正文因多出 190px 侧栏而变窄，行宽从约 1220px 降到约 990px，反而更利于阅读。
+ */
+.post-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+}
+
+.post-content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.post-toc {
+  flex: 0 0 190px;
+  width: 190px;
+  position: sticky;
+  top: 20px;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.post-toc[hidden],
+.post-toc-toggle[hidden] {
+  display: none;
+}
+
+.post-toc__title {
+  margin: 0 0 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+}
+
+.post-toc__link {
+  display: block;
+  padding: 4px 0 4px 12px;
+  border-left: 2px solid var(--border-color);
+  color: var(--text-secondary);
+  transition: color 0.15s ease, border-color 0.15s ease;
+
+  &:hover {
+    color: var(--accent-color);
+  }
+
+  &.is-active {
+    color: var(--accent-color);
+    border-left-color: var(--accent-color);
+  }
+}
+
+/* 宽屏下隐藏窄屏悬浮按钮 */
+.post-toc-toggle {
+  display: none;
+}
+
+@include media-query($on-laptop) {
+  /* 窄屏：取消并排，正文占满整行 */
+  .post-body {
+    display: block;
+  }
+
+  /* 目录改为右侧抽屉 */
+  .post-toc {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    flex: none;
+    width: 260px;
+    max-width: 80vw;
+    max-height: none;
+    padding: 24px 20px 88px;
+    background-color: var(--bg-primary);
+    border-left: 1px solid var(--border-color);
+    box-shadow: -4px 0 16px var(--shadow-color);
+    overflow-y: auto;
+    font-size: 14px;
+    transform: translateX(100%);
+    transition: transform 0.25s ease;
+  }
+
+  .post-toc.is-open {
+    transform: translateX(0);
+  }
+
+  /* 抽屉底部留出 88px 内边距，悬浮按钮正好压在这块空白上，不会遮挡目录项 */
+  .post-toc-toggle {
+    display: inline-flex;
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 41;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--accent-color);
+    background-color: var(--bg-primary);
+    border: 1px solid var(--accent-color);
+    border-radius: 999px;
+    box-shadow: 0 2px 10px var(--shadow-color);
+    cursor: pointer;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .post-toc {
+    transition: none;
+  }
+}
+
+/* ------------------------------------------------------------
+ * 文章详情页：文末导航（返回全部文章 + 上一篇 / 下一篇）
+ * ------------------------------------------------------------
+ * 两列等宽卡片，缺上一篇或下一篇时用占位 span 保持另一张卡的位置。
+ * 窄屏（≤660px）改为纵向排列并隐藏占位，避免出现空卡片。
+ */
+.post-nav {
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-color);
+  font-size: 14px;
+}
+
+.post-nav__back {
+  display: inline-block;
+  margin-bottom: 16px;
+  color: var(--text-secondary);
+
+  &:hover {
+    color: var(--accent-color);
+  }
+}
+
+.post-nav__links {
+  display: flex;
+  gap: 16px;
+}
+
+.post-nav__item {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-primary);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    border-color: var(--accent-color);
+    transform: translateY(-2px);
+  }
+}
+
+.post-nav__item--next {
+  text-align: right;
+}
+
+/* 占位：保留布局但不可见、不可点击 */
+.post-nav__item--empty {
+  border-color: transparent;
+  pointer-events: none;
+}
+
+.post-nav__label {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.post-nav__title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@include media-query($on-palm) {
+  .post-nav__links {
+    flex-direction: column;
+  }
+
+  .post-nav__item--next {
+    text-align: left;
+  }
+
+  .post-nav__item--empty {
+    display: none;
+  }
+}
+
+/* ============================================================
+   深色模式：文章代码块 / 行内代码 / 表格
+   ------------------------------------------------------------
+   背景：minima 的 _base.scss 与 _syntax-highlighting.scss 中，
+   代码块、行内代码、表格以及 Rouge token 均为硬编码浅色，
+   深色模式下依旧是亮底，导致刺眼、部分文字不可读。
+   这里统一在主题层覆盖，不改动 minima 原文件；浅色模式不受影响。
+   ============================================================ */
+
+/* ---------- 行内代码 / 代码块容器 ---------- */
+[data-theme="dark"] pre,
+[data-theme="dark"] code {
+  background-color: var(--code-bg);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+/* ---------- 代码块高亮容器 ---------- */
+[data-theme="dark"] .highlight,
+[data-theme="dark"] .highlighter-rouge .highlight {
+  background: var(--code-bg);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+/* ---------- Rouge 语法高亮 token：映射到 GitHub Dark ---------- */
+/* 注释 / 前导符 / 通用文本 */
+[data-theme="dark"] .highlight .c,
+[data-theme="dark"] .highlight .cm,
+[data-theme="dark"] .highlight .c1,
+[data-theme="dark"] .highlight .cs,
+[data-theme="dark"] .highlight .cp,
+[data-theme="dark"] .highlight .bp,
+[data-theme="dark"] .highlight .go,
+[data-theme="dark"] .highlight .gp,
+[data-theme="dark"] .highlight .gu,
+[data-theme="dark"] .highlight .w,
+[data-theme="dark"] .highlight .nn {
+  color: #8b949e;
+}
+
+/* 关键字 / 运算符 */
+[data-theme="dark"] .highlight .k,
+[data-theme="dark"] .highlight .kc,
+[data-theme="dark"] .highlight .kd,
+[data-theme="dark"] .highlight .kn,
+[data-theme="dark"] .highlight .kp,
+[data-theme="dark"] .highlight .kr,
+[data-theme="dark"] .highlight .kt,
+[data-theme="dark"] .highlight .ow,
+[data-theme="dark"] .highlight .o {
+  color: #ff7b72;
+}
+
+/* 字符串 */
+[data-theme="dark"] .highlight .s,
+[data-theme="dark"] .highlight .sb,
+[data-theme="dark"] .highlight .sc,
+[data-theme="dark"] .highlight .sd,
+[data-theme="dark"] .highlight .s2,
+[data-theme="dark"] .highlight .se,
+[data-theme="dark"] .highlight .sh,
+[data-theme="dark"] .highlight .si,
+[data-theme="dark"] .highlight .sx,
+[data-theme="dark"] .highlight .s1,
+[data-theme="dark"] .highlight .sr,
+[data-theme="dark"] .highlight .ss {
+  color: #a5d6ff;
+}
+
+/* 数字 */
+[data-theme="dark"] .highlight .m,
+[data-theme="dark"] .highlight .mf,
+[data-theme="dark"] .highlight .mh,
+[data-theme="dark"] .highlight .mi,
+[data-theme="dark"] .highlight .mo,
+[data-theme="dark"] .highlight .il {
+  color: #79c0ff;
+}
+
+/* 函数名 / 类名 / 内建 / 异常 */
+[data-theme="dark"] .highlight .nf,
+[data-theme="dark"] .highlight .fm,
+[data-theme="dark"] .highlight .nc,
+[data-theme="dark"] .highlight .nb,
+[data-theme="dark"] .highlight .ne {
+  color: #ffa657;
+}
+
+/* 标签 / 属性 / 变量 / 常量 */
+[data-theme="dark"] .highlight .nt {
+  color: #7ee787;
+}
+
+[data-theme="dark"] .highlight .na,
+[data-theme="dark"] .highlight .no,
+[data-theme="dark"] .highlight .nv,
+[data-theme="dark"] .highlight .vc,
+[data-theme="dark"] .highlight .vg,
+[data-theme="dark"] .highlight .vi,
+[data-theme="dark"] .highlight .ni {
+  color: #79c0ff;
+}
+
+[data-theme="dark"] .highlight .gh {
+  color: #79c0ff;
+}
+
+[data-theme="dark"] .highlight .gr,
+[data-theme="dark"] .highlight .gt {
+  color: #f85149;
+}
+
+/* diff：错误 / 删除 / 新增 */
+[data-theme="dark"] .highlight .err {
+  color: #f85149;
+  background-color: #490202;
+}
+
+[data-theme="dark"] .highlight .gd,
+[data-theme="dark"] .highlight .gd .x {
+  color: #ffdcd7;
+  background-color: #67060c;
+}
+
+[data-theme="dark"] .highlight .gi,
+[data-theme="dark"] .highlight .gi .x {
+  color: #aff5b4;
+  background-color: #033a16;
+}
+
+/* ---------- 表格 ---------- */
+[data-theme="dark"] table {
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] table tr:nth-child(even) {
+  background-color: var(--bg-secondary);
+}
+
+[data-theme="dark"] table th {
+  background-color: var(--bg-tertiary);
+  border-color: var(--border-color);
+  border-bottom-color: var(--border-strong);
+}
+
+[data-theme="dark"] table td {
+  border-color: var(--border-color);
 }
