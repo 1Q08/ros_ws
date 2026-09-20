@@ -4,7 +4,9 @@
 校验项：
   1. commands.json / commands.en.json 均可被 JSON 解析；
   2. 两份 JSON 结构一致（同样的版本、类别、命令顺序与 cmd）；
-  3. 每条命令 7 字段齐全（display/title/cmd/desc/example/options/notes）；
+  3. 每条命令 8 字段齐全
+     （display/title/cmd/desc/example/options/notes/distros）；
+  3.5. distros 非空，且属于该版本允许的发行版集合；
   4. 命令计数与 _data/stats.yml 一致；
   5. 命令计数与 README.md / README.zh-CN.md 的统计表格一致。
 
@@ -17,6 +19,8 @@ import json
 import re
 import sys
 from pathlib import Path
+
+import yaml
 
 DOCS = Path(__file__).resolve().parent.parent
 DATA = DOCS / "_data"
@@ -69,7 +73,7 @@ def main():
     else:
         print("结构一致: 两份 JSON 版本、类别、命令 cmd 序列相同")
 
-    # 3. 7 字段齐全
+    # 3. 8 字段齐全
     missing = []
     for label, data in (("zh", zh), ("en", en)):
         for version in VERSIONS:
@@ -119,24 +123,18 @@ def main():
     total_commands = stats["commands"]["ros1"] + stats["commands"]["ros2"]
     total_categories = stats["categories"]["ros1"] + stats["categories"]["ros2"]
 
-    # 4. 与 stats.yml 一致
-    stats_yaml = stats_path.read_text(encoding="utf-8")
+    # 4. 与 stats.yml 一致（直接解析 YAML，避免脆弱的正则匹配）
+    stats_yaml = yaml.safe_load(stats_path.read_text(encoding="utf-8")) or {}
+    ros1_yaml = stats_yaml.get("ros1") or {}
+    ros2_yaml = stats_yaml.get("ros2") or {}
     expected = {
-        "commands": int(re.search(r"^commands:\s*(\d+)", stats_yaml, re.M).group(1)),
-        "categories": int(re.search(r"^categories:\s*(\d+)", stats_yaml, re.M).group(1)),
-        "versions": int(re.search(r"^versions:\s*(\d+)", stats_yaml, re.M).group(1)),
-        "ros1_commands": int(
-            re.search(r"ros1:\s*\n\s+commands:\s*(\d+)", stats_yaml).group(1)
-        ),
-        "ros1_categories": int(
-            re.search(r"ros1:\s*\n\s+commands:\s*\d+\s*\n\s+categories:\s*(\d+)", stats_yaml).group(1)
-        ),
-        "ros2_commands": int(
-            re.search(r"ros2:\s*\n\s+commands:\s*(\d+)", stats_yaml).group(1)
-        ),
-        "ros2_categories": int(
-            re.search(r"ros2:\s*\n\s+commands:\s*\d+\s*\n\s+categories:\s*(\d+)", stats_yaml).group(1)
-        ),
+        "commands": stats_yaml.get("commands"),
+        "categories": stats_yaml.get("categories"),
+        "versions": stats_yaml.get("versions"),
+        "ros1_commands": ros1_yaml.get("commands"),
+        "ros1_categories": ros1_yaml.get("categories"),
+        "ros2_commands": ros2_yaml.get("commands"),
+        "ros2_categories": ros2_yaml.get("categories"),
     }
 
     checks = {
@@ -148,11 +146,16 @@ def main():
         "ROS 2 命令数": (stats["commands"]["ros2"], expected["ros2_commands"]),
         "ROS 2 分类数": (stats["categories"]["ros2"], expected["ros2_categories"]),
     }
-    for label, (actual, exp) in checks.items():
-        if actual != exp:
-            errors.append(f"stats.yml 不一致: {label} 实际 {actual} != 声明 {exp}")
-        else:
-            print(f"stats.yml 一致: {label} = {actual}")
+
+    invalid_keys = [k for k, v in expected.items() if not isinstance(v, int)]
+    if invalid_keys:
+        errors.append(f"stats.yml 缺少或非法的字段: {', '.join(invalid_keys)}")
+    else:
+        for label, (actual, exp) in checks.items():
+            if actual != exp:
+                errors.append(f"stats.yml 不一致: {label} 实际 {actual} != 声明 {exp}")
+            else:
+                print(f"stats.yml 一致: {label} = {actual}")
 
     # 5. 与 README 统计表格一致
     readme_checks = [
