@@ -1,3 +1,5 @@
+/* ==== 1. 全局 CSS 变量（浅色 / 深色） ==== */
+
 /**
  * 全局主题系统 - CSS 变量定义
  * ============================================================
@@ -40,6 +42,8 @@
   --input-bg: #0d1117;
   --particle-color: #a0b4c8;
 }
+
+/* ==== 2. 站点骨架：body / 页眉导航 / 页脚 ==== */
 
 /**
  * 全局应用主题变量
@@ -110,7 +114,7 @@ body {
  */
 .footer-social {
   clear: both;
-  margin-top: 15px;
+  margin-top: 8px;   // 原 15px 已被下方「页脚压缩」覆盖为 8px，此处直接写最终值
   display: flex;
   justify-content: center;
   align-items: center;
@@ -153,10 +157,6 @@ body {
   margin-bottom: 6px;
 }
 
-.footer-social {
-  margin-top: 8px;
-}
-
 /**
  * 页脚访问量计数
  */
@@ -165,6 +165,8 @@ body {
   vertical-align: middle;
   height: 20px;
 }
+
+/* ==== 3. giscus 评论区 ==== */
 
 /**
  * giscus 评论区
@@ -242,6 +244,8 @@ body {
   min-height: 180px;
 }
 
+/* ==== 4. 主题切换按钮 ==== */
+
 /**
  * 主题切换按钮（导航栏中）
  */
@@ -282,6 +286,8 @@ body {
     width: fit-content;
   }
 }
+
+/* ==== 5. 首页 · 标题与弹幕 ==== */
 
 /**
  * 首页（layout: home）标题强调与文案居中
@@ -477,6 +483,8 @@ body {
   }
 }
 
+/* ==== 6. 首页 · 纵向居中与快速入口卡片 ==== */
+
 /**
  * 首页纵向居中（上下居中）
  * ------------------------------------------------------------
@@ -606,6 +614,8 @@ html[lang^="en"] .entry-grid {
   color: var(--text-secondary);
 }
 
+/* ==== 7. 归档页说明文字 ==== */
+
 /**
  * 归档页说明文字
  */
@@ -613,6 +623,8 @@ html[lang^="en"] .entry-grid {
   color: var(--text-secondary);
   margin-bottom: 12px;
 }
+
+/* ==== 8. 背景粒子画布 ==== */
 
 /**
  * 背景粒子动画 Canvas
@@ -630,6 +642,8 @@ html[lang^="en"] .entry-grid {
   z-index: 0;
   pointer-events: none;
 }
+
+/* ==== 9. 层叠顺序与页眉控件（标题图标 / 语言切换） ==== */
 
 // 粒子层固定于底层，页眉/内容/页脚需提升层级以免被粒子浮在文字之上
 // 页眉层级需高于正文：移动端下拉菜单会溢出到正文区域，
@@ -684,6 +698,8 @@ html[lang^="en"] .entry-grid {
     color: var(--accent-color);
   }
 }
+
+/* ==== 10. 英文站排版与响应式压缩 ==== */
 
 /**
  * 英文排版优化（英文页面）
@@ -789,6 +805,8 @@ html[lang^="en"] .entry-card__title {
     font-size: 22px;
   }
 }
+
+/* ==== 11. 文章详情页 · 目录与文末导航 ==== */
 
 /* ------------------------------------------------------------
  * 文章详情页：右侧目录（TOC）
@@ -1003,6 +1021,8 @@ html[lang^="en"] .entry-card__title {
   }
 }
 
+/* ==== 12. 深色模式覆盖：代码块 / 行内代码 / 表格 ==== */
+
 /* ============================================================
    深色模式：文章代码块 / 行内代码 / 表格
    ------------------------------------------------------------
@@ -1029,127 +1049,46 @@ html[lang^="en"] .entry-card__title {
 }
 
 /* ---------- Rouge 语法高亮 token：映射到 GitHub Dark ---------- */
-/* 注释 / 前导符 / 通用文本 */
-[data-theme="dark"] .highlight .c,
-[data-theme="dark"] .highlight .cm,
-[data-theme="dark"] .highlight .c1,
-[data-theme="dark"] .highlight .cs,
-[data-theme="dark"] .highlight .cp,
-[data-theme="dark"] .highlight .bp,
-[data-theme="dark"] .highlight .go,
-[data-theme="dark"] .highlight .gp,
-[data-theme="dark"] .highlight .gu,
-[data-theme="dark"] .highlight .w,
-[data-theme="dark"] .highlight .nn {
-  color: #8b949e;
-}
+// 用 Sass 嵌套收敛重复的 `[data-theme="dark"] .highlight` 前缀；
+// 编译后的选择器与逐条平铺完全等价，仅源码不再重复。
+[data-theme="dark"] .highlight {
+  // 注释 / 前导符 / 通用文本
+  .c, .cm, .c1, .cs, .cp, .bp, .go, .gp, .gu, .w, .nn { color: #8b949e; }
 
-/* 关键字 / 运算符 */
-[data-theme="dark"] .highlight .k,
-[data-theme="dark"] .highlight .kc,
-[data-theme="dark"] .highlight .kd,
-[data-theme="dark"] .highlight .kn,
-[data-theme="dark"] .highlight .kp,
-[data-theme="dark"] .highlight .kr,
-[data-theme="dark"] .highlight .kt,
-[data-theme="dark"] .highlight .ow,
-[data-theme="dark"] .highlight .o {
-  color: #ff7b72;
-}
+  // 关键字 / 运算符
+  .k, .kc, .kd, .kn, .kp, .kr, .kt, .ow, .o { color: #ff7b72; }
 
-/* 字符串 */
-[data-theme="dark"] .highlight .s,
-[data-theme="dark"] .highlight .sb,
-[data-theme="dark"] .highlight .sc,
-[data-theme="dark"] .highlight .sd,
-[data-theme="dark"] .highlight .s2,
-[data-theme="dark"] .highlight .se,
-[data-theme="dark"] .highlight .sh,
-[data-theme="dark"] .highlight .si,
-[data-theme="dark"] .highlight .sx,
-[data-theme="dark"] .highlight .s1,
-[data-theme="dark"] .highlight .sr,
-[data-theme="dark"] .highlight .ss {
-  color: #a5d6ff;
-}
+  // 字符串
+  .s, .sb, .sc, .sd, .s2, .se, .sh, .si, .sx, .s1, .sr, .ss { color: #a5d6ff; }
 
-/* 数字 */
-[data-theme="dark"] .highlight .m,
-[data-theme="dark"] .highlight .mf,
-[data-theme="dark"] .highlight .mh,
-[data-theme="dark"] .highlight .mi,
-[data-theme="dark"] .highlight .mo,
-[data-theme="dark"] .highlight .il {
-  color: #79c0ff;
-}
+  // 数字
+  .m, .mf, .mh, .mi, .mo, .il { color: #79c0ff; }
 
-/* 函数名 / 类名 / 内建 / 异常 */
-[data-theme="dark"] .highlight .nf,
-[data-theme="dark"] .highlight .fm,
-[data-theme="dark"] .highlight .nc,
-[data-theme="dark"] .highlight .nb,
-[data-theme="dark"] .highlight .ne {
-  color: #ffa657;
-}
+  // 函数名 / 类名 / 内建 / 异常
+  .nf, .fm, .nc, .nb, .ne { color: #ffa657; }
 
-/* 标签 / 属性 / 变量 / 常量 */
-[data-theme="dark"] .highlight .nt {
-  color: #7ee787;
-}
+  // 标签 / 属性 / 变量 / 常量
+  .nt { color: #7ee787; }
+  .na, .no, .nv, .vc, .vg, .vi, .ni { color: #79c0ff; }
+  .gh { color: #79c0ff; }
+  .gr, .gt { color: #f85149; }
 
-[data-theme="dark"] .highlight .na,
-[data-theme="dark"] .highlight .no,
-[data-theme="dark"] .highlight .nv,
-[data-theme="dark"] .highlight .vc,
-[data-theme="dark"] .highlight .vg,
-[data-theme="dark"] .highlight .vi,
-[data-theme="dark"] .highlight .ni {
-  color: #79c0ff;
-}
-
-[data-theme="dark"] .highlight .gh {
-  color: #79c0ff;
-}
-
-[data-theme="dark"] .highlight .gr,
-[data-theme="dark"] .highlight .gt {
-  color: #f85149;
-}
-
-/* diff：错误 / 删除 / 新增 */
-[data-theme="dark"] .highlight .err {
-  color: #f85149;
-  background-color: #490202;
-}
-
-[data-theme="dark"] .highlight .gd,
-[data-theme="dark"] .highlight .gd .x {
-  color: #ffdcd7;
-  background-color: #67060c;
-}
-
-[data-theme="dark"] .highlight .gi,
-[data-theme="dark"] .highlight .gi .x {
-  color: #aff5b4;
-  background-color: #033a16;
+  // diff：错误 / 删除 / 新增
+  .err { color: #f85149; background-color: #490202; }
+  .gd, .gd .x { color: #ffdcd7; background-color: #67060c; }
+  .gi, .gi .x { color: #aff5b4; background-color: #033a16; }
 }
 
 /* ---------- 表格 ---------- */
 [data-theme="dark"] table {
   color: var(--text-primary);
   border-color: var(--border-color);
-}
 
-[data-theme="dark"] table tr:nth-child(even) {
-  background-color: var(--bg-secondary);
-}
-
-[data-theme="dark"] table th {
-  background-color: var(--bg-tertiary);
-  border-color: var(--border-color);
-  border-bottom-color: var(--border-strong);
-}
-
-[data-theme="dark"] table td {
-  border-color: var(--border-color);
+  tr:nth-child(even) { background-color: var(--bg-secondary); }
+  th {
+    background-color: var(--bg-tertiary);
+    border-color: var(--border-color);
+    border-bottom-color: var(--border-strong);
+  }
+  td { border-color: var(--border-color); }
 }
