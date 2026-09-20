@@ -83,6 +83,24 @@ Object.keys(DISTROS).forEach(function (v) {
   (DISTROS[v] || []).forEach(function (d) { DISTRO_NAMES[d.key] = d.name; });
 });
 
+// 发行版显示名：查表失败时回退为原始 key
+function distroName(key) {
+  return DISTRO_NAMES[key] || key;
+}
+
+// ============================================================
+// 共用渲染：发行版徽章
+// ============================================================
+// 由 4 处调用方复用：命令详情、速查表、搜索结果、搜索详情
+// 参数 distroList：发行版键名数组（可为 null/undefined，自动降级为空数组）
+// ============================================================
+function renderDistroBadges(distroList) {
+  return (distroList || []).map(function (d) {
+    return '<span class="distro-badge distro-badge--' + d + '">' +
+           escapeHtml(distroName(d)) + '</span>';
+  }).join('');
+}
+
 // 全局数据存储
 // 结构: { ros1: { core: {...}, topic: {...}, ... }, ros2: {...} }
 // 每条命令含 distros 字段：该命令适用的发行版列表（如 ["jazzy"]）
@@ -235,7 +253,7 @@ function renderEmptyDistroNotice(detailDiv, distro, hasCategories) {
     notice.className = 'empty-distro-notice';
     detailDiv.parentNode.insertBefore(notice, detailDiv.nextSibling);
   }
-  notice.textContent = T.emptyDistro + '（' + (DISTRO_NAMES[distro] || distro) + '）';
+  notice.textContent = T.emptyDistro + '（' + distroName(distro) + '）';
   notice.style.display = 'block';
 }
 
@@ -307,10 +325,7 @@ function onCommandChange() {
 
   // 填充详情区域各个字段
   document.getElementById('detailTitle').textContent = cmd.title || cmd.display || cmd.cmd;
-  document.getElementById('detailVersionMeta').innerHTML = (cmd.distros || []).map(function (d) {
-    return '<span class="distro-badge distro-badge--' + d + '">' +
-           escapeHtml(DISTRO_NAMES[d] || d) + '</span>';
-  }).join('');
+  document.getElementById('detailVersionMeta').innerHTML = renderDistroBadges(cmd.distros);
   document.getElementById('detailCmd').innerHTML = highlightCode(cmd.cmd);
   document.getElementById('detailDesc').textContent = cmd.desc;
   document.getElementById('detailExample').innerHTML = highlightCode(cmd.example);
@@ -364,10 +379,7 @@ function renderSummaryTable() {
         //   已选发行版 → 仅显示该发行版徽章；未选 → 显示命令支持的全部发行版
         let distroList = cmd.distros || [];
         if (selDistro) distroList = distroList.filter(d => d === selDistro);
-        const distroBadges = distroList.map(function (d) {
-          return '<span class="distro-badge distro-badge--' + d + '">' +
-                 escapeHtml(DISTRO_NAMES[d] || d) + '</span>';
-        }).join('');
+        const distroBadges = renderDistroBadges(distroList);
         rows += `
           <tr>
             <td><span class="summary-version-wrap"><span class="summary-version summary-version--${version}">${VERSION_NAMES[version]}</span><span class="summary-distros">${distroBadges}</span></span></td>
@@ -399,7 +411,7 @@ function updateSummaryFilterBadge(version, distro) {
   }
 
   let label = VERSION_NAMES[version] || version;
-  if (distro) label += ' · ' + (DISTRO_NAMES[distro] || distro);
+  if (distro) label += ' · ' + distroName(distro);
   badge.textContent = label;
   badge.hidden = false;
 }
@@ -555,10 +567,7 @@ function setupSearch() {
     let html = '<p class="results-count">' + escapeHtml(T.totalCount.replace('{n}', results.length)) + '</p>';
     html += '<div class="results-list">';
     results.forEach((cmd, index) => {
-      const resultDistroBadges = (cmd.distros || []).map(function (d) {
-        return '<span class="distro-badge distro-badge--' + d + '">' +
-               escapeHtml(DISTRO_NAMES[d] || d) + '</span>';
-      }).join('');
+      const resultDistroBadges = renderDistroBadges(cmd.distros);
       html += `
         <div class="result-item" role="button" tabindex="0"
              onclick="showSearchResult(${index})"
@@ -610,10 +619,7 @@ function showSearchResult(index) {
   // 填充详情内容（仅保留：版本、说明、示例三项，标题使用 title 字段）
   // 标题为链接，点击后联动四级下拉框并跳转到分类浏览详情卡片
   const jumpDistro = (cmd.distros && cmd.distros.length) ? cmd.distros[0] : '';
-  const detailDistroBadges = (cmd.distros || []).map(function (d) {
-    return '<span class="distro-badge distro-badge--' + d + '">' +
-           escapeHtml(DISTRO_NAMES[d] || d) + '</span>';
-  }).join('');
+  const detailDistroBadges = renderDistroBadges(cmd.distros);
   // 版本行采用「ROS / 发行版 / 分类」斜杠串联格式：ROS 2 / [Jazzy][Humble] / 核心命令
   const distroSegment = (cmd.distros && cmd.distros.length)
     ? ' / ' + detailDistroBadges
