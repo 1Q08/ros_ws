@@ -10,7 +10,11 @@
 // 依赖：
 //   window.COMMANDS_DATA_URL  - 由页面 HTML 注入的 JSON 数据地址（经
 //                               relative_url 处理，兼容 GitHub Pages baseurl）
+//   window.AppUtils           - assets/js/lib/utils.js 提供的通用工具函数
+//                               （escapeHtml / debounce / escapeRegExp）
 // ============================================================
+
+const { escapeHtml, debounce, escapeRegExp } = window.AppUtils;
 
 // ============================================================
 // 国际化文案：根据页面语言（<html lang>）选择
@@ -418,26 +422,6 @@ function toggleSummary() {
 // 匹配结果以卡片列表形式显示在搜索框下方
 // ============================================================
 
-// HTML 转义（C5）：搜索结果与详情中的描述字段不再裸拼 innerHTML
-function escapeHtml(text) {
-  if (text === null || text === undefined) return '';
-  return String(text)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
-
-// 防抖：搜索输入触发频瓕降低，避免每次按键都全量遍历
-function debounce(fn, delay) {
-  let timer = null;
-  return function (...args) {
-    clearTimeout(timer);
-    timer = setTimeout(() => fn.apply(this, args), delay);
-  };
-}
-
 // 归一化：去除空格、下划线、连字符、斜杠、标点等分隔符，便于模糊匹配
 function normalizeSearch(s) {
   return String(s || '').toLowerCase().replace(/[\s_\-/<>:=[]{}.,'\"()|;]/g, '');
@@ -486,11 +470,6 @@ function scoreField(kwRaw, kwNorm, rawText, normText) {
   if (!kwNorm || !normText) return 0;
   if (normText.includes(kwNorm)) return 80;
   return 0;
-}
-
-// 正则特殊字符转义
-function escapeRegExp(s) {
-  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 // 高亮命中片段：先转义 HTML，再对忽略大小写的关键词加 <mark> 标记

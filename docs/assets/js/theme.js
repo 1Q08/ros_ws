@@ -7,6 +7,8 @@
 // 说明（G4）：本脚本在 <head> 中同步加载，立即应用已保存的主题，
 // 避免首屏先用默认浅色渲染、再闪一下切到深色（FOUC）。
 // 按钮图标/文字因依赖 DOM，推迟到 DOMContentLoaded 再补一次。
+//
+// 依赖：window.ThemeCore（assets/js/lib/theme-core.js，已在本文件之前同步加载）
 // ============================================================
 
 // 国际化：根据页面语言（<html lang>）选择按钮文案（F3）
@@ -27,21 +29,12 @@ const THEME_I18N = {
 
 // 初始化主题：localStorage > 系统偏好 > 默认浅色
 function initTheme() {
-  let savedTheme = null;
-  try {
-    savedTheme = localStorage.getItem('theme');
-  } catch (e) { /* localStorage 不可用时忽略 */ }
-
-  const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const theme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
-  setTheme(theme);
+  setTheme(ThemeCore.resolveTheme());
 }
 
 // 切换主题（点击按钮时触发）
 function toggleTheme() {
-  const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
-  const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-  setTheme(newTheme);
+  setTheme(ThemeCore.currentTheme() === 'light' ? 'dark' : 'light');
 }
 
 // 更新按钮图标和文字（依赖 DOM，按语言翻译）
@@ -66,9 +59,7 @@ function setTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
 
   // 保存到 localStorage（不可用时静默失败）
-  try {
-    localStorage.setItem('theme', theme);
-  } catch (e) { /* 忽略 */ }
+  ThemeCore.saveTheme(theme);
 
   // 更新按钮（DOM 未就绪时 getElementById 返回 null，安全跳过）
   updateThemeButton(theme);
@@ -82,6 +73,5 @@ initTheme();
 
 // 页面 DOM 就绪后补一次按钮文案（此时按钮元素才存在）
 document.addEventListener('DOMContentLoaded', function () {
-  const theme = document.documentElement.getAttribute('data-theme') || 'light';
-  updateThemeButton(theme);
+  updateThemeButton(ThemeCore.currentTheme());
 });

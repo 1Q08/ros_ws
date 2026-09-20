@@ -8,17 +8,10 @@
 // 使用页面：/commands/、/archive/ —— 页面内需有 .giscus 容器与 #giscus-load-btn 按钮；
 //   若找不到按钮，脚本会兜底立即加载。
 // 映射规则：data-mapping="pathname"，评论线程与页面路径绑定 —— 换路径即新线程。
+// 依赖：window.ThemeCore（assets/js/lib/theme-core.js，已在本文件之前加载）
 // ============================================================
 (function () {
   'use strict';
-
-  function resolveTheme() {
-    try {
-      var saved = localStorage.getItem('theme');
-      if (saved === 'dark' || saved === 'light') return saved;
-    } catch (e) {}
-    return (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
-  }
 
   function giscusThemeName(theme) {
     return theme === 'dark' ? 'noborder_dark' : 'noborder_light';
@@ -44,7 +37,7 @@
     s.setAttribute('data-reactions-enabled', '1');
     s.setAttribute('data-emit-metadata', '0');
     s.setAttribute('data-input-position', 'top');
-    s.setAttribute('data-theme', giscusThemeName(resolveTheme()));
+    s.setAttribute('data-theme', giscusThemeName(ThemeCore.currentTheme()));
     s.setAttribute('data-lang', 'zh-CN');
     // eager：手动懒加载已由「点击按钮」承担，原生 lazy 会推迟到滚动才渲染，
     // 与“点开后立即显示”冲突，且易导致高度计算滞后（内容被裁剪）

@@ -5,6 +5,7 @@
 //   1. 根据当前主题（data-theme 或系统偏好）设置 favicon
 //   2. 同步更新页眉站点标题图标
 //   3. 监听 themechange 事件实时切换
+// 依赖：window.ThemeCore（assets/js/lib/theme-core.js，已在本文件之前加载）
 // ============================================================
 (function () {
   function applyFavicon(theme) {
@@ -19,17 +20,10 @@
       if (iconSrc) titleIcon.src = iconSrc;
     }
   }
-  function detectTheme() {
-    try {
-      var saved = localStorage.getItem('theme');
-      if (saved === 'dark' || saved === 'light') return saved;
-    } catch (e) {}
-    return (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
-  }
   document.addEventListener('themechange', function (e) {
     applyFavicon(e.detail && e.detail.theme);
   });
   document.addEventListener('DOMContentLoaded', function () {
-    applyFavicon(document.documentElement.getAttribute('data-theme') || detectTheme());
+    applyFavicon(ThemeCore.currentTheme());
   });
 })();

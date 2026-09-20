@@ -9,6 +9,8 @@
         data-light="{{ "/assets/icons/favicon.svg" | relative_url }}"
         data-dark="{{ "/assets/icons/favicon-dark.svg" | relative_url }}">
   <script src="{{ "/assets/js/favicon.js" | relative_url }}" defer></script>
+  <!-- 通用工具函数（escapeHtml / debounce / escapeRegExp），供页面脚本复用 -->
+  <script src="{{ "/assets/js/lib/utils.js" | relative_url }}" defer></script>
   {%- if page.lang == 'en' -%}
   <link rel="alternate" hreflang="en" href="{{ page.url | absolute_url }}">
   <link rel="alternate" hreflang="zh-CN" href="{{ page.url | remove_first: '/en' | absolute_url }}">
@@ -44,6 +46,8 @@
   {%- if jekyll.environment == 'production' and site.google_analytics -%}
     {%- include google-analytics.html -%}
   {%- endif -%}
+  <!-- 主题解析核心：必须同步（阻塞）先于 theme.js 加载，首屏立即应用主题以防闪烁 -->
+  <script src="{{ "/assets/js/lib/theme-core.js" | relative_url }}"></script>
   <script src="{{ "/assets/js/theme.js" | relative_url }}"></script>
   <script src="{{ "/assets/js/bg-particles.js" | relative_url }}" defer></script>
   {%- if page.custom_css -%}
