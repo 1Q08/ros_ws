@@ -1,0 +1,37 @@
+{%- comment -%}
+  评论区容器（giscus 懒加载）
+  - 按钮/状态文案随 page.lang 自动切换，英文页使用 data-lang="en"
+  - 页面内需有 .giscus 容器与 #giscus-load-btn 按钮（本模板已提供）
+  - 加载逻辑见 assets/js/giscus.js（从按钮的 data-* 读取文案、语言与线程 term）
+{%- endcomment -%}
+{%- comment -%}
+  线程绑定：去掉语言前缀后取页面路径作为 term，使 /commands/ 与 /en/commands/
+  归一到同一个 term，从而中英文页共用同一条评论线程；其它页面各自成线程。
+  term 与线上 location.pathname 形式保持一致（去掉 baseurl 的前导斜杠），
+  这样可继续命中已有讨论帖（giscus 以 term 的 SHA-1 在帖子正文中检索）。
+{%- endcomment -%}
+{%- assign giscus_path = page.url | replace_first: '/en/', '/' -%}
+{%- assign giscus_term = site.baseurl | append: giscus_path | remove_first: '/' -%}
+{%- if page.lang == 'en' -%}
+  {%- assign giscus_text = 'View comments' -%}
+  {%- assign giscus_text_loading = 'Loading…' -%}
+  {%- assign giscus_text_retry = 'Failed to load, click to retry' -%}
+  {%- assign giscus_lang = 'en' -%}
+{%- else -%}
+  {%- assign giscus_text = '查看评论' -%}
+  {%- assign giscus_text_loading = '加载中…' -%}
+  {%- assign giscus_text_retry = '加载失败，点击重试' -%}
+  {%- assign giscus_lang = 'zh-CN' -%}
+{%- endif -%}
+<section class="giscus-wrapper">
+  <button type="button" class="giscus-load-btn" id="giscus-load-btn"
+          data-text-loading="{{ giscus_text_loading }}"
+          data-text-retry="{{ giscus_text_retry }}"
+          data-lang="{{ giscus_lang }}"
+          data-term="{{ giscus_term }}">
+    <span class="giscus-load-icon" aria-hidden="true"></span>
+    <span class="giscus-load-text">{{ giscus_text }}</span>
+  </button>
+  <div class="giscus"></div>
+  <script src="{{ "/assets/js/giscus.js" | relative_url }}" defer></script>
+</section>

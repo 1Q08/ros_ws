@@ -26,15 +26,7 @@ custom_js: /assets/js/commands.js
 
 {%- include command-reference.html lang="zh" -%}
 
-<!-- 评论区：点击后懒加载 giscus（目前仅中文页启用） -->
-<section class="giscus-wrapper">
-  <button type="button" class="giscus-load-btn" id="giscus-load-btn">
-    <span class="giscus-load-icon" aria-hidden="true"></span>
-    <span class="giscus-load-text">查看评论</span>
-  </button>
-  <div class="giscus"></div>
-  <script src="{{ "/assets/js/giscus.js" | relative_url }}" defer></script>
-</section>
+{%- include giscus.html -%}
 
 <script>
 // 命令速查页脚本已抽取为独立文件（assets/js/commands.js，经 front matter custom_js 加载）

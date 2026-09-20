@@ -23,11 +23,12 @@ shared template:
   _includes/command-reference.html  structural skeleton
   _data/commands_ui.yml             bilingual UI strings (this page uses the "en" group)
 
-This file only keeps the page-specific bits: the command data URL.
-Note: unlike the Chinese page, this page currently has no comment section.
+This file only keeps the page-specific bits: the command data URL and the comment section.
 {%- endcomment -%}
 
 {%- include command-reference.html lang="en" -%}
+
+{%- include giscus.html -%}
 
 <script>
 // The command-reference script lives in assets/js/commands.js (loaded via custom_js).

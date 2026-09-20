@@ -23,11 +23,4 @@ permalink: /archive/
   {%- endfor -%}
 </ul>
 
-<section class="giscus-wrapper">
-  <button type="button" class="giscus-load-btn" id="giscus-load-btn">
-    <span class="giscus-load-icon" aria-hidden="true"></span>
-    <span class="giscus-load-text">查看评论</span>
-  </button>
-  <div class="giscus"></div>
-  <script src="{{ "/assets/js/giscus.js" | relative_url }}" defer></script>
-</section>
+{%- include giscus.html -%}
