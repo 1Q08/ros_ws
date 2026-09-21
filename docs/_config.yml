@@ -65,5 +65,8 @@ exclude:
   - vendor/gems/
   - vendor/ruby/
   # --- 本站自定义项 ---
-  # 文档站的中文手册，只供在 GitHub 上阅读，不作为网站页面发布
+  # 文档站的中英文手册，只供在 GitHub 上阅读，不作为网站页面发布
   - README.zh-CN.md
+  - README.md
+  # 命令数据一致性校验脚本，仅供本地开发使用
+  - tools/
