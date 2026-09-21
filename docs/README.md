@@ -43,6 +43,32 @@
 
 ## 📁 Project Structure
 
+Every folder has one responsibility, and the boundaries are deliberate:
+
+### Directory responsibilities
+
+| Path | Responsibility | Boundary (what belongs elsewhere) |
+| --- | --- | --- |
+| `docs/` | Jekyll site root — Chinese pages + site config | English pages go to `en/`; theme source goes to `_sass/` |
+| `en/` | English mirror of the Chinese pages | Pages only — layouts, scripts and data are shared, never duplicated |
+| `_layouts/` | Page-level HTML shells (frame around `{{ content }}`) | No reusable blocks — those live in `_includes/` |
+| `_includes/` | Reusable HTML snippets (global chrome + page-level skeletons) | No page config and no visible text — text lives in `_data/` |
+| `_data/` | Build-time site data, read by Liquid while building | Nothing the browser fetches at runtime |
+| `_sass/` | Global SCSS variables + partials | No page-specific selectors |
+| `assets/main.scss` | Global style entry → `main.css` | No page-specific selectors |
+| `assets/css/` | Page-level style entries, loaded per page via `page.custom_css` | Consumes the `main.css` variables — must not redefine them |
+| `assets/js/` | One script per page or feature | No shared helpers |
+| `assets/js/lib/` | Shared base modules (`ThemeCore`, `AppUtils`) used by page scripts | Not bound to any single page |
+| `assets/data/` | Command database fetched by `commands.js` at runtime | No site config, no UI strings |
+| `assets/icons/` | SVG icons and favicons | — |
+| `_posts/` | Tutorial articles (Markdown, date in filename) | Not site pages |
+| `tools/` | Local maintenance scripts, never published | Not referenced by the site; unrelated to the repo-root `tools/` (Jetson scripts) |
+
+> **Build-time vs runtime data**: `_data/*.yml` is read by Liquid during the build;
+> `assets/data/*.json` is fetched by the browser after the page loads.
+
+### Directory tree
+
 ```
 docs/                              # Jekyll site root
 ├── _config.yml                   # Site core configuration
@@ -50,9 +76,10 @@ docs/                              # Jekyll site root
 ├── README.md                     # This document (English)
 ├── README.zh-CN.md               # Chinese version of this document
 │
-├── _data/                        # Site data (single-source stats)
-│   └── stats.yml                 # └─ Command/category counts (used by About page)
-├── tools/                        # Maintenance scripts
+├── _data/                        # Build-time site data (single source of truth)
+│   ├── stats.yml                 # ├─ Global counts (commands/categories, About page)
+│   └── commands_ui.yml           # └─ Commands page UI strings (zh/en, read by the skeleton)
+├── tools/                        # Maintenance scripts (never published)
 │   └── check_commands.py         # └─ Command data consistency checker
 │
 ├── index.md                      # Home page (home layout)
@@ -66,6 +93,7 @@ docs/                              # Jekyll site root
 │   ├── commands.html             # ├─ English command reference page
 │   ├── about.md                  # ├─ English about page
 │   └── 404.html                  # └─ English custom 404
+│                                 # ⚠️ no archive.md yet: /archive/ has no English twin
 │
 ├── _posts/                       # Blog posts (Markdown, filename contains date)
 ├── _layouts/                     # Page layout templates (inheritance chain)
@@ -79,7 +107,10 @@ docs/                              # Jekyll site root
 │   ├── header.html               # ├─ Navbar: title (zh/en adaptive) + links + language/theme toggles
 │   ├── footer.html               # ├─ Footer: author + email + description (zh/en) + social links
 │   ├── lang-switcher.html        # ├─ Language switcher button (/en/ ↔ /)
-│   └── social.html               # └─ Social icons: GitHub + RSS + Feishu
+│   ├── social.html               # ├─ Social icons: GitHub + RSS + Feishu
+│   ├── command-reference.html    # ├─ [page-level skeleton] whole commands page markup,
+│   │                             # │  takes lang="zh|en" and reads _data/commands_ui.yml
+│   └── giscus.html               # └─ [page-level] comment block; zh/en share one thread
 │
 ├── _sass/                        # SCSS style source
 │   ├── minima.scss               # ├─ Main entry: variable definitions + partial imports
@@ -101,14 +132,20 @@ docs/                              # Jekyll site root
     │   ├── feishu.svg                 # ├─ Feishu icon (official colored logo)
     │   ├── icon-search.svg            # ├─ Search icon
     │   ├── icon-eye.svg               # ├─ Browse icon
-    │   └── icon-sort.svg              # └─ Sort icon (reference table button)
-    ├── js/
+    │   ├── icon-sort.svg              # ├─ Sort icon (reference table button)
+    │   └── message-comments.svg       # └─ Comments icon (load-comments button)
+    ├── js/                       # Page scripts (one file per page or feature)
+    │   ├── lib/                  # ├─ Shared base modules (loaded before page scripts)
+    │   │   ├── theme-core.js     # │  ├─ ThemeCore: theme resolve/save (blocking, prevents FOUC)
+    │   │   └── utils.js          # │  └─ AppUtils: escapeHtml / debounce / escapeRegExp
     │   ├── theme.js              # ├─ Theme toggle (localStorage + system, i18n button, FOUC-free init)
     │   ├── favicon.js            # ├─ Dynamic favicon switching (follows theme)
     │   ├── giscus.js             # ├─ Lazy-loaded giscus comments (button + retry + theme sync)
     │   ├── bg-particles.js       # ├─ Background particle animation (Canvas, layered + glow)
+    │   ├── toc.js                # ├─ Post TOC: right rail on desktop, floating button on mobile
+    │   ├── mermaid.js            # ├─ Renders mermaid code blocks in articles (follows theme)
     │   └── commands.js           # └─ Command reference (search + debounce + four-level cascading selects + escaping + i18n)
-    └── css/
+    └── css/                      # Page-level style entries (page.custom_css)
         ├── commands.scss         # ├─ Command reference page styles (zebra-striped table)
         ├── about.scss            # ├─ About page styles
         └── 404.scss              # └─ 404 page styles (ROS terminal)
@@ -251,9 +288,23 @@ Edit `assets/data/commands.json` and add the command to the `commands` array und
 
 ### Add a page
 
-1. Create `new-page.md` with `layout: page` front matter
-2. Declare `custom_css` / `custom_js` in front matter if it needs custom styles/scripts
-3. Add it to `header_pages` in `_config.yml` to show it in the nav
+1. Regular page: create `new-page.md` with `layout: page` front matter, declare `custom_css` / `custom_js` if it needs custom styles/scripts, and add it to `header_pages` in `_config.yml` to show it in the nav
+2. Tutorial article: create `_posts/YYYY-MM-DD-slug.md` (Jekyll automatically ignores files starting with `_`, `.` or `#`, so no config change is needed) with this front matter:
+
+   ```yaml
+   ---
+   layout: post
+   title: "Article title"
+   date: 2026-09-21 11:50:00 +0800
+   categories: ros2 tutorial
+   author: 老张同志
+   excerpt: "Summary used for listings and the SEO description"
+   ---
+   ```
+
+3. Start the article body with `# Article title` (matching `title`) and use `## 一、` / `## 二、`-style Chinese-numeral headings, with two-column tables and `bash` / `python` code blocks
+4. For flowcharts, use a `mermaid` code block — the site loads mermaid automatically and follows the light/dark theme (no CDN request when a page has no diagrams)
+5. The article is added to `/archive/` and `feed.xml` automatically after the build
 
 ---
 

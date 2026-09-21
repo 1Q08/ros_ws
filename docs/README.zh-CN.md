@@ -43,6 +43,32 @@
 
 ## 📁 项目架构
 
+每个文件夹只负责一件事，边界是刻意划定的：
+
+### 目录职责与边界
+
+| 路径 | 职责 | 边界（什么不放在这里） |
+| --- | --- | --- |
+| `docs/` | 站点根目录：中文页面 + 站点配置 | 英文页面放 `en/`；主题源码放 `_sass/` |
+| `en/` | 中文页面的英文镜像 | 只放页面，布局/脚本/数据一律共享，不复制 |
+| `_layouts/` | 页面级 HTML 外壳（包住 `{{ content }}` 的框架） | 不放可复用片段，那些在 `_includes/` |
+| `_includes/` | 可复用 HTML 片段（全局框架 + 页面级骨架） | 不放页面配置与可见文案，文案在 `_data/` |
+| `_data/` | 构建期站点数据，由 Liquid 在构建时读取 | 不放浏览器运行时获取的数据 |
+| `_sass/` | 全局 SCSS 变量与 partial | 不放页面专属选择器 |
+| `assets/main.scss` | 全局样式入口 → `main.css` | 不放页面专属选择器 |
+| `assets/css/` | 页面级样式入口，由 `page.custom_css` 按需加载 | 消费 `main.css` 的变量，不重复定义变量 |
+| `assets/js/` | 一个页面/功能一个脚本 | 不放共享工具函数 |
+| `assets/js/lib/` | 共享基础模块（`ThemeCore`、`AppUtils`），供页面脚本调用 | 不绑定任何单个页面 |
+| `assets/data/` | 命令数据库，由 `commands.js` 运行时 fetch | 不放站点配置与界面文案 |
+| `assets/icons/` | SVG 图标与 favicon | — |
+| `_posts/` | 教程文章（Markdown，文件名含日期） | 不放站点页面 |
+| `tools/` | 本地维护脚本，永不发布 | 站点不引用它；与仓库根的 `tools/`（Jetson 脚本）无关 |
+
+> **构建期 vs 运行时数据**：`_data/*.yml` 在构建时由 Liquid 读取；
+> `assets/data/*.json` 在页面加载后由浏览器 fetch。
+
+### 目录树
+
 ```
 docs/                              # Jekyll 站点根目录
 ├── _config.yml                   # 站点核心配置
@@ -50,9 +76,10 @@ docs/                              # Jekyll 站点根目录
 ├── README.md                     # 英文说明文档
 ├── README.zh-CN.md               # 中文说明文档
 │
-├── _data/                        # 站点数据（统计数据单点维护）
-│   └── stats.yml                 # └─ 命令/分类计数（关于页引用）
-├── tools/                        # 维护脚本
+├── _data/                        # 构建期站点数据（单点维护）
+│   ├── stats.yml                 # ├─ 全站统计（命令/分类计数，关于页引用）
+│   └── commands_ui.yml           # └─ 命令速查页界面文案（zh/en，由骨架读取）
+├── tools/                        # 维护脚本（不发布）
 │   └── check_commands.py         # └─ 命令数据一致性校验脚本
 │
 ├── index.md                      # 首页（home 布局）
@@ -66,6 +93,7 @@ docs/                              # Jekyll 站点根目录
 │   ├── commands.html             # ├─ 英文命令速查交互页
 │   ├── about.md                  # ├─ 英文关于页
 │   └── 404.html                  # └─ 英文自定义 404
+│                                 # ⚠️ 尚无 archive.md：/archive/ 没有英文对应页
 │
 ├── _posts/                       # 博客文章（Markdown，文件名含发布日期）
 ├── _layouts/                     # 页面布局模板（继承链）
@@ -79,7 +107,10 @@ docs/                              # Jekyll 站点根目录
 │   ├── header.html               # ├─ 导航栏：标题（中英自适应）+ 链接 + 语言/主题切换按钮
 │   ├── footer.html               # ├─ 页脚：作者 + 邮箱 + 描述（中英自适应）+ 社交链接
 │   ├── lang-switcher.html        # ├─ 语言切换按钮（中英互跳 /en/ ↔ /）
-│   └── social.html               # └─ 社交图标：GitHub + RSS + 飞书
+│   ├── social.html               # ├─ 社交图标：GitHub + RSS + 飞书
+│   ├── command-reference.html    # ├─ 【页面级骨架】命令速查页整页结构，
+│   │                             # │  接收 lang="zh|en" 并读取 _data/commands_ui.yml
+│   └── giscus.html               # └─ 【页面级】评论区，中英文共用同一条线程
 │
 ├── _sass/                        # SCSS 样式源
 │   ├── minima.scss               # ├─ 主入口：变量定义 + 导入 partials
@@ -101,14 +132,20 @@ docs/                              # Jekyll 站点根目录
     │   ├── feishu.svg                 # ├─ 飞书图标（官方彩色 Logo）
     │   ├── icon-search.svg            # ├─ 搜索图标
     │   ├── icon-eye.svg               # ├─ 浏览图标
-    │   └── icon-sort.svg              # └─ 排序图标（速查表按钮）
-    ├── js/
+    │   ├── icon-sort.svg              # ├─ 排序图标（速查表按钮）
+    │   └── message-comments.svg       # └─ 评论图标（加载评论按钮）
+    ├── js/                       # 页面脚本（一个页面/功能一个文件）
+    │   ├── lib/                  # ├─ 共享基础模块（先于页面脚本加载）
+    │   │   ├── theme-core.js     # │  ├─ ThemeCore：主题解析/保存（阻塞加载，防白屏闪烁）
+    │   │   └── utils.js          # │  └─ AppUtils：escapeHtml / debounce / escapeRegExp
     │   ├── theme.js              # ├─ 主题切换（localStorage + 系统偏好，按钮文案 i18n，免闪烁初始化）
     │   ├── favicon.js            # ├─ favicon 动态切换（跟随主题）
     │   ├── giscus.js             # ├─ giscus 评论区懒加载（按钮 + 重试 + 主题同步）
     │   ├── bg-particles.js       # ├─ 背景粒子动画（Canvas，大小分层 + 发光）
+    │   ├── toc.js                # ├─ 文章目录：桌面右侧栏，移动端悬浮按钮
+    │   ├── mermaid.js            # ├─ 文章内 mermaid 图渲染（跟随深浅色模式）
     │   └── commands.js           # └─ 命令速查页脚本（搜索防抖 + 四级联动 + 转义 + 文案 i18n）
-    └── css/
+    └── css/                      # 页面级样式入口（page.custom_css）
         ├── commands.scss         # ├─ 命令速查页专属样式（含斑马条纹表格）
         ├── about.scss            # ├─ 关于页专属样式
         └── 404.scss              # └─ 404 页专属样式（ROS 终端风格）
@@ -251,9 +288,23 @@ bundle exec jekyll serve --baseurl=""
 
 ### 添加新页面
 
-1. 创建 `new-page.md`，设置 `layout: page` 等 front matter
-2. 如需专属样式/脚本，在 front matter 中声明 `custom_css` / `custom_js`
-3. 添加到 `_config.yml` 的 `header_pages` 列表显示在导航栏
+1. 普通页面：创建 `new-page.md`，设置 `layout: page` 等 front matter，如需专属样式/脚本则声明 `custom_css` / `custom_js`，并加入 `_config.yml` 的 `header_pages` 显示在导航栏
+2. 教程文章：在 `_posts/` 下新建 `YYYY-MM-DD-slug.md`（Jekyll 会自动忽略以 `_`、`.`、`#` 开头的文件，无需改配置），front matter 固定写法：
+
+   ```yaml
+   ---
+   layout: post
+   title: "文章标题"
+   date: 2026-09-21 11:50:00 +0800
+   categories: ros2 tutorial
+   author: 老张同志
+   excerpt: "摘要，用于列表展示与 SEO 描述"
+   ---
+   ```
+
+3. 文章正文首行用 `# 文章标题`（与 `title` 保持一致），小节用 `## 一、` / `## 二、` 中文数字标题，正文以两列说明表格与 `bash` / `python` 代码块为主
+4. 需要流程图时直接写 `mermaid` 代码块，站点会自动加载 mermaid 渲染并跟随深浅色模式（页面中没有图时不会请求 CDN）
+5. 文章构建后自动进入 `/archive/` 与 `feed.xml`，无需手动登记
 
 ---
 
