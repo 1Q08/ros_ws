@@ -45,104 +45,30 @@
 
 ```
 docs/                              # Jekyll 站点根目录
-├── _config.yml                   # 站点核心配置
-├── Gemfile / Gemfile.lock        # Ruby 依赖管理
-├── README.md                     # 英文说明文档
-├── README.zh-CN.md               # 中文说明文档
-│
-├── _data/                        # 构建期站点数据（单点维护）
-│   ├── stats.yml                 # ├─ 全站统计（命令/分类计数，关于页引用）
-│   └── commands_ui.yml           # └─ 命令速查页界面文案（zh/en，由骨架读取）
-├── tools/                        # 维护脚本（不发布）
-│   └── check_commands.py         # └─ 命令数据一致性校验脚本
-│
+├── _config.yml                   # 站点配置：标题 / 导航 / 插件 / 排除清单
+├── Gemfile / Gemfile.lock        # Ruby 依赖（github-pages 环境）
+├── README.md / README.zh-CN.md   # 中英文说明文档（本项目）
+├── _data/                        # 构建期数据：stats.yml 统计 + commands_ui.yml 界面文案
+├── tools/check_commands.py       # 命令数据一致性校验脚本（不发布）
 ├── index.md                      # 首页（home 布局）
-├── about.md                      # 关于页（page 布局）
+├── about.md                      # 关于页
 ├── commands.html                 # 命令速查交互页（核心功能）
-├── archive.md                    # 全部文章归档页（page 布局）
-├── 404.html                      # 自定义 404 页面（ROS 终端风格）
-│
-├── en/                           # 英文版页面（挂载于 /en/ 路径）
-│   ├── index.md                  # ├─ 英文首页（无文章列表 / 评论区）
-│   ├── commands.html             # ├─ 英文命令速查交互页
-│   ├── about.md                  # ├─ 英文关于页
-│   └── 404.html                  # └─ 英文自定义 404
-│                                 # ⚠️ 尚无 archive.md：/archive/ 没有英文对应页
-│
-├── _posts/                       # 博客文章（Markdown，文件名含发布日期）
-├── _layouts/                     # 页面布局模板（继承链）
-│   ├── default.html              # ├─ 根布局：head + header + content + footer
-│   ├── home.html                 # ├─ 首页布局：文章列表 + giscus 评论区
-│   ├── page.html                 # ├─ 普通页面布局：标题 + 内容
-│   └── post.html                 # └─ 文章布局：日期 + 作者 + schema.org
-│
-├── _includes/                    # 可复用片段
-│   ├── head.html                 # ├─ <head>：meta + CSS + JS + SEO + feed + hreflang
-│   ├── header.html               # ├─ 导航栏：标题（中英自适应）+ 链接 + 语言/主题切换按钮
-│   ├── footer.html               # ├─ 页脚：作者 + 邮箱 + 描述（中英自适应）+ 社交链接
-│   ├── lang-switcher.html        # ├─ 语言切换按钮（中英互跳 /en/ ↔ /）
-│   ├── social.html               # ├─ 社交图标：GitHub + RSS + 飞书
-│   ├── command-reference.html    # ├─ 【页面级骨架】命令速查页整页结构，
-│   │                             # │  接收 lang="zh|en" 并读取 _data/commands_ui.yml
-│   └── giscus.html               # └─ 【页面级】评论区，中英文共用同一条线程
-│
-├── _sass/                        # SCSS 样式源
-│   ├── minima.scss               # ├─ 主入口：变量定义 + 导入 partials
-│   └── minima/
-│       ├── _base.scss            # ├─ 基础元素：字体、颜色、链接、代码块、wrapper
-│       ├── _layout.scss          # ├─ 布局样式：header、footer、导航、page-content
-│       ├── _syntax-highlighting.scss  # ├─ Rouge 代码高亮配色
-│       └── _theme.scss           # └─ 自定义主题系统：CSS 变量 + 深浅色模式
-│
+├── archive.md                    # 文章归档页
+├── 404.html                      # 自定义 404（ROS 终端风格）
+├── en/                           # 英文页面（挂载于 /en/，暂无 archive.md）
+├── _posts/                       # 博客文章（Markdown，仅中文）
+├── _layouts/                     # 布局：default / home / page / post
+├── _includes/                    # 片段：head / header / footer / lang-switcher / 速查页骨架 / giscus
+├── _sass/                        # 样式：minima.scss + _base / _layout / _syntax-highlighting / _theme
 └── assets/                       # 静态资源
-    ├── main.scss                 # ├─ CSS 入口（@import "minima" → main.css）
-    ├── data/
-    │   ├── commands.json         # ├─ 命令数据库（中文源，速查页数据源）
-    │   └── commands.en.json      # └─ 命令数据库（英文翻译，结构一致）
-    ├── icons/
-    │   ├── favicon.svg                # ├─ 浅色 favicon（随主题动态切换）
-    │   ├── favicon-dark.svg           # ├─ 深色 favicon
-    │   ├── minima-social-icons.svg    # ├─ GitHub/RSS 图标
-    │   ├── feishu.svg                 # ├─ 飞书图标（官方彩色 Logo）
-    │   ├── icon-search.svg            # ├─ 搜索图标
-    │   ├── icon-eye.svg               # ├─ 浏览图标
-    │   ├── icon-sort.svg              # ├─ 排序图标（速查表按钮）
-    │   └── message-comments.svg       # └─ 评论图标（加载评论按钮）
-    ├── js/                       # 页面脚本（一个页面/功能一个文件）
-    │   ├── lib/                  # ├─ 共享基础模块（先于页面脚本加载）
-    │   │   ├── theme-core.js     # │  ├─ ThemeCore：主题解析/保存（阻塞加载，防白屏闪烁）
-    │   │   └── utils.js          # │  └─ AppUtils：escapeHtml / debounce / escapeRegExp
-    │   ├── theme.js              # ├─ 主题切换（localStorage + 系统偏好，按钮文案 i18n，免闪烁初始化）
-    │   ├── favicon.js            # ├─ favicon 动态切换（跟随主题）
-    │   ├── giscus.js             # ├─ giscus 评论区懒加载（按钮 + 重试 + 主题同步）
-    │   ├── bg-particles.js       # ├─ 背景粒子动画（Canvas，大小分层 + 发光）
-    │   ├── toc.js                # ├─ 文章目录：桌面右侧栏，移动端悬浮按钮
-    │   ├── mermaid.js            # ├─ 文章内 mermaid 图渲染（跟随深浅色模式）
-    │   └── commands.js           # └─ 命令速查页脚本（搜索防抖 + 四级联动 + 转义 + 文案 i18n）
-    └── css/                      # 页面级样式入口（page.custom_css）
-        ├── commands.scss         # ├─ 命令速查页专属样式（含斑马条纹表格）
-        ├── about.scss            # ├─ 关于页专属样式
-        └── 404.scss              # └─ 404 页专属样式（ROS 终端风格）
+    ├── main.scss                 # CSS 入口（@import "minima" → main.css）
+    ├── data/                     # commands.json（中文源）+ commands.en.json（英文翻译）
+    ├── icons/                    # 图标：favicon（浅/深）+ 社交 / 搜索 / 浏览 / 排序 / 评论
+    ├── js/                       # 脚本：lib/ 共享模块 + 各页面脚本（主题 / 目录 / mermaid / 速查等）
+    └── css/                      # 页面样式：commands / about / 404
 
 _site/                             # Jekyll 编译输出（自动生成，不手动编辑）
 ```
-
----
-
-## 🌐 中英双语
-
-站点默认中文，英文版挂载于 `/en/` 路径，与中文共享同一套布局、脚本与数据源。
-
-**覆盖范围**：
-
-| 页面     | 中文           | 英文              |
-| -------- | -------------- | ----------------- |
-| 首页     | `/`          | `/en/`          |
-| 命令速查 | `/commands/` | `/en/commands/` |
-| 关于     | `/about/`    | `/en/about/`    |
-| 404      | `/404.html`  | `/en/404.html`  |
-
-> 博客文章（`_posts/`）仅提供中文，不生成英文副本。
 
 ---
 
@@ -157,42 +83,11 @@ _site/                             # Jekyll 编译输出（自动生成，不手
 | 命令速查表 | 折叠面板，一键展开查看全部命令概览（版本/分类/命令/说明）          |
 | 命令详情   | 显示命令名称、代码块（含 `<param>` 占位符）、说明、示例、注意事项 |
 
-**技术特点**：
-
-- 数据与视图分离：`commands.json` / `commands.en.json` 为数据源，`commands.js` 实现交互逻辑，`commands.scss` 控制样式
-- 页面文案国际化：脚本根据 `<html lang>` 自动切换中英文 UI 文案与数据文件，无需维护两份 JS
-- 搜索输入防抖处理，避免每次按键都全量遍历命令集
-- 概览表采用斑马条纹（偶数行底色复用 `--bg-secondary`），低对比、深浅主题均辅助横向扫视
-- 代码块中 `ros1`/`ros2` 关键字橙黄色高亮（`<span class="hl-ros">`）
-- HTML 实体转义，防止 `<param>` 被浏览器解析为标签
-
 ---
 
 ## 命令数据库
 
-中英文数据源分离：`commands.json` 为中文源，`commands.en.json` 为其逐条英文翻译（结构完全一致）
-
-**数据结构**：
-
-```json
-{
-  "ros1": { "category_key": { "name": "分类名", "commands": [...] } },
-  "ros2": { "category_key": { "name": "分类名", "commands": [...] } }
-}
-```
-
-每条命令字段：
-
-| 字段        | 用途                   | 示例                               |
-| ----------- | ---------------------- | ---------------------------------- |
-| `display` | 下拉框短名称           | `"echo"`                         |
-| `title`   | 详情页标题             | `"ros2 topic echo"`              |
-| `cmd`     | 代码块命令（含占位符） | `"ros2 topic echo <topic_name>"` |
-| `desc`    | 说明文字               | `"实时打印话题消息"`             |
-| `example` | 示例代码               | `"ros2 topic echo /chatter"`     |
-| `options` | 常用选项（可选）       | `[{ "flag": "--csv", "desc": "..." }]` |
-| `notes`   | 注意事项               | `"按 Ctrl+C 停止显示"`           |
-| `distros` | 适用发行版列表         | `["jazzy", "humble"]`          |
+`assets/data/commands.json` 为中文源，`commands.en.json` 为其逐条英文翻译（结构完全一致）；每条命令包含 `display` / `title` / `cmd` / `desc` / `example` / `options` / `notes` / `distros` 字段。
 
 **命令统计**：
 
@@ -206,93 +101,22 @@ _site/                             # Jekyll 编译输出（自动生成，不手
 
 ## 本地开发
 
-> 注：giscus 评论区依赖 giscus.app 外网服务，本地沙箱预览时可能无法访问而不显示，部署到 GitHub Pages 后即可正常加载。
-
-### 环境要求
-
-- Ruby 3.2+（推荐 3.2.3）
-- Bundler
-- GCC / Make（用于 native gem 编译）
-
-### 启动步骤
+依赖 Ruby 3.2+ 与 Bundler（完整清单见 `Gemfile`）：
 
 ```bash
-# 1. 安装依赖
-cd docs
-bundle install
-
-# 2. 启动开发服务器（监听文件变化，自动重建）
-bundle exec jekyll serve --baseurl=""
-
-# 3. 浏览器访问
-# http://127.0.0.1:4000
+cd docs && bundle install
+bundle exec jekyll serve --baseurl=""   # 本地访问 http://127.0.0.1:4000
 ```
 
----
+> giscus 评论区依赖外网服务，本地沙箱预览可能不显示，部署到 GitHub Pages 后即可正常加载。
 
-## 扩展指南
+**扩展指南**：
 
-### 添加新命令
-
-编辑 `assets/data/commands.json`，在对应版本和分类的 `commands` 数组中添加；随后在 `assets/data/commands.en.json` 的相同位置补一条英文翻译（保持两条 JSON 结构一致，否则中英文速查表条目数会不一致）。最后同步更新 `_data/stats.yml` 中的计数并运行 `python3 tools/check_commands.py` 校验：
-
-```json
-{
-  "display": "short_name",
-  "title": "ros2 xxx xxx",
-  "cmd": "ros2 xxx xxx <param>",
-  "desc": "命令说明",
-  "example": "ros2 xxx xxx /example",
-  "notes": "注意事项\n\n常用选项：\n  --option    说明",
-  "distros": ["jazzy"]
-}
-```
-
-### 添加新分类
-
-1. 在 `commands.json` 的对应版本对象中添加新键值，并在 `commands.en.json` 中同步添加英文分类名
-2. 该键会自动出现在分类下拉框中（无需修改 JS）
-3. 更新 `_data/stats.yml` 中的分类计数并运行 `python3 tools/check_commands.py` 校验
-
-### 添加英文页面
-
-1. 在 `en/` 目录下创建对应文件，front matter 声明 `lang: en` 与 `permalink: /en/xxx/`
-2. 英文站导航固定在 `_includes/header.html` 中维护（Home / Commands / About），新增导航项需同步修改该文件
-3. 页面级 `<title>` 与 `description` 在 front matter 中用 `title:` / `description:` 定位英文文案
-
-### 添加新页面
-
-1. 普通页面：创建 `new-page.md`，设置 `layout: page` 等 front matter，如需专属样式/脚本则声明 `custom_css` / `custom_js`，并加入 `_config.yml` 的 `header_pages` 显示在导航栏
-2. 教程文章：在 `_posts/` 下新建 `YYYY-MM-DD-slug.md`（Jekyll 会自动忽略以 `_`、`.`、`#` 开头的文件，无需改配置），front matter 固定写法：
-
-   ```yaml
-   ---
-   layout: post
-   title: "文章标题"
-   date: 2026-09-21 11:50:00 +0800
-   categories: ros2 tutorial
-   author: 老张同志
-   excerpt: "摘要，用于列表展示与 SEO 描述"
-   ---
-   ```
-
-3. 文章正文首行用 `# 文章标题`（与 `title` 保持一致），小节用 `## 一、` / `## 二、` 中文数字标题，正文以两列说明表格与 `bash` / `python` 代码块为主
-4. 需要流程图时直接写 `mermaid` 代码块，站点会自动加载 mermaid 渲染并跟随深浅色模式（页面中没有图时不会请求 CDN）
-5. 文章构建后自动进入 `/archive/` 与 `feed.xml`，无需手动登记
-
----
-
-## 依赖
-
-| 依赖                                        | 用途                                             |
-| ------------------------------------------- | ------------------------------------------------ |
-| `github-pages` gem                        | GitHub Pages 环境（含 Jekyll 3.x + minima 主题） |
-| `jekyll-feed`                             | RSS feed 生成                                    |
-| `jekyll-seo-tag`                          | SEO meta 标签                                    |
-| `jekyll-sitemap`                          | sitemap.xml 生成                                 |
-| `faraday-retry`                           | faraday 1.x 重试兼容层（构建期网络请求）         |
-| [giscus](https://github.com/giscus/giscus) | 评论区，依托 GitHub Discussions 存储             |
-| [hits.sh](https://hits.sh)                 | 零代码的访客计数徽章服务（页脚访问量）           |
+- 新增命令：在 `assets/data/commands.json` 与 `commands.en.json` 的同一位置各加一条（结构须一致），同步 `_data/stats.yml` 计数后运行 `python3 tools/check_commands.py` 校验
+- 新增分类：在两个 JSON 的对应版本对象中添加键即可，会自动出现在分类下拉框中（无需修改 JS）
+- 新增页面：使用 `layout: page`，需要专属样式/脚本时声明 `custom_css` / `custom_js`，并加入 `_config.yml` 的 `header_pages`
+- 新增英文页：放在 `en/` 目录下，front matter 声明 `lang: en` 与 `permalink: /en/xxx/`，并在 `_includes/header.html` 中补上导航项
+- 新增文章：`_posts/YYYY-MM-DD-slug.md`，front matter 使用 `layout: post` / `title` / `date` / `categories` / `author` / `excerpt`；正文可直接写 `mermaid` 代码块（自动跟随深浅色模式）
 
 ---
 

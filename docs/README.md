@@ -45,104 +45,30 @@
 
 ```
 docs/                              # Jekyll site root
-├── _config.yml                   # Site core configuration
-├── Gemfile / Gemfile.lock        # Ruby dependency management
-├── README.md                     # This document (English)
-├── README.zh-CN.md               # Chinese version of this document
-│
-├── _data/                        # Build-time site data (single source of truth)
-│   ├── stats.yml                 # ├─ Global counts (commands/categories, About page)
-│   └── commands_ui.yml           # └─ Commands page UI strings (zh/en, read by the skeleton)
-├── tools/                        # Maintenance scripts (never published)
-│   └── check_commands.py         # └─ Command data consistency checker
-│
+├── _config.yml                   # Site config: title / nav / plugins / exclusions
+├── Gemfile / Gemfile.lock        # Ruby deps (github-pages environment)
+├── README.md / README.zh-CN.md   # English / Chinese docs (this project)
+├── _data/                        # Build-time data: stats.yml counts + commands_ui.yml UI strings
+├── tools/check_commands.py       # Command data consistency checker (never published)
 ├── index.md                      # Home page (home layout)
-├── about.md                      # About page (page layout)
+├── about.md                      # About page
 ├── commands.html                 # Interactive command reference (core feature)
-├── archive.md                    # Post archive page (page layout)
-├── 404.html                      # Custom 404 page (ROS terminal style)
-│
-├── en/                           # English pages (mounted at /en/)
-│   ├── index.md                  # ├─ English home (no post list / comments)
-│   ├── commands.html             # ├─ English command reference page
-│   ├── about.md                  # ├─ English about page
-│   └── 404.html                  # └─ English custom 404
-│                                 # ⚠️ no archive.md yet: /archive/ has no English twin
-│
-├── _posts/                       # Blog posts (Markdown, filename contains date)
-├── _layouts/                     # Page layout templates (inheritance chain)
-│   ├── default.html              # ├─ Root layout: head + header + content + footer
-│   ├── home.html                 # ├─ Home layout: post list + giscus comments
-│   ├── page.html                 # ├─ Generic page layout: title + content
-│   └── post.html                 # └─ Post layout: date + author + schema.org
-│
-├── _includes/                    # Reusable snippets
-│   ├── head.html                 # ├─ <head>: meta + CSS + JS + SEO + feed + hreflang
-│   ├── header.html               # ├─ Navbar: title (zh/en adaptive) + links + language/theme toggles
-│   ├── footer.html               # ├─ Footer: author + email + description (zh/en) + social links
-│   ├── lang-switcher.html        # ├─ Language switcher button (/en/ ↔ /)
-│   ├── social.html               # ├─ Social icons: GitHub + RSS + Feishu
-│   ├── command-reference.html    # ├─ [page-level skeleton] whole commands page markup,
-│   │                             # │  takes lang="zh|en" and reads _data/commands_ui.yml
-│   └── giscus.html               # └─ [page-level] comment block; zh/en share one thread
-│
-├── _sass/                        # SCSS style source
-│   ├── minima.scss               # ├─ Main entry: variable definitions + partial imports
-│   └── minima/
-│       ├── _base.scss            # ├─ Base elements: fonts, colors, links, code blocks, wrapper
-│       ├── _layout.scss          # ├─ Layout styles: header, footer, nav, page-content
-│       ├── _syntax-highlighting.scss  # ├─ Rouge syntax highlighting colors
-│       └── _theme.scss           # └─ Custom theme system: CSS variables + dark/light modes
-│
+├── archive.md                    # Post archive
+├── 404.html                      # Custom 404 (ROS terminal style)
+├── en/                           # English pages (mounted at /en/, no archive.md yet)
+├── _posts/                       # Blog posts (Markdown, Chinese only)
+├── _layouts/                     # Layouts: default / home / page / post
+├── _includes/                    # Snippets: head / header / footer / lang-switcher / commands skeleton / giscus
+├── _sass/                        # SCSS: minima.scss + _base / _layout / _syntax-highlighting / _theme
 └── assets/                       # Static assets
-    ├── main.scss                 # ├─ CSS entry (@import "minima" → main.css)
-    ├── data/
-    │   ├── commands.json         # ├─ Command database (Chinese source)
-    │   └── commands.en.json      # └─ Command database (English translation, same structure)
-    ├── icons/
-    │   ├── favicon.svg                # ├─ Light favicon (switches with theme)
-    │   ├── favicon-dark.svg           # ├─ Dark favicon
-    │   ├── minima-social-icons.svg    # ├─ GitHub/RSS icons
-    │   ├── feishu.svg                 # ├─ Feishu icon (official colored logo)
-    │   ├── icon-search.svg            # ├─ Search icon
-    │   ├── icon-eye.svg               # ├─ Browse icon
-    │   ├── icon-sort.svg              # ├─ Sort icon (reference table button)
-    │   └── message-comments.svg       # └─ Comments icon (load-comments button)
-    ├── js/                       # Page scripts (one file per page or feature)
-    │   ├── lib/                  # ├─ Shared base modules (loaded before page scripts)
-    │   │   ├── theme-core.js     # │  ├─ ThemeCore: theme resolve/save (blocking, prevents FOUC)
-    │   │   └── utils.js          # │  └─ AppUtils: escapeHtml / debounce / escapeRegExp
-    │   ├── theme.js              # ├─ Theme toggle (localStorage + system, i18n button, FOUC-free init)
-    │   ├── favicon.js            # ├─ Dynamic favicon switching (follows theme)
-    │   ├── giscus.js             # ├─ Lazy-loaded giscus comments (button + retry + theme sync)
-    │   ├── bg-particles.js       # ├─ Background particle animation (Canvas, layered + glow)
-    │   ├── toc.js                # ├─ Post TOC: right rail on desktop, floating button on mobile
-    │   ├── mermaid.js            # ├─ Renders mermaid code blocks in articles (follows theme)
-    │   └── commands.js           # └─ Command reference (search + debounce + four-level cascading selects + escaping + i18n)
-    └── css/                      # Page-level style entries (page.custom_css)
-        ├── commands.scss         # ├─ Command reference page styles (zebra-striped table)
-        ├── about.scss            # ├─ About page styles
-        └── 404.scss              # └─ 404 page styles (ROS terminal)
+    ├── main.scss                 # CSS entry (@import "minima" → main.css)
+    ├── data/                     # commands.json (Chinese source) + commands.en.json (English)
+    ├── icons/                    # Icons: favicons (light/dark) + social / search / browse / sort / comment
+    ├── js/                       # Scripts: theme / favicon / giscus / bg-particles / toc / mermaid / commands
+    └── css/                      # Page styles: commands / about / 404
 
 _site/                             # Jekyll build output (auto-generated, do not edit)
 ```
-
----
-
-## 🌐 Bilingual Support
-
-The site defaults to Chinese, with an English version mounted at `/en/` that shares the same layouts, scripts, and data sources.
-
-**Coverage**:
-
-| Page     | Chinese      | English       |
-| -------- | ------------ | ------------- |
-| Home     | `/`          | `/en/`        |
-| Commands | `/commands/` | `/en/commands/` |
-| About    | `/about/`    | `/en/about/`  |
-| 404      | `/404.html`  | `/en/404.html` |
-
-> Blog posts (`_posts/`) are Chinese only; no English copies are generated.
 
 ---
 
@@ -157,42 +83,11 @@ The site defaults to Chinese, with an English version mounted at `/en/` that sha
 | Command table  | Collapsible panel listing all commands (version/category/command/desc)  |
 | Command detail | Name, code block (with `<param>` placeholders), description, example, notes |
 
-**Technical highlights**:
-
-- Data/view separation: `commands.json` / `commands.en.json` as data sources, `commands.js` for interaction, `commands.scss` for styling
-- UI i18n: the script switches UI copy and data file based on `<html lang>` — no need to maintain two JS files
-- Search input is debounced to avoid scanning the whole command set on every keystroke
-- Zebra-striped overview table (even rows reuse `--bg-secondary`) for low-contrast, scan-friendly reading in both themes
-- `ros1`/`ros2` keywords highlighted in orange-yellow (`<span class="hl-ros">`)
-- HTML entity escaping prevents `<param>` from being parsed as a tag
-
 ---
 
 ## Command Database
 
-Separate data sources: `commands.json` (Chinese) and `commands.en.json` (English translation with an identical structure).
-
-**Data structure**:
-
-```json
-{
-  "ros1": { "category_key": { "name": "category name", "commands": [...] } },
-  "ros2": { "category_key": { "name": "category name", "commands": [...] } }
-}
-```
-
-Command fields:
-
-| Field     | Purpose                          | Example                              |
-| --------- | -------------------------------- | ------------------------------------ |
-| `display` | Short name in the dropdown       | `"echo"`                             |
-| `title`   | Detail title                     | `"ros2 topic echo"`                  |
-| `cmd`     | Command (with placeholders)      | `"ros2 topic echo <topic_name>"`     |
-| `desc`    | Description                      | `"Print topic messages in real time"` |
-| `example` | Example                          | `"ros2 topic echo /chatter"`         |
-| `options` | Common options (optional)        | `[{ "flag": "--csv", "desc": "..." }]` |
-| `notes`   | Notes                            | `"Press Ctrl+C to stop"`             |
-| `distros` | Applicable distributions        | `["jazzy", "humble"]`             |
+`assets/data/commands.json` is the Chinese source and `commands.en.json` is its per-entry English translation (identical structure); each command contains `display` / `title` / `cmd` / `desc` / `example` / `options` / `notes` / `distros`.
 
 **Command counts**:
 
@@ -206,93 +101,22 @@ Command fields:
 
 ## Local Development
 
-> Note: the giscus comment section depends on giscus.app; it may not load in a sandboxed local preview but will work once deployed to GitHub Pages.
-
-### Requirements
-
-- Ruby 3.2+ (3.2.3 recommended)
-- Bundler
-- GCC / Make (for compiling native gems)
-
-### Getting started
+Requires Ruby 3.2+ and Bundler (full list in `Gemfile`):
 
 ```bash
-# 1. Install dependencies
-cd docs
-bundle install
-
-# 2. Start the dev server (auto-rebuilds on change)
-bundle exec jekyll serve --baseurl=""
-
-# 3. Open in browser
-# http://127.0.0.1:4000
+cd docs && bundle install
+bundle exec jekyll serve --baseurl=""   # local: http://127.0.0.1:4000
 ```
 
----
+> The giscus comment section depends on an external service; it may not show in a sandboxed local preview but works once deployed to GitHub Pages.
 
-## Extending
+**Extending**:
 
-### Add a command
-
-Edit `assets/data/commands.json` and add the command to the `commands` array under the matching version/category; then add a matching English translation to `assets/data/commands.en.json` at the same position (keep both JSON files structurally identical, otherwise entry counts will mismatch). Finally update the counts in `_data/stats.yml` and run `python3 tools/check_commands.py` to verify:
-
-```json
-{
-  "display": "short_name",
-  "title": "ros2 xxx xxx",
-  "cmd": "ros2 xxx xxx <param>",
-  "desc": "Description",
-  "example": "ros2 xxx xxx /example",
-  "notes": "Notes\n\nCommon options:\n  --option    description",
-  "distros": ["jazzy"]
-}
-```
-
-### Add a category
-
-1. Add a new key to the corresponding version object in `commands.json`, and add the English category name to `commands.en.json`
-2. The key appears automatically in the category dropdown (no JS changes needed)
-3. Update the category counts in `_data/stats.yml` and run `python3 tools/check_commands.py`
-
-### Add an English page
-
-1. Create the file under `en/` with front matter `lang: en` and `permalink: /en/xxx/`
-2. The English nav is hardcoded in `_includes/header.html` (Home / Commands / About); sync new nav items there
-3. Localize the page `<title>` and `description` via `title:` / `description:` in front matter
-
-### Add a page
-
-1. Regular page: create `new-page.md` with `layout: page` front matter, declare `custom_css` / `custom_js` if it needs custom styles/scripts, and add it to `header_pages` in `_config.yml` to show it in the nav
-2. Tutorial article: create `_posts/YYYY-MM-DD-slug.md` (Jekyll automatically ignores files starting with `_`, `.` or `#`, so no config change is needed) with this front matter:
-
-   ```yaml
-   ---
-   layout: post
-   title: "Article title"
-   date: 2026-09-21 11:50:00 +0800
-   categories: ros2 tutorial
-   author: 老张同志
-   excerpt: "Summary used for listings and the SEO description"
-   ---
-   ```
-
-3. Start the article body with `# Article title` (matching `title`) and use `## 一、` / `## 二、`-style Chinese-numeral headings, with two-column tables and `bash` / `python` code blocks
-4. For flowcharts, use a `mermaid` code block — the site loads mermaid automatically and follows the light/dark theme (no CDN request when a page has no diagrams)
-5. The article is added to `/archive/` and `feed.xml` automatically after the build
-
----
-
-## Dependencies
-
-| Dependency                                     | Purpose                                        |
-| ---------------------------------------------- | ---------------------------------------------- |
-| `github-pages` gem                             | GitHub Pages environment (Jekyll 3.x + minima) |
-| `jekyll-feed`                                  | RSS feed generation                            |
-| `jekyll-seo-tag`                               | SEO meta tags                                  |
-| `jekyll-sitemap`                               | sitemap.xml generation                         |
-| `faraday-retry`                                | faraday 1.x retry compatibility for builds     |
-| [giscus](https://github.com/giscus/giscus)  | Comments, backed by GitHub Discussions         |
-| [hits.sh](https://hits.sh)                  | Zero-code visitor counter badge (footer)       |
+- Add a command: add one entry at the same position in both `assets/data/commands.json` and `commands.en.json` (structures must match), sync the counts in `_data/stats.yml`, then run `python3 tools/check_commands.py`
+- Add a category: add the key to the matching version object in both JSON files (no JS changes needed)
+- Add a page: use `layout: page`; declare `custom_css` / `custom_js` when it needs its own styles/scripts, and add it to `header_pages` in `_config.yml`
+- Add an English page: put it under `en/` with front matter `lang: en` and `permalink: /en/xxx/`, and add the nav item in `_includes/header.html`
+- Add an article: `_posts/YYYY-MM-DD-slug.md` with front matter `layout: post` / `title` / `date` / `categories` / `author` / `excerpt`; a `mermaid` code block works out of the box (follows the light/dark theme)
 
 ---
 
