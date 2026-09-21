@@ -508,6 +508,32 @@
   white-space: nowrap;
 }
 
+/* 折叠按钮行：按钮在左，数据来源提示紧贴其右侧同一行 */
+.summary-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* 速查表按钮右侧的数据来源与反馈提示
+   常驻显示（不受折叠面板显隐影响） */
+.summary-note {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* 窄屏放不下时缩小字号，尽量避免提示折行 */
+@media (max-width: 660px) {
+  .summary-note {
+    font-size: 11px;
+  }
+}
+
 /* 版本标签 */
 .summary-version {
   font-size: 12px;

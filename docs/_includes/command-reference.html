@@ -13,12 +13,13 @@
     2. filter-section   三级联动下拉（ROS 版本 → 发行版本 → 命令分类 → 具体命令）
     3. command-detail   选中命令的完整信息（默认隐藏）
     4. summary-section  命令速查表折叠面板（默认折叠）
+    5. summary-note     数据来源与反馈提示（常驻在速查表按钮右侧，不随折叠隐藏）
 
   注意：
     - 所有 id / class / onclick / aria-* 与重构前逐字一致，脚本 commands.js 依赖这些钩子。
     - 本模板只负责「结构 + 文案」，文案来自 _data/commands_ui.yml；
       页面专属配置（window.COMMANDS_DATA_URL）仍写在各自页面里。
-    - 评论区（giscus）不在本模板内：目前仅中文页启用，见 commands.html。
+    - 评论区（giscus）不在本模板内：中英页面各自 include，见 commands.html 与 en/commands.html。
 ============================================================
 {%- endcomment -%}
 {%- assign ui_lang = include.lang | default: "zh" -%}
@@ -110,13 +111,16 @@
 
   {%- comment -%} 区域 3：命令速查表（折叠面板，默认折叠） {%- endcomment -%}
   <div class="summary-section">
-    <button type="button" class="summary-toggle" id="summaryToggle" onclick="toggleSummary()" aria-expanded="false">
-      <span class="summary-sort-icon" aria-hidden="true"></span>
-      <span class="summary-toggle-text">{{ t.summary_title }}</span>
-      <span class="summary-count" id="summaryCount"></span>
-      <span class="summary-filter-badge" id="summaryFilterBadge" hidden></span>
-      <span class="summary-chevron-icon" aria-hidden="true"></span>
-    </button>
+    <div class="summary-head">
+      <button type="button" class="summary-toggle" id="summaryToggle" onclick="toggleSummary()" aria-expanded="false">
+        <span class="summary-sort-icon" aria-hidden="true"></span>
+        <span class="summary-toggle-text">{{ t.summary_title }}</span>
+        <span class="summary-count" id="summaryCount"></span>
+        <span class="summary-filter-badge" id="summaryFilterBadge" hidden></span>
+        <span class="summary-chevron-icon" aria-hidden="true"></span>
+      </button>
+      <p class="summary-note">{{ t.summary_source_note }}</p>
+    </div>
 
     <div class="summary-body" id="summaryBody" hidden>
       <table class="summary-table">
@@ -132,5 +136,6 @@
       </table>
     </div>
   </div>
+
 
 </div>

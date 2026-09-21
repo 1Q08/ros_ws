@@ -38,6 +38,7 @@ zh:
   th_category: "分类"
   th_command: "命令"
   th_description: "说明"
+  summary_source_note: "数据来源于ROS官方文档、社区整理的速查表以及各类教程，若有补充或错误请在下方评论区反馈或提交 Issue"
 
 en:
   # --- Section 1: search ---
@@ -70,3 +71,4 @@ en:
   th_category: "Category"
   th_command: "Command"
   th_description: "Description"
+  summary_source_note: "Data comes from the official ROS documentation, community cheat sheets, and various tutorials. If you have additions or corrections, please leave a comment below or submit an Issue."
