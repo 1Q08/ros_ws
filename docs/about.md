@@ -104,6 +104,8 @@ custom_css: /assets/css/about.css
     </div>
     <div class="card-body changelog-body">
       <ul class="changelog-list">
+        <li><span class="cl-date">2026-09-21</span> 新增教程文章《ROS 2 自定义接口（msg / srv / action）最小可运行案例（Python）》，并为全站文章中的 mermaid 图增加渲染支持（跟随深浅色模式）</li>
+        <li><span class="cl-date">2026-09-21</span> 排除构建时被误发布的非页面文件</li>
         <li><span class="cl-date">2026-09-20</span> 新增：文章页右侧目录（移动端为悬浮按钮）、上一篇/下一篇切换与返回文章列表，中英文命令页共用同一条评论线程；修复：深色模式下代码块、行内代码与表格配色，中文页日期改为数字格式；优化：梳理样式与脚本结构，抽取中英命令页共享模块并清理重复与死代码</li>
         <li><span class="cl-date">2026-09-19</span> 优化首页展示以及结构、评论区迁移、增加可联系的稳定邮箱地址、优化页面放大时页眉效果</li>
         <li><span class="cl-date">2026-09-09</span> 新增 `rosdep` 依赖管理命令，优化命令分类（并入独立小分类），优化移动端显示：修复页眉菜单点击、深浅模式切换、按钮摆放，优化页脚布局</li>
