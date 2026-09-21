@@ -1092,3 +1092,17 @@ html[lang^="en"] .entry-card__title {
   }
   td { border-color: var(--border-color); }
 }
+
+/* ==== 13. Mermaid 图表 ==== */
+/* 文章里的 ```mermaid 代码块由 assets/js/mermaid.js 渲染成 SVG，
+   渲染失败时回退成原始代码块，所以这里只负责容器表现。 */
+.mermaid {
+  margin: 24px 0;
+  overflow-x: auto; // 图过宽时横向滚动，不撑破正文
+  text-align: center;
+}
+
+.mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
