@@ -32,6 +32,29 @@ function initTheme() {
   setTheme(ThemeCore.resolveTheme());
 }
 
+// 主题切换过渡（样式见 _sass/minima/_theme.scss 第 14 节）
+// 切换瞬间给 <html> 加一个类，让整棵 DOM 用同一条 0.2s 颜色过渡，
+// 使深浅色切换不再「一部分淡出、一部分瞬切」；
+// 略大于过渡时长的 240ms 后移除，避免长期接管元素自己的过渡
+// （悬停位移、抽屉滑动等）。
+const THEME_TRANSITION_MS = 240;
+let themeTransitionTimer = null;
+
+function startThemeTransition() {
+  // 首屏：theme.js 在 <head> 中同步执行时 <body> 尚未解析，
+  // 此时元素都还不存在，不需要过渡（加了也不会看到效果）。
+  if (!document.body) return;
+
+  const root = document.documentElement;
+  root.classList.add('theme-transitioning');
+
+  if (themeTransitionTimer !== null) clearTimeout(themeTransitionTimer);
+  themeTransitionTimer = setTimeout(function () {
+    root.classList.remove('theme-transitioning');
+    themeTransitionTimer = null;
+  }, THEME_TRANSITION_MS);
+}
+
 // 切换主题（点击按钮时触发）
 function toggleTheme() {
   setTheme(ThemeCore.currentTheme() === 'light' ? 'dark' : 'light');
@@ -55,6 +78,9 @@ function updateThemeButton(theme) {
 
 // 设置主题
 function setTheme(theme) {
+  // 先开启全站统一过渡（必须在改属性之前，否则过渡不生效）
+  startThemeTransition();
+
   // 设置 HTML 根元素属性
   document.documentElement.setAttribute('data-theme', theme);
 

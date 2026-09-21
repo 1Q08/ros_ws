@@ -43,32 +43,6 @@
 
 ## 📁 Project Structure
 
-Every folder has one responsibility, and the boundaries are deliberate:
-
-### Directory responsibilities
-
-| Path | Responsibility | Boundary (what belongs elsewhere) |
-| --- | --- | --- |
-| `docs/` | Jekyll site root — Chinese pages + site config | English pages go to `en/`; theme source goes to `_sass/` |
-| `en/` | English mirror of the Chinese pages | Pages only — layouts, scripts and data are shared, never duplicated |
-| `_layouts/` | Page-level HTML shells (frame around `{{ content }}`) | No reusable blocks — those live in `_includes/` |
-| `_includes/` | Reusable HTML snippets (global chrome + page-level skeletons) | No page config and no visible text — text lives in `_data/` |
-| `_data/` | Build-time site data, read by Liquid while building | Nothing the browser fetches at runtime |
-| `_sass/` | Global SCSS variables + partials | No page-specific selectors |
-| `assets/main.scss` | Global style entry → `main.css` | No page-specific selectors |
-| `assets/css/` | Page-level style entries, loaded per page via `page.custom_css` | Consumes the `main.css` variables — must not redefine them |
-| `assets/js/` | One script per page or feature | No shared helpers |
-| `assets/js/lib/` | Shared base modules (`ThemeCore`, `AppUtils`) used by page scripts | Not bound to any single page |
-| `assets/data/` | Command database fetched by `commands.js` at runtime | No site config, no UI strings |
-| `assets/icons/` | SVG icons and favicons | — |
-| `_posts/` | Tutorial articles (Markdown, date in filename) | Not site pages |
-| `tools/` | Local maintenance scripts, never published | Not referenced by the site; unrelated to the repo-root `tools/` (Jetson scripts) |
-
-> **Build-time vs runtime data**: `_data/*.yml` is read by Liquid during the build;
-> `assets/data/*.json` is fetched by the browser after the page loads.
-
-### Directory tree
-
 ```
 docs/                              # Jekyll site root
 ├── _config.yml                   # Site core configuration

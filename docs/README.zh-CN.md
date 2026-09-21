@@ -43,32 +43,6 @@
 
 ## 📁 项目架构
 
-每个文件夹只负责一件事，边界是刻意划定的：
-
-### 目录职责与边界
-
-| 路径 | 职责 | 边界（什么不放在这里） |
-| --- | --- | --- |
-| `docs/` | 站点根目录：中文页面 + 站点配置 | 英文页面放 `en/`；主题源码放 `_sass/` |
-| `en/` | 中文页面的英文镜像 | 只放页面，布局/脚本/数据一律共享，不复制 |
-| `_layouts/` | 页面级 HTML 外壳（包住 `{{ content }}` 的框架） | 不放可复用片段，那些在 `_includes/` |
-| `_includes/` | 可复用 HTML 片段（全局框架 + 页面级骨架） | 不放页面配置与可见文案，文案在 `_data/` |
-| `_data/` | 构建期站点数据，由 Liquid 在构建时读取 | 不放浏览器运行时获取的数据 |
-| `_sass/` | 全局 SCSS 变量与 partial | 不放页面专属选择器 |
-| `assets/main.scss` | 全局样式入口 → `main.css` | 不放页面专属选择器 |
-| `assets/css/` | 页面级样式入口，由 `page.custom_css` 按需加载 | 消费 `main.css` 的变量，不重复定义变量 |
-| `assets/js/` | 一个页面/功能一个脚本 | 不放共享工具函数 |
-| `assets/js/lib/` | 共享基础模块（`ThemeCore`、`AppUtils`），供页面脚本调用 | 不绑定任何单个页面 |
-| `assets/data/` | 命令数据库，由 `commands.js` 运行时 fetch | 不放站点配置与界面文案 |
-| `assets/icons/` | SVG 图标与 favicon | — |
-| `_posts/` | 教程文章（Markdown，文件名含日期） | 不放站点页面 |
-| `tools/` | 本地维护脚本，永不发布 | 站点不引用它；与仓库根的 `tools/`（Jetson 脚本）无关 |
-
-> **构建期 vs 运行时数据**：`_data/*.yml` 在构建时由 Liquid 读取；
-> `assets/data/*.json` 在页面加载后由浏览器 fetch。
-
-### 目录树
-
 ```
 docs/                              # Jekyll 站点根目录
 ├── _config.yml                   # 站点核心配置

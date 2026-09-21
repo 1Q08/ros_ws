@@ -51,7 +51,8 @@
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  // 主题切换的过渡已统一到第 14 节（由 .theme-transitioning 临时类控制），
+  // 这里不再单独过渡：否则只有 body 淡出、其它元素瞬切，反而更突兀。
 }
 
 /**
@@ -1105,4 +1106,49 @@ html[lang^="en"] .entry-card__title {
 .mermaid svg {
   max-width: 100%;
   height: auto;
+}
+
+/* ==== 14. 主题切换过渡（全站统一） ==== */
+/**
+ * 深/浅色切换时的统一过渡
+ * ------------------------------------------------------------
+ * 问题：以前只有 body 一条 transition（0.3s），页眉、页脚、代码块、表格、
+ * 卡片、按钮边框等全是瞬时跳变 ⇒ 点切换按钮的瞬间会出现
+ * 「一部分淡出、一部分瞬切」的割裂感。
+ *
+ * 做法：由 theme.js 在切换的瞬间给 <html> 加 .theme-transitioning，
+ * 让整棵 DOM 共用同一条 0.2s 的颜色过渡；约 240ms 后移除该类，
+ * 一切恢复原状。只列颜色类属性，不碰 transform / opacity，
+ * 所以悬停位移、抽屉滑动、复制按钮淡入等既有动画完全不受影响
+ * （仅在切换的那 0.2 秒内被临时接管）。
+ *
+ * 为什么不给元素永久加 transition：会和现有的 `transition: all 0.3s`
+ * （.theme-toggle-btn / .lang-switch-btn / .entry-card）打架，
+ * 被点中的那个按钮反而比页面慢半拍。
+ *
+ * 未纳入过渡：背景粒子（canvas 颜色由 JS 读取 --particle-color，
+ * 属 canvas 像素而非 CSS 属性）与 favicon，均为瞬时切换，
+ * 肉眼不可察，故保持不动。
+ */
+html.theme-transitioning,
+html.theme-transitioning *,
+html.theme-transitioning *::before,
+html.theme-transitioning *::after {
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    fill 0.2s ease,
+    stroke 0.2s ease !important;
+}
+
+/* 无障碍：系统开启「减弱动态效果」时直接瞬切，不做过渡 */
+@media (prefers-reduced-motion: reduce) {
+  html.theme-transitioning,
+  html.theme-transitioning *,
+  html.theme-transitioning *::before,
+  html.theme-transitioning *::after {
+    transition: none !important;
+  }
 }
