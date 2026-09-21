@@ -424,6 +424,28 @@
       "name": "核心命令",
       "commands": [
         {
+          "display": "ros2 -h",
+          "title": "ros2 -h",
+          "cmd": "ros2 -h",
+          "desc": "列出 ros2 的所有子命令及全局选项",
+          "example": "ros2 -h",
+          "options": [
+            {
+              "flag": "-h, --help",
+              "desc": "显示帮助信息并退出"
+            },
+            {
+              "flag": "--use-python-default-buffering",
+              "desc": "使用 Python 默认的输出缓冲（不强制行缓冲）"
+            }
+          ],
+          "notes": "Humble 共 18 个子命令：action、bag、component、daemon、doctor、interface、launch、lifecycle、multicast、node、param、pkg、plugin、run、security、service、topic、wtf；Jazzy 在此基础上多出 control。子命令用法可用 ros2 <命令> -h 查看",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
+        },
+        {
           "display": "ros2 run",
           "title": "ros2 run",
           "cmd": "ros2 run <package_name> <executable_name>",
@@ -1043,10 +1065,9 @@
               "desc": "等待发现节点的秒数"
             }
           ],
-          "notes": "打印指定服务的信息，包括服务类型与 QoS 配置",
+          "notes": "打印指定服务的信息，包括服务类型与 QoS 配置（Jazzy 专属；Humble 的 ros2 service 仅支持 call、find、list、type）",
           "distros": [
-            "jazzy",
-            "humble"
+            "jazzy"
           ]
         },
         {
@@ -1120,10 +1141,9 @@
               "desc": "不打印消息中的字符串字段"
             }
           ],
-          "notes": "",
+          "notes": "Jazzy 专属；Humble 的 ros2 service 无 echo 子命令",
           "distros": [
-            "jazzy",
-            "humble"
+            "jazzy"
           ]
         }
       ]
@@ -1169,10 +1189,9 @@
           "desc": "显示动作的类型",
           "example": "ros2 action type /turtle1/rotate_absolute",
           "options": [],
-          "notes": "",
+          "notes": "Jazzy 专属；Humble 的 ros2 action 仅支持 info、list、send_goal",
           "distros": [
-            "jazzy",
-            "humble"
+            "jazzy"
           ]
         },
         {
@@ -1323,10 +1342,9 @@
           "desc": "突发（burst）回放 bag 中指定话题的数据，用于快速回放或测试",
           "example": "ros2 bag burst my_data.db3 /chatter",
           "options": [],
-          "notes": "",
+          "notes": "Jazzy 专属；Humble 的 ros2 bag 无 burst 子命令",
           "distros": [
-            "jazzy",
-            "humble"
+            "jazzy"
           ]
         },
         {
@@ -1541,10 +1559,9 @@
           "desc": "清理控制器管理器中的控制器",
           "example": "ros2 control cleanup_controller /controller_manager joint_state_broadcaster",
           "options": [],
-          "notes": "",
+          "notes": "Jazzy 专属；Humble 的 ros2 control 无 cleanup_controller 子命令",
           "distros": [
-            "jazzy",
-            "humble"
+            "jazzy"
           ]
         },
         {
@@ -1567,7 +1584,7 @@
           "desc": "列出已加载的控制器、类型与状态",
           "example": "ros2 control list_controllers /controller_manager",
           "options": [],
-          "notes": "",
+          "notes": "Humble 需安装 ros-humble-ros2controlcli 才有 ros2 control（共 11 个子命令，无 cleanup_controller）；Jazzy 为 12 个子命令",
           "distros": [
             "jazzy",
             "humble"
@@ -1960,7 +1977,7 @@
               "desc": "将警告纳入失败检查：存在警告也计入失败（需与 --report-failed 配合）"
             }
           ],
-          "notes": "",
+          "notes": "Humble 无 -ep, --exclude-packages 选项（Humble 仅支持 --report、-rf、-iw）",
           "distros": [
             "jazzy",
             "humble"
@@ -1980,15 +1997,42 @@
           ]
         },
         {
+          "display": "ros2 wtf",
+          "title": "ros2 wtf",
+          "cmd": "ros2 wtf",
+          "desc": "ros2 doctor 的别名，检查 ROS 2 环境并报告潜在问题",
+          "example": "ros2 wtf",
+          "options": [
+            {
+              "flag": "-r, --report",
+              "desc": "生成完整的诊断报告"
+            },
+            {
+              "flag": "-rf, --report-failed",
+              "desc": "只输出检查失败的条目（不打印通过项）"
+            },
+            {
+              "flag": "-iw, --include-warnings",
+              "desc": "将警告纳入失败检查：存在警告也计入失败（需与 --report-failed 配合）"
+            }
+          ],
+          "notes": "Humble 中 ros2 wtf 是 ros2 doctor 的别名（用法完全一致），其子命令为 hello；Humble 与 Jazzy 均无 -ep, --exclude-packages",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
+        },
+        {
           "display": "hello",
           "title": "ros2 wtf hello",
           "cmd": "ros2 wtf hello",
           "desc": "检查多台主机之间的网络连通性",
           "example": "ros2 wtf hello",
           "options": [],
-          "notes": "",
+          "notes": "与 ros2 doctor hello 等价（Humble 中 wtf 是 doctor 的别名）",
           "distros": [
-            "jazzy"
+            "jazzy",
+            "humble"
           ]
         }
       ]

@@ -94,8 +94,8 @@ _site/                             # Jekyll build output (auto-generated, do not
 | Version   | Categories | Commands |
 | --------- | ---------- | -------- |
 | ROS 1     | 7          | 26       |
-| ROS 2     | 18         | 102      |
-| **Total** | **25**     | **128**  |
+| ROS 2     | 18         | 104      |
+| **Total** | **25**     | **130**  |
 
 ---
 

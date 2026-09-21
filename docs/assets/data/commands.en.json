@@ -424,6 +424,28 @@
       "name": "Core Commands",
       "commands": [
         {
+          "display": "ros2 -h",
+          "title": "ros2 -h",
+          "cmd": "ros2 -h",
+          "desc": "List all ros2 sub-commands and global options",
+          "example": "ros2 -h",
+          "options": [
+            {
+              "flag": "-h, --help",
+              "desc": "Show the help message and exit"
+            },
+            {
+              "flag": "--use-python-default-buffering",
+              "desc": "Use Python's default output buffering (do not force line buffering)"
+            }
+          ],
+          "notes": "Humble has 18 sub-commands: action, bag, component, daemon, doctor, interface, launch, lifecycle, multicast, node, param, pkg, plugin, run, security, service, topic, wtf; Jazzy additionally provides control. Use ros2 <command> -h for a sub-command's usage",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
+        },
+        {
           "display": "ros2 run",
           "title": "ros2 run",
           "cmd": "ros2 run <package_name> <executable_name>",
@@ -1043,10 +1065,9 @@
               "desc": "Seconds to wait for node discovery"
             }
           ],
-          "notes": "Prints information about the specified service, including its type and QoS settings",
+          "notes": "Prints information about the specified service, including its type and QoS settings (Jazzy only; Humble's ros2 service supports call, find, list, type)",
           "distros": [
-            "jazzy",
-            "humble"
+            "jazzy"
           ]
         },
         {
@@ -1120,10 +1141,9 @@
               "desc": "Don't print string fields of messages"
             }
           ],
-          "notes": "",
+          "notes": "Jazzy only; Humble's ros2 service has no echo sub-command",
           "distros": [
-            "jazzy",
-            "humble"
+            "jazzy"
           ]
         }
       ]
@@ -1169,10 +1189,9 @@
           "desc": "Show the type of an action",
           "example": "ros2 action type /turtle1/rotate_absolute",
           "options": [],
-          "notes": "",
+          "notes": "Jazzy only; Humble's ros2 action supports info, list, send_goal",
           "distros": [
-            "jazzy",
-            "humble"
+            "jazzy"
           ]
         },
         {
@@ -1323,10 +1342,9 @@
           "desc": "Burst-replay the data of a specified topic in a bag, for fast replay or testing",
           "example": "ros2 bag burst my_data.db3 /chatter",
           "options": [],
-          "notes": "",
+          "notes": "Jazzy only; Humble's ros2 bag has no burst sub-command",
           "distros": [
-            "jazzy",
-            "humble"
+            "jazzy"
           ]
         },
         {
@@ -1541,10 +1559,9 @@
           "desc": "Clean up a controller in a controller manager",
           "example": "ros2 control cleanup_controller /controller_manager joint_state_broadcaster",
           "options": [],
-          "notes": "",
+          "notes": "Jazzy only; Humble's ros2 control has no cleanup_controller sub-command",
           "distros": [
-            "jazzy",
-            "humble"
+            "jazzy"
           ]
         },
         {
@@ -1567,7 +1584,7 @@
           "desc": "List the loaded controllers, their type, and status",
           "example": "ros2 control list_controllers /controller_manager",
           "options": [],
-          "notes": "",
+          "notes": "In Humble, ros2 control requires the ros-humble-ros2controlcli package (11 sub-commands, no cleanup_controller); Jazzy has 12 sub-commands",
           "distros": [
             "jazzy",
             "humble"
@@ -1960,7 +1977,7 @@
               "desc": "Include warnings as failed checks"
             }
           ],
-          "notes": "",
+          "notes": "Humble has no -ep, --exclude-packages option (Humble only supports --report, -rf, -iw)",
           "distros": [
             "jazzy",
             "humble"
@@ -1980,15 +1997,42 @@
           ]
         },
         {
+          "display": "ros2 wtf",
+          "title": "ros2 wtf",
+          "cmd": "ros2 wtf",
+          "desc": "An alias of ros2 doctor: check the ROS 2 environment and report potential issues",
+          "example": "ros2 wtf",
+          "options": [
+            {
+              "flag": "-r, --report",
+              "desc": "Print all reports"
+            },
+            {
+              "flag": "-rf, --report-failed",
+              "desc": "Print reports of failed checks only"
+            },
+            {
+              "flag": "-iw, --include-warnings",
+              "desc": "Include warnings as failed checks"
+            }
+          ],
+          "notes": "In Humble, ros2 wtf is an alias of ros2 doctor (identical usage) and its sub-command is hello; neither Humble nor Jazzy has -ep, --exclude-packages",
+          "distros": [
+            "jazzy",
+            "humble"
+          ]
+        },
+        {
           "display": "hello",
           "title": "ros2 wtf hello",
           "cmd": "ros2 wtf hello",
           "desc": "Check network connectivity between multiple hosts",
           "example": "ros2 wtf hello",
           "options": [],
-          "notes": "",
+          "notes": "Equivalent to ros2 doctor hello (in Humble, wtf is an alias of doctor)",
           "distros": [
-            "jazzy"
+            "jazzy",
+            "humble"
           ]
         }
       ]
