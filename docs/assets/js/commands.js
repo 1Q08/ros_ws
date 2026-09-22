@@ -37,7 +37,8 @@ const I18N = {
     options: '常用选项',
     optionFlag: '选项',
     optionDesc: '说明',
-    emptyDistro: '该发行版暂无命令数据'
+    emptyDistro: '该发行版暂无命令数据',
+    loadError: '命令数据加载失败，请刷新页面重试'
   },
   en: {
     selectPlaceholder: '-- Select --',
@@ -54,7 +55,8 @@ const I18N = {
     options: 'Common options',
     optionFlag: 'Option',
     optionDesc: 'Description',
-    emptyDistro: 'No command data for this distribution'
+    emptyDistro: 'No command data for this distribution',
+    loadError: 'Failed to load command data. Please refresh the page.'
   }
 };
 
@@ -115,6 +117,11 @@ let searchIndex = [];
 // 由 onDistroChange 写入，onCategoryChange 读取（模块级变量，避免挂在 window 上）
 let filteredCategories = {};
 
+// 当前搜索结果与关键词缓存：供点击结果项时获取完整数据与命中高亮
+// （模块级变量，避免挂在 window 上，消除跨脚本竞态）
+let currentSearchResults = [];
+let currentSearchKeyword = '';
+
 // ============================================================
 // 初始化：页面加载完成后挂载全部交互（B3：合并为单一入口）
 // ============================================================
@@ -123,13 +130,29 @@ function initApp() {
   initCopyButtons(document);
 
   fetch(window.COMMANDS_DATA_URL || 'assets/data/commands.json')
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('HTTP ' + response.status + ' ' + response.statusText);
+      }
+      return response.json();
+    })
     .then(data => {
       commandsData = data;
       buildSearchIndex();
       renderSummaryTable();
     })
-    .catch(error => console.error('加载命令数据失败:', error));
+    .catch(error => {
+      console.error('加载命令数据失败:', error);
+      showLoadError();
+    });
+}
+
+// 数据加载失败时，在命令总览表体内给出可见的错误提示
+function showLoadError() {
+  const tbody = document.getElementById('summaryTableBody');
+  if (tbody) {
+    tbody.innerHTML = '<tr><td class="load-error">' + escapeHtml(T.loadError) + '</td></tr>';
+  }
 }
 
 document.addEventListener('DOMContentLoaded', initApp);
@@ -435,8 +458,12 @@ function toggleSummary() {
 // ============================================================
 
 // 归一化：去除空格、下划线、连字符、斜杠、标点等分隔符，便于模糊匹配
+// 说明：字符类中的 [ ] 必须转义（\[ \]），否则 ] 会提前闭合字符类，
+// 导致 { } . , ' " ( ) | ; 等符号未被归一化，模糊匹配结果不一致。
+// 正则预编译为模块常量，避免每次调用重复构造。
+const NORMALIZE_SEARCH_RE = /[\s_\-/<>:=\[\]{}.,'"()|;]/g;
 function normalizeSearch(s) {
-  return String(s || '').toLowerCase().replace(/[\s_\-/<>:=[]{}.,'\"()|;]/g, '');
+  return String(s || '').toLowerCase().replace(NORMALIZE_SEARCH_RE, '');
 }
 
 // 构建扁平化搜索索引（数据加载后调用一次）
@@ -541,15 +568,8 @@ function setupSearch() {
         scoreField(keyword, kwNorm, entry.rawCat, entry.normCat)
       );
       if (score > 0) {
-        results.push({
-          versionKey: entry.versionKey,
-          versionName: entry.versionName,
-          categoryKey: entry.categoryKey,
-          category: entry.category,
-          commandIndex: entry.commandIndex,
-          score: score,
-          ...entry.cmd  // 展开命令对象（cmd, desc, example, notes）
-        });
+        // 仅保存对索引条目的引用与得分，避免每次按键整份展开命令对象（零拷贝）
+        results.push({ entry: entry, score: score });
       }
     }
 
@@ -566,17 +586,19 @@ function setupSearch() {
     // 顶部显示命中条数；结果项支持键盘（Tab 聚焦 + Enter/Space 触发）
     let html = '<p class="results-count">' + escapeHtml(T.totalCount.replace('{n}', results.length)) + '</p>';
     html += '<div class="results-list">';
-    results.forEach((cmd, index) => {
+    results.forEach((r, index) => {
+      const entry = r.entry;
+      const cmd = entry.cmd;
       const resultDistroBadges = renderDistroBadges(cmd.distros);
       html += `
         <div class="result-item" role="button" tabindex="0"
              onclick="showSearchResult(${index})"
              onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showSearchResult(${index})}">
           <span class="result-version-wrap">
-            <span class="result-version result-version--${cmd.versionKey}">${escapeHtml(cmd.versionName)}</span>
+            <span class="result-version result-version--${entry.versionKey}">${escapeHtml(entry.versionName)}</span>
             <span class="result-distros">${resultDistroBadges}</span>
           </span>
-          <span class="result-category">${escapeHtml(cmd.category)}</span>
+          <span class="result-category">${escapeHtml(entry.category)}</span>
           <code class="result-cmd">${highlightText(cmd.title, keyword)}</code>
           <span class="result-desc">${highlightText(cmd.desc, keyword)}</span>
         </div>
@@ -587,8 +609,8 @@ function setupSearch() {
     resultsDiv.innerHTML = html;
 
     // 保存当前搜索结果与关键词，供点击时获取完整数据与命中高亮
-    window.currentSearchResults = results;
-    window.currentSearchKeyword = keyword;
+    currentSearchResults = results;
+    currentSearchKeyword = keyword;
   }, 150));
 }
 
@@ -599,7 +621,20 @@ function setupSearch() {
 // 功能：显示选中命令的完整信息 + 关闭按钮
 // ============================================================
 function showSearchResult(index) {
-  const cmd = window.currentSearchResults[index];
+  const entry = currentSearchResults[index].entry;
+  // 合成一个只读视图：元数据取自 entry，命令原文取自 entry.cmd，
+  // 供下方模板沿用原有 cmd.xxx 字段名，避免改动渲染逻辑。
+  const cmd = {
+    versionKey: entry.versionKey,
+    versionName: entry.versionName,
+    categoryKey: entry.categoryKey,
+    category: entry.category,
+    commandIndex: entry.commandIndex,
+    distros: entry.cmd.distros,
+    title: entry.cmd.title,
+    desc: entry.cmd.desc,
+    example: entry.cmd.example
+  };
   const resultsDiv = document.getElementById('searchResults');
 
   // 首次点击时创建详情容器，后续点击复用
@@ -630,7 +665,7 @@ function showSearchResult(index) {
       <button class="close-detail" onclick="closeSearchDetail()">×</button>
     </div>
     <p><strong>${T.version}:</strong> ${escapeHtml(cmd.versionName)}${distroSegment} / ${escapeHtml(cmd.category)}</p>
-    <p><strong>${T.description}:</strong> ${highlightText(cmd.desc, window.currentSearchKeyword || '')}</p>
+    <p><strong>${T.description}:</strong> ${highlightText(cmd.desc, currentSearchKeyword || '')}</p>
     <p><strong>${T.example}:</strong></p>
     <pre class="highlight-code"><code>${highlightCode(cmd.example)}</code></pre>
   `;
@@ -710,8 +745,8 @@ function clearSearch() {
   if (detailDiv) {
     detailDiv.remove();
   }
-  window.currentSearchResults = [];
-  window.currentSearchKeyword = '';
+  currentSearchResults = [];
+  currentSearchKeyword = '';
 }
 
 // ============================================================
@@ -753,15 +788,15 @@ function renderOptionsTable(options) {
 //   →  橙黄色（品牌色）
 //   后续可扩展更多关键字
 // ============================================================
+// ROS 关键字高亮正则（预编译为模块常量，避免每次调用重建）
+const HL_KEYWORD_RE = /\b(ros1|ros2|roscore|rosrun|roslaunch|rosnode|rosparam|rosservice|rostopic|rosbag)\b/gi;
 function highlightCode(text) {
   if (!text) return '';
-  return text
-    // 先转义 HTML 特殊字符，防止 <param> 等被当成标签
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
+  // 复用通用 escapeHtml 转义 HTML 特殊字符，防止 <param> 等被当成标签；
+  // 转义后的引号实体在渲染与复制（读取 DOM 文本节点）时均与原文等价。
+  return escapeHtml(text)
     // ros1 / ros2 及 ROS1 子命令橙黄色高亮（大小写不敏感）
-    .replace(/\b(ros1|ros2|roscore|rosrun|roslaunch|rosnode|rosparam|rosservice|rostopic|rosbag)\b/gi, '<span class="hl-ros">$1</span>');
+    .replace(HL_KEYWORD_RE, '<span class="hl-ros">$1</span>');
 }
 
 // ============================================================
