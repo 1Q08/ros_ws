@@ -106,6 +106,7 @@ custom_css: /assets/css/about.css
     </div>
     <div class="card-body changelog-body">
       <ul class="changelog-list">
+        <li><span class="cl-date">2026-09-23</span> Purchased a custom domain and set up a reverse proxy to improve access speed in mainland China and multi-platform SEO; temporarily added the developer avatar to the footer (desktop and tablet only)</li>
         <li><span class="cl-date">2026-09-21</span> Excluded non-page files that were published by mistake during the build, added a new tutorial article, and added site-wide rendering of mermaid diagrams in articles (following the light/dark theme)</li>
         <li><span class="cl-date">2026-09-20</span> Added: a right-side table of contents on article pages (a floating button on mobile), previous/next switching buttons and links plus a back-to-articles link, and one shared comment thread for the Chinese and English command pages; Fixed: code block, inline code and table colors in dark mode, and the date format on Chinese pages; Improved: reorganized the stylesheets and scripts, extracting shared modules for the command pages and removing duplicated and dead code</li>
         <li><span class="cl-date">2026-09-19</span> Optimized the home page presentation &amp; structure, migrated the comments section, added a stable contact email address, and improved the header layout when the page is zoomed in</li>

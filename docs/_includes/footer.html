@@ -4,6 +4,13 @@
   <div class="wrapper">
 
     <div class="footer-col-wrapper">
+      <!-- 头像列（最左独立一列，仅桌面/平板显示；头像由 jekyll-avatar 插件从 GitHub 拉取） -->
+      {%- if site.github_username -%}
+      <div class="footer-col footer-col-avatar">
+        {% avatar user=site.github_username size=40 %}
+      </div>
+      {%- endif -%}
+
       <div class="footer-col footer-col-1">
         <ul class="contact-list">
           <li class="p-name">

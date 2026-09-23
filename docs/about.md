@@ -104,6 +104,7 @@ custom_css: /assets/css/about.css
     </div>
     <div class="card-body changelog-body">
       <ul class="changelog-list">
+        <li><span class="cl-date">2026-09-23</span> 购买自定义域名并使用反向代理，优化国内访问体验、多平台 SEO、页脚临时增加开发者头像（仅网页端和平板端显示）</li>
         <li><span class="cl-date">2026-09-21</span> 排除构建时被误发布的非页面文件、新增一篇教程文章、为全站文章中的 mermaid 图增加渲染支持（跟随深浅色模式）</li>
         <li><span class="cl-date">2026-09-20</span> 新增：文章页右侧目录（移动端为悬浮按钮）、上一篇/下一篇切换与返回文章列表，中英文命令页共用同一条评论线程；修复：深色模式下代码块、行内代码与表格配色，中文页日期改为数字格式；优化：梳理样式与脚本结构，抽取中英命令页共享模块并清理重复与死代码</li>
         <li><span class="cl-date">2026-09-19</span> 优化首页展示以及结构、评论区迁移、增加可联系的稳定邮箱地址、优化页面放大时页眉效果</li>

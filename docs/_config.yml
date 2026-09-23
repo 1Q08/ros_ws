@@ -39,6 +39,7 @@ plugins:
   - jekyll-feed
   - jekyll-seo-tag
   - jekyll-sitemap
+  - jekyll-avatar
 
 # 站长身份验证
 # Google Search Console 用「网址前缀」形式验证 https://1q08.github.io/ros_ws/

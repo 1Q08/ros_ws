@@ -167,6 +167,33 @@ body {
   height: 20px;
 }
 
+/**
+ * 页脚头像（最左独立一列）
+ * 数据来自 jekyll-avatar 插件（GitHub 头像）。
+ * 圆形 + 1px 细边框：边框用 box-shadow 外描边绘制，不占布局空间、不缩放头像，
+ * 且能跟随圆角；颜色取主题变量，深浅模式自动适配。
+ * 窄屏（≤$on-palm）隐藏，保持手机端「作者 + 描述」既有并排布局。
+ */
+.footer-col-avatar {
+  width: 40px;      // 内容宽 = 头像直径（左侧 15px 内边距由 .footer-col 提供）
+  line-height: 0;   // 消除 <img> 的基线空隙
+
+  .avatar {
+    display: block;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 1px var(--border-color, #{$grey-color-light});
+    background-color: var(--bg-secondary);
+  }
+}
+
+@include media-query($on-palm) {
+  .footer-col-avatar {
+    display: none;
+  }
+}
+
 /* ==== 3. giscus 评论区 ==== */
 
 /**
